@@ -1,0 +1,30 @@
+ElementID,SectionID,Name,Description
+LE_66C_1,IT_66C,Fraudulent/dishonest intent,The accused must have acted with fraudulent or dishonest intent to use another's identity.
+LE_66C_2,IT_66C,Electronic signature or password used,"The unique identifier (password, PIN, OTP, biometric) of another person was used."
+LE_66C_3,IT_66C,Identity features belongs to victim,"The electronic identity feature used must belong to a real, identifiable victim."
+LE_66D_1,IT_66D,Personation via computer resource,The accused communicated as a different entity using a computer resource or device.
+LE_66D_2,IT_66D,Inducement to deliver property/money,The victim was induced to part with money or property through the impersonation.
+LE_66D_3,IT_66D,Use of communication device,"A communication device (phone, internet, app) was used as the medium of impersonation."
+LE_43_1,IT_43,Unauthorised access to computer system,Access to a computer system without authorisation of the owner.
+LE_43_2,IT_43,Data theft or manipulation,Electronic data was stolen or manipulated without authorisation.
+LE_72_1,IT_72,Breach of confidentiality,A person with lawful access to electronic records disclosed them without consent.
+LE_72_2,IT_72,Breach of contractual duty of privacy,Disclosure was in breach of a lawful contract or fiduciary duty.
+LE_318_1,BNS_318,Deception of the victim,The accused made false representations of fact that were believed by the victim.
+LE_318_2,BNS_318,Fraudulent or dishonest inducement,The victim acted on the deception and was thereby induced to act to their detriment.
+LE_318_3,BNS_318,Delivery of property or financial loss,"The victim delivered money or property, or suffered financial loss."
+LE_318_4,BNS_318,Damage to the deceived person,The victim suffered actual measurable harm as a result of the deception.
+LE_319_1,BNS_319,Pretending to be another person,The accused claimed to be a government official or other person they are not.
+LE_319_2,BNS_319,Knowledge of false identity,The accused knew their claimed identity was false.
+LE_319_3,BNS_319,Victim acted on false identity,The victim's loss was a direct consequence of believing the false identity.
+LE_PMLA_1,PMLA_3,Proceeds of crime involved,The funds or property involved are proceeds of a scheduled offence.
+LE_PMLA_2,PMLA_3,Layering or integration of funds,Funds were moved through multiple accounts to obscure their origin.
+LE_PMLA_3,PMLA_3,Knowingly facilitating money laundering,The accused knew or had reason to believe the funds were proceeds of crime.
+LE_PMLA_4,PMLA_3,Cross-border or crypto element,Funds were moved internationally or converted to cryptocurrency to further conceal origin.
+LE_BSA_63_1,BSA_63,Electronic record produced in proceedings,"The electronic evidence (screenshot, message log, transaction record) has been produced before the court."
+LE_BSA_63_2,BSA_63,Certificate under Section 63 filed,A certificate from the responsible person/officer confirming the device's proper operation has been filed.
+LE_BSA_63_3,BSA_63,Device integrity established,There is no evidence of tampering with the electronic evidence or the device it was obtained from.
+LE_BSA_63_4,BSA_63,Hash value / chain of custody maintained,The electronic evidence has a verifiable hash or chain of custody record.
+LE_BNSS_94_1,BNSS_94,Summons for bank records issued,Summons to bank or telecom operator for transaction logs or CDR records.
+LE_BNSS_94_2,BNSS_94,Records produced and authenticated,Bank statements or call records produced and authenticated by the institution.
+LE_BNSS_175_1,BNSS_175,Witness summoned during investigation,Witnesses called for examination during police investigation.
+LE_BNSS_175_2,BNSS_175,Statement recorded under BNSS,Statements recorded under the applicable BNSS provisions.

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIKYA — Crime Intelligence for Karnataka State Police</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* ---------- nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--ink); color: var(--text-inverse);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .nav-inner {
+    max-width: var(--wrap); margin: 0 auto; padding: 0 24px;
+    height: 64px; display: flex; align-items: center; gap: 28px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 800; font-size: 19px; letter-spacing: .04em; color: var(--text-inverse); text-decoration: none; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 8px; background: var(--gold); display: grid; place-items: center; color: var(--ink); }
+  .brand small { display: block; font-family: var(--font-body); font-weight: 500; font-size: 10.5px; letter-spacing: .18em; color: var(--text-inverse-dim); }
+  .nav-links { display: flex; gap: 22px; margin-left: auto; align-items: center; }
+  .nav-links a { color: var(--text-inverse-dim); text-decoration: none; font-size: 14.5px; font-weight: 500; transition: color .18s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav .btn { min-height: 38px; padding: 0 18px; font-size: 14px; }
+
+  /* ---------- hero ---------- */
+  .hero { background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%); color: var(--text-inverse); overflow: hidden; }
+  .hero-inner {
+    max-width: var(--wrap); margin: 0 auto; padding: 84px 24px 72px;
+    display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 56px; align-items: center;
+  }
+  .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+  .kicker::before { content: ""; width: 26px; height: 2px; background: var(--gold); }
+  .hero h1 { color: #fff; font-size: clamp(34px, 4.6vw, 56px); font-weight: 800; letter-spacing: -.015em; margin-bottom: 20px; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p.lead { font-size: 18px; color: var(--text-inverse-dim); max-width: 52ch; margin: 0 0 32px; }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+  .hero-stats { display: flex; gap: 36px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,.12); padding-top: 26px; }
+  .stat b { display: block; font-family: var(--font-display); font-size: 26px; font-weight: 700; color: #fff; }
+  .stat span { font-size: 13px; color: var(--text-inverse-dim); }
+
+  /* hero visual: case connection graph */
+  .hero-visual { position: relative; }
+  .graph-card {
+    background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.12);
+    border-radius: var(--r-lg); padding: 18px; backdrop-filter: blur(4px); box-shadow: var(--shadow-3);
+  }
+  .graph-card header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .graph-card header span { font-size: 12.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-inverse-dim); }
+  .graph-svg { width: 100%; height: auto; display: block; }
+  .match-float {
+    position: absolute; right: -10px; bottom: -26px; width: 250px;
+    background: var(--surface); color: var(--text); border-radius: var(--r-md);
+    box-shadow: var(--shadow-3); padding: 14px 16px; border-left: 4px solid var(--ok);
+    animation: rise .7s ease-out .5s both;
+  }
+  .match-float b { font-size: 13.5px; display: block; margin-bottom: 2px; }
+  .match-float small { color: var(--text-dim); font-size: 12px; }
+  .match-score { float: right; font-family: var(--font-mono); font-weight: 600; color: var(--ok); font-size: 13px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- how it works ---------- */
+  section { padding: 76px 24px; }
+  .section-inner { max-width: var(--wrap); margin: 0 auto; }
+  .section-head { max-width: 62ch; margin-bottom: 44px; }
+  .section-head .kicker { color: var(--warn); }
+  .section-head .kicker::before { background: var(--warn); }
+  .section-head h2 { font-size: clamp(26px, 3.2vw, 36px); font-weight: 700; letter-spacing: -.01em; margin-bottom: 12px; }
+  .section-head p { color: var(--text-dim); font-size: 16.5px; margin: 0; }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: step; }
+  .step { padding: 24px 22px; position: relative; }
+  .step::before {
+    counter-increment: step; content: counter(step, decimal-leading-zero);
+    font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--gold);
+    display: block; margin-bottom: 14px; letter-spacing: .1em;
+  }
+  .step h3 { font-size: 17.5px; margin-bottom: 8px; }
+  .step p { font-size: 14px; color: var(--text-dim); margin: 0; }
+  .step.gate { background: var(--ink); border-color: var(--ink); }
+  .step.gate h3 { color: #fff; }
+  .step.gate p { color: var(--text-inverse-dim); }
+  .step.gate::before { color: var(--gold); }
+  .step.gate::after { content: "OFFICER IN COMMAND"; position: absolute; top: 18px; right: 16px; font-size: 9.5px; font-weight: 700; letter-spacing: .14em; color: var(--ink); background: var(--gold); border-radius: 4px; padding: 3px 7px; }
+
+  /* ---------- capabilities ---------- */
+  .caps-section { background: var(--surface); border-block: 1px solid var(--border); }
+  .caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cap { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 26px 24px; background: var(--paper); transition: box-shadow .2s ease, transform .2s ease; }
+  .cap:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+  .cap-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--ink); color: var(--gold); display: grid; place-items: center; margin-bottom: 16px; }
+  .cap h3 { font-size: 17px; margin-bottom: 8px; }
+  .cap p { font-size: 14px; color: var(--text-dim); margin: 0 0 10px; }
+  .cap .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ---------- evidence strip ---------- */
+  .evidence { background: var(--ink-2); color: var(--text-inverse); }
+  .evidence .section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .evidence h2 { color: #fff; font-size: clamp(24px, 3vw, 32px); margin-bottom: 14px; }
+  .evidence p { color: var(--text-inverse-dim); font-size: 15.5px; }
+  .trail { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r-lg); overflow: hidden; }
+  .trail table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .trail caption { text-align: left; padding: 14px 18px 10px; font-size: 12.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-inverse-dim); }
+  .trail th { text-align: left; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-inverse-dim); padding: 8px 18px; border-bottom: 1px solid rgba(255,255,255,.12); font-weight: 600; }
+  .trail td { padding: 10px 18px; border-bottom: 1px solid rgba(255,255,255,.07); color: var(--text-inverse); }
+  .trail td.amt { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--gold); text-align: right; }
+  .trail tr:last-child td { border-bottom: none; }
+
+  /* ---------- CTA ---------- */
+  .cta-final { text-align: center; }
+  .cta-final h2 { font-size: clamp(26px, 3.4vw, 38px); margin-bottom: 14px; }
+  .cta-final p { color: var(--text-dim); max-width: 54ch; margin: 0 auto 30px; }
+
+  footer { background: var(--ink); color: var(--text-inverse-dim); font-size: 13.5px; }
+  .footer-inner { max-width: var(--wrap); margin: 0 auto; padding: 26px 24px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  .reveal { animation: rise .6s ease-out both; }
+  .reveal:nth-child(2) { animation-delay: .08s; } .reveal:nth-child(3) { animation-delay: .16s; } .reveal:nth-child(4) { animation-delay: .24s; }
+
+  @media (max-width: 960px) {
+    .hero-inner, .evidence .section-inner { grid-template-columns: 1fr; gap: 40px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .caps { grid-template-columns: 1fr; }
+    .match-float { position: static; margin-top: 14px; width: auto; }
+    .nav-links a:not(.btn) { display: none; }
+  }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="nav-inner">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="18" cy="8" r="2.6"/><circle cx="10" cy="18" r="2.6"/><path d="M8.2 7.1l7.3 0.6M7.2 8.3l2 7.3M16.4 10l-5 6"/></svg>
+      </span>
+      <span>AIKYA<small>KARNATAKA STATE POLICE</small></span>
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#evidence">Money trail</a>
+      <a class="btn btn-gold" href="ingest.html">Open console</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero contour">
+  <div class="hero-inner">
+    <div>
+      <span class="kicker">Crime Intelligence Platform · Datathon 2026</span>
+      <h1>Every case file speaks.<br><em>AIKYA</em> makes them talk to each other.</h1>
+      <p class="lead">Upload FIRs, investigation reports and digital evidence. AIKYA reads them — Kannada or English — extracts every person, account, device and transaction, and connects them across every case on record. Nothing is filed without an officer's approval.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-gold" href="ingest.html">Start an ingestion</a>
+        <a class="btn btn-ghost" style="color:var(--text-inverse);border-color:rgba(255,255,255,.3)" href="#how">See the pipeline</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>8</b><span>file formats read, incl. screenshots</span></div>
+        <div class="stat"><b>5</b><span>entity types resolved per document</span></div>
+        <div class="stat"><b>1</b><span>officer approval gates every record</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <figure class="graph-card" role="img" aria-label="Connection graph linking two cases through a shared bank account">
+        <header><span>Connections · Case 12 ↔ Case 42</span><span class="badge badge-warn">Review pending</span></header>
+        <svg class="graph-svg" viewBox="0 0 460 300" fill="none">
+          <g stroke="#A8B3C7" stroke-opacity=".5" stroke-width="1.4">
+            <line x1="88" y1="66" x2="212" y2="140"/><line x1="88" y1="222" x2="212" y2="140"/>
+            <line x1="212" y1="140" x2="356" y2="76"/><line x1="212" y1="140" x2="356" y2="216"/>
+            <line x1="356" y1="76" x2="356" y2="216" stroke-dasharray="4 4" stroke="#C9A227" stroke-opacity=".9"/>
+          </g>
+          <g font-family="'Public Sans',sans-serif" font-size="11" text-anchor="middle">
+            <circle cx="88" cy="66" r="26" fill="#23375E" stroke="#C9A227" stroke-width="1.5"/>
+            <text x="88" y="62" fill="#fff" font-weight="600">Case</text><text x="88" y="75" fill="#C9A227" font-family="'IBM Plex Mono',monospace">#12</text>
+            <circle cx="88" cy="222" r="26" fill="#23375E" stroke="#C9A227" stroke-width="1.5"/>
+            <text x="88" y="218" fill="#fff" font-weight="600">Case</text><text x="88" y="231" fill="#C9A227" font-family="'IBM Plex Mono',monospace">#42</text>
+            <circle cx="212" cy="140" r="30" fill="#C9A227"/>
+            <text x="212" y="136" fill="#0C1B33" font-weight="700">Shared</text><text x="212" y="149" fill="#0C1B33" font-weight="700">a/c ****4417</text>
+            <circle cx="356" cy="76" r="26" fill="#16294A" stroke="#A8B3C7"/>
+            <text x="356" y="72" fill="#fff" font-weight="600">Accused</text><text x="356" y="85" fill="#A8B3C7">R. Kumar</text>
+            <circle cx="356" cy="216" r="26" fill="#16294A" stroke="#A8B3C7"/>
+            <text x="356" y="212" fill="#fff" font-weight="600">Accused</text><text x="356" y="225" fill="#A8B3C7">"Ravi K."</text>
+            <text x="284" y="98" fill="#A8B3C7" font-size="10">paid ₹50,000</text>
+            <text x="284" y="196" fill="#A8B3C7" font-size="10">owns</text>
+            <text x="376" y="150" fill="#C9A227" font-size="10" font-weight="600">same IMEI?</text>
+          </g>
+        </svg>
+        <figcaption class="match-float">
+          <span class="match-score">0.91</span>
+          <b>Potential match found</b>
+          <small>Same phone number · Same device (IMEI) · Similar name — awaiting officer decision: <strong>Merge</strong> or <strong>Keep separate</strong></small>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="kicker">How it works</span>
+      <h2>A two-phase pipeline with the officer in the middle</h2>
+      <p>Extraction is automatic. Filing is not. Every run pauses at a checkpoint until the investigating officer has reviewed the findings and resolved any identity matches.</p>
+    </div>
+    <div class="steps">
+      <div class="step card reveal">
+        <h3>Upload the case file</h3>
+        <p>FIR, investigation reports, bank statements, UPI &amp; chat screenshots. A new case always begins with an FIR — the system enforces it.</p>
+      </div>
+      <div class="step card reveal">
+        <h3>AIKYA reads everything</h3>
+        <p>Vision and language models pick out names, numbers, accounts and transactions — then check every person against those already on record.</p>
+      </div>
+      <div class="step card gate reveal">
+        <h3>You review the findings</h3>
+        <p>Entities, the money trail, a connection graph, and side-by-side "same person?" matches. Merge or keep separate — your call, recorded.</p>
+      </div>
+      <div class="step card reveal">
+        <h3>Proceed files it</h3>
+        <p>On your approval, records enter case files, the case network and smart search. Originals are archived, untouched.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities" class="caps-section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="kicker">Capabilities</span>
+      <h2>Built for the questions investigators actually ask</h2>
+      <p>Who else uses this account? Is this the same man under a different name? Where did the money go next?</p>
+    </div>
+    <div class="caps">
+      <article class="cap">
+        <div class="cap-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="9" cy="19" r="2.4"/><circle cx="17" cy="16" r="2.4"/><path d="M7 6l9.6.9M6 7l2.4 9.6M11 18l3.7-1.4M18.4 9.2l-1 4.4"/></svg></div>
+        <h3>Ring detection</h3>
+        <p>Digital-arrest scam cells surface when separate FIRs share an aggregation account, a device or a handler number.</p>
+        <div class="chips"><span class="badge badge-muted">Neo4j graph</span><span class="badge badge-muted">shared entities</span></div>
+      </article>
+      <article class="cap">
+        <div class="cap-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.2 2.9-5 5.5-5s4.9 1.8 5.5 5"/><path d="M16 4.5c1.8.6 3 2 3 3.9 0 1.4-.7 2.6-1.8 3.3M17.5 15.2c1.9.7 3.1 2.3 3.5 4.8"/></svg></div>
+        <h3>Alias resolution</h3>
+        <p>One criminal, four names. Probabilistic matching on phones, UPI IDs, IMEIs and account numbers proposes the merge; the officer decides.</p>
+        <div class="chips"><span class="badge badge-ok">score ≥ threshold → suggest merge</span></div>
+      </article>
+      <article class="cap">
+        <div class="cap-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg></div>
+        <h3>Money trail</h3>
+        <p>Every transaction extracted from statements and screenshots becomes a directed edge — follow funds through bridge and mule accounts.</p>
+        <div class="chips"><span class="badge badge-muted">bank + UPI</span><span class="badge badge-muted">amount &amp; date on every edge</span></div>
+      </article>
+      <article class="cap">
+        <div class="cap-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a1 1 0 011-1h9l5 5v10a1 1 0 01-1 1H5a1 1 0 01-1-1z"/><path d="M14 4v5h5M8 13h8M8 16.5h5"/></svg></div>
+        <h3>Reads what you have</h3>
+        <p>PDFs, Word files, photos of screens. Kannada and English. Evidence is auto-classified — bank statement, UPI screenshot, chat export.</p>
+        <div class="chips"><span class="badge badge-muted">pdf · docx · png · jpg · html · txt</span></div>
+      </article>
+      <article class="cap">
+        <div class="cap-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></div>
+        <h3>Smart search</h3>
+        <p>Semantic search across every filed document — find "victim was told his Aadhaar was used in Mumbai" without exact words.</p>
+        <div class="chips"><span class="badge badge-muted">Pinecone vectors</span></div>
+      </article>
+      <article class="cap">
+        <div class="cap-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4.5"/></svg></div>
+        <h3>Chain of custody</h3>
+        <p>Original documents are archived unmodified. Every merge decision records who resolved it. Nothing writes to the record without Proceed.</p>
+        <div class="chips"><span class="badge badge-muted">human-in-the-loop</span><span class="badge badge-muted">auditable</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="evidence" class="evidence contour">
+  <div class="section-inner">
+    <div>
+      <span class="kicker">From screenshot to evidence</span>
+      <h2>A UPI screenshot becomes a ledger entry in minutes</h2>
+      <p>The victim forwards a payment screenshot. AIKYA transcribes it, extracts the transaction, links payer and payee to people already in the graph, and stages it for your review — with the source file one click away.</p>
+      <a class="btn btn-gold" href="ingest.html" style="margin-top:10px">Try it in the console</a>
+    </div>
+    <div class="trail">
+      <table>
+        <caption>Money trail · extracted from evidence_upi_01.png</caption>
+        <thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col" style="text-align:right">Amount</th><th scope="col">Date</th><th scope="col">Mode</th></tr></thead>
+        <tbody>
+          <tr><td>Suresh B (victim)</td><td>rk.traders@okaxis</td><td class="amt">₹ 49,500</td><td class="mono">04 Jan 2026</td><td>UPI</td></tr>
+          <tr><td>rk.traders@okaxis</td><td>a/c ****4417</td><td class="amt">₹ 2,10,000</td><td class="mono">05 Jan 2026</td><td>IMPS</td></tr>
+          <tr><td>a/c ****4417</td><td>a/c ****9902 (bridge)</td><td class="amt">₹ 1,95,000</td><td class="mono">05 Jan 2026</td><td>NEFT</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="section-inner">
+    <h2>The case connections are already in your files.</h2>
+    <p>AIKYA surfaces them, and keeps the officer in command of every record that gets filed.</p>
+    <a class="btn btn-primary" href="ingest.html">Open the ingestion console</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <span>AIKYA — Crime Intelligence Platform · KSP Datathon 2026</span>
+    <span>Built on Zoho Catalyst · QuickML · Neo4j · Pinecone</span>
+  </div>
+</footer>
+
+</body>
+</html>

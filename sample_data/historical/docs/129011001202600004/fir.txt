@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202600004
+Case No.         : 202600004
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2026-03-26
+Date of Offence  : 2026-03-23
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Sarala Shastri
+Age              : 19 years
+Occupation       : Part-time Worker
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_309
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG71901301368
+  UPI VPAs       : saralash91@okicici
+  Phone Numbers  : 9517310810
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-23T00:28  |  fake job offer received
+  2026-03-24T00:28  |  registration fee paid
+  2026-04-02T00:28  |  offer turned out fake
+  2026-04-03T00:28  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-23  |  From: VICTIM_ACC_FIR_BG_309  ->  To: BG71901301368  |  Rs. 296,983  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000038
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1017
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.307727, 75.851338
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-03-26
+Signature of Complainant: Sarala Shastri
+Signature of Recording Officer: Kavitha Reddy, CEN Police Station - East Division

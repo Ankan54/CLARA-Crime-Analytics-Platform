@@ -1,0 +1,37 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000013
+Crime No.        : 129261030202500001
+Case No.         : 202500001
+CaseMasterID     : 1000044
+Police Station   : Chikkaballapur CEN Police Station
+District         : Chikkaballapur
+Report Date      : 2025-11-08
+IO Officer       : Priya Shankar (EmployeeID: 5002)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹317,042 via IMPS. Account BG30726384310 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG30726384310
+  UPI VPAs       : mangalav86@okicici
+  Phone Numbers  : 9362155909
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-10-12T21:06  |  investment offer on WhatsApp
+  2025-10-15T21:06  |  test withdrawal succeeded
+  2025-10-19T21:06  |  large investment transferred
+  2025-10-22T21:06  |  withdrawal blocked
+  2025-10-24T21:06  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-10-12  |  From: VICTIM_ACC_FIR_BG_315  ->  To: BG30726384310  |  Rs. 317,042  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Chikkaballapur, 2025-11-08
+Signature of IO: Priya Shankar, Chikkaballapur CEN Police Station

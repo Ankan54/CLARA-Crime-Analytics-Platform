@@ -1,0 +1,26 @@
+{
+  "scenario_key": "LIVE_SCN3",
+  "CrimeNo": "129191018202600001",
+  "newly_revealed_identifiers": {
+    "accounts": [
+      "5530123456789001"
+    ]
+  },
+  "money_trail_summary": "BRIDGE_ACC_03 (5530123456789001) links this case to Belagavi digital arrest ring. ~Rs 6,20,000 still sitting in downstream accounts.",
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129061017202600001",
+      "via_identifier": "5530123456789001",
+      "identifier_type": "account_no",
+      "_note": "BRIDGE_ACC_03 is the shared bridge account; lights up existing Belagavi case"
+    },
+    {
+      "historical_case_crime_no": "129191018202600002",
+      "via_identifier": "5530123456789001",
+      "identifier_type": "account_no",
+      "_note": "BRIDGE_ACC_03 is the shared bridge account; lights up existing Belagavi case"
+    }
+  ],
+  "extension_extraction_target": {},
+  "_note": "Live IR reveals identifiers not present in historical data."
+}

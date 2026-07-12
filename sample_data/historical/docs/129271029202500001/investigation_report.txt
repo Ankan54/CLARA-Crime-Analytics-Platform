@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000005
+Crime No.        : 129271029202500001
+Case No.         : 202500001
+CaseMasterID     : 1000034
+Police Station   : Kolar CEN Police Station
+District         : Kolar
+Report Date      : 2025-10-12
+IO Officer       : Savitha Nagaraj (EmployeeID: 5004)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹49,029 via NEFT. Account BG47966341235 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG47966341235
+  UPI VPAs       : harishla82@okicici
+  Phone Numbers  : 9534308020
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-09-18T17:31  |  recruited to share bank account
+  2025-09-23T17:31  |  account used for illegal transfers
+  2025-10-18T17:31  |  account frozen
+  2025-10-23T17:31  |  FIR filed against account holder
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-09-18  |  From: VICTIM_ACC_FIR_BG_305  ->  To: BG47966341235  |  Rs. 49,029  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Kolar, 2025-10-12
+Signature of IO: Savitha Nagaraj, Kolar CEN Police Station

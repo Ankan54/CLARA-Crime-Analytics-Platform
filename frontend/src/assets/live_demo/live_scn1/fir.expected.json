@@ -1,0 +1,111 @@
+{
+  "scenario_key": "LIVE_SCN1",
+  "CrimeNo": "129011001202600001",
+  "CaseNo": "202600001",
+  "PoliceStationID": 1001,
+  "PoliceStationName": "CEN Police Station - East Division",
+  "DistrictID": 2901,
+  "DistrictName": "Bengaluru Urban",
+  "CaseCategoryID": 1,
+  "CaseStatusID": 1,
+  "CrimeMajorHeadID": 101,
+  "CrimeMinorHeadID": 1011,
+  "CrimeRegisteredDate": "2026-06-26",
+  "complainant": {
+    "name": "Dr. Anand Rao",
+    "age": 58,
+    "occupation": "Retired Professor",
+    "gender": "M"
+  },
+  "accused": [
+    {
+      "person_id_label": "A1",
+      "name": "Ravi Kumar G",
+      "AccusedMasterID": 2000004,
+      "age": 28,
+      "gender": "M",
+      "occupation": "Unemployed",
+      "is_arrested": true,
+      "_note": "Own AccusedMasterID; un-merged from any historical alias"
+    }
+  ],
+  "charged_sections": [
+    {
+      "act_code": "ITACT",
+      "section_code": "66C"
+    },
+    {
+      "act_code": "ITACT",
+      "section_code": "66D"
+    },
+    {
+      "act_code": "BNS",
+      "section_code": "318"
+    },
+    {
+      "act_code": "BNS",
+      "section_code": "319"
+    }
+  ],
+  "revealed_identifiers": {
+    "accounts": [
+      "9842017633250001"
+    ],
+    "imeis": [
+      "867537042195016"
+    ],
+    "upis": [
+      "raghu.ctrl@ybl"
+    ],
+    "phones": [],
+    "ips": []
+  },
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129031010202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    },
+    {
+      "historical_case_crime_no": "129041013202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    },
+    {
+      "historical_case_crime_no": "129051014202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    },
+    {
+      "historical_case_crime_no": "129141025202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    }
+  ],
+  "extension_extraction_target": {
+    "accounts": [
+      {
+        "account_no": "9842017633250001",
+        "bank": "HDFC Bank",
+        "ifsc": "HDFC0004217",
+        "branch_district": "Bengaluru Urban",
+        "kyc_name": "",
+        "is_flagged_mule": true
+      }
+    ],
+    "rels_uses": [
+      {
+        "from_person_id": "ACC:2000004",
+        "to_object_id": "9842017633250001",
+        "object_type": "accounts",
+        "source_caseid": "129011001202600001",
+        "confidence": 1.0
+      }
+    ]
+  },
+  "_note": "Live Accused rows have own AccusedMasterIDs. No RESOLVED_AS/LINKED_TO pre-baked."
+}

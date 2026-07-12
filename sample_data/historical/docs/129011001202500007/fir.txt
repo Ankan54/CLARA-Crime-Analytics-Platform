@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500007
+Case No.         : 202500007
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-11-13
+Date of Offence  : 2025-11-09
+IO Officer       : Deepa Kamath
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Nalini Shastri
+Age              : 39 years
+Occupation       : MSME Owner
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_316
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG16567373140
+  UPI VPAs       : nalinish12@okicici
+  Phone Numbers  : 9614025492
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-11-09T22:18  |  fake UPI request sent
+  2025-11-09T22:23  |  payment made under confusion
+  2025-11-10T22:18  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-11-09  |  From: VICTIM_ACC_FIR_BG_316  ->  To: BG16567373140  |  Rs. 230,835  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000045
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1014
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 13.130042, 77.569379
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-11-13
+Signature of Complainant: Nalini Shastri
+Signature of Recording Officer: Deepa Kamath, CEN Police Station - East Division

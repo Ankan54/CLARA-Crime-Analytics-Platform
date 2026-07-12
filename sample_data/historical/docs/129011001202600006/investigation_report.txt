@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000019
+Crime No.        : 129011001202600006
+Case No.         : 202600006
+CaseMasterID     : 1000050
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2026-04-04
+IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹37,297 via UPI. Account BG29028523818 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG29028523818
+  UPI VPAs       : nalinipa83@okicici
+  Phone Numbers  : 9708939813
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-07T16:59  |  loan app installed
+  2026-03-07T17:59  |  personal data harvested
+  2026-03-21T16:59  |  harassment calls started
+  2026-03-27T16:59  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-07  |  From: VICTIM_ACC_FIR_BG_321  ->  To: BG29028523818  |  Rs. 37,297  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-04-04
+Signature of IO: Venkatesh Kumar, CEN Police Station - East Division

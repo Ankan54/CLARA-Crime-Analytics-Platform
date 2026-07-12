@@ -1,0 +1,98 @@
+{
+  "scenario_key": "LIVE_SCN2",
+  "CrimeNo": "129011005202600001",
+  "CaseNo": "202600001",
+  "PoliceStationID": 1005,
+  "PoliceStationName": "Whitefield Cyber Crime Police Station",
+  "DistrictID": 2901,
+  "DistrictName": "Bengaluru Urban",
+  "CaseCategoryID": 1,
+  "CaseStatusID": 1,
+  "CrimeMajorHeadID": 101,
+  "CrimeMinorHeadID": 1012,
+  "CrimeRegisteredDate": "2026-06-26",
+  "complainant": {
+    "name": "Kavitha Reddy",
+    "age": 34,
+    "occupation": "Software Engineer",
+    "gender": "F"
+  },
+  "accused": [
+    {
+      "person_id_label": "A1",
+      "name": "Imran S.",
+      "AccusedMasterID": 2000005,
+      "age": 31,
+      "gender": "M",
+      "occupation": "Freelancer",
+      "is_arrested": false,
+      "_note": "Own AccusedMasterID; shares DEV_IMEI_02/UPI_02 with historical aliases via USES edges. Un-merged."
+    }
+  ],
+  "charged_sections": [
+    {
+      "act_code": "ITACT",
+      "section_code": "66D"
+    },
+    {
+      "act_code": "BNS",
+      "section_code": "318"
+    },
+    {
+      "act_code": "PMLA",
+      "section_code": "3"
+    }
+  ],
+  "revealed_identifiers": {
+    "accounts": [],
+    "imeis": [
+      "351756078901234"
+    ],
+    "upis": [
+      "imran.transactions@axl"
+    ],
+    "phones": [
+      "9611234567"
+    ]
+  },
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129011004202400001",
+      "via_identifier": "351756078901234",
+      "identifier_type": "imei",
+      "_note": "IMEI DEV_IMEI_02 shared across all alias-accused cases"
+    },
+    {
+      "historical_case_crime_no": "129111020202500001",
+      "via_identifier": "351756078901234",
+      "identifier_type": "imei",
+      "_note": "IMEI DEV_IMEI_02 shared across all alias-accused cases"
+    },
+    {
+      "historical_case_crime_no": "129011002202500001",
+      "via_identifier": "351756078901234",
+      "identifier_type": "imei",
+      "_note": "IMEI DEV_IMEI_02 shared across all alias-accused cases"
+    },
+    {
+      "historical_case_crime_no": "129011004202400001",
+      "via_identifier": "imran.transactions@axl",
+      "identifier_type": "upi",
+      "_note": "UPI_02 is the shared VPA across alias cases"
+    },
+    {
+      "historical_case_crime_no": "129111020202500001",
+      "via_identifier": "imran.transactions@axl",
+      "identifier_type": "upi",
+      "_note": "UPI_02 is the shared VPA across alias cases"
+    },
+    {
+      "historical_case_crime_no": "129011002202500001",
+      "via_identifier": "imran.transactions@axl",
+      "identifier_type": "upi",
+      "_note": "UPI_02 is the shared VPA across alias cases"
+    }
+  ],
+  "extension_extraction_target": {},
+  "_note": "Live Accused rows have own AccusedMasterIDs. No RESOLVED_AS/LINKED_TO pre-baked."
+}

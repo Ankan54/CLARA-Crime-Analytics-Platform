@@ -1,0 +1,66 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011007202600003
+Case No.         : 202600003
+Police Station   : Koramangala Cyber Crime Station
+District         : Bengaluru Urban
+Date Registered  : 2026-06-13
+Date of Offence  : 2026-06-10
+IO Officer       : Manjunath Gowda
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Kantharaju Venkataraman
+Age              : 23 years
+Occupation       : Engineering Student
+Address          : 126, Colony Road, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_08
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655005, 4440988776655003, 4440988776655007
+  IMEI Numbers   : 353816081234505
+  UPI VPAs       : simpletask005@okhdfcbank, dailywork003@fino, jobapp007@hdfcbank
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.142
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-10T15:31  |  Telegram task group invite
+  2026-06-10T17:31  |  small test payment received
+  2026-06-11T15:31  |  initial deposit paid
+  2026-06-13T15:31  |  FIR filed
+  2026-06-15T15:31  |  withdrawal blocked
+  2026-06-19T15:31  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-11  |  From: VICTIM_ACC_FIR_SCN4_BURST_08  ->  To: 4440988776655005  |  Rs. 19,840  |  Channel: UPI
+  2026-06-11  |  From: VICTIM_ACC_FIR_SCN4_BURST_08  ->  To: 4440988776655003  |  Rs. 19,840  |  Channel: UPI
+  2026-06-11  |  From: VICTIM_ACC_FIR_SCN4_BURST_08  ->  To: 4440988776655007  |  Rs. 19,840  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000017
+PoliceStationID  : 1007
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.950152, 77.556492
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-06-13
+Signature of Complainant: Kantharaju Venkataraman
+Signature of Recording Officer: Manjunath Gowda, Koramangala Cyber Crime Station

@@ -1,0 +1,61 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202600005
+Case No.         : 202600005
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2026-02-10
+Date of Offence  : 2026-02-08
+IO Officer       : Savitha Nagaraj
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Sunitha Patil
+Age              : 37 years
+Occupation       : Software Engineer
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 3 PMLA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_320
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG96612869449
+  UPI VPAs       : sunithap93@okicici
+  Phone Numbers  : 9179116734
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-02-08T15:30  |  investment offer on WhatsApp
+  2026-02-11T15:30  |  test withdrawal succeeded
+  2026-02-15T15:30  |  large investment transferred
+  2026-02-18T15:30  |  withdrawal blocked
+  2026-02-20T15:30  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-02-08  |  From: VICTIM_ACC_FIR_BG_320  ->  To: BG96612869449  |  Rs. 417,235  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000049
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1012
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.693629, 77.323622
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-02-10
+Signature of Complainant: Sunitha Patil
+Signature of Recording Officer: Savitha Nagaraj, CEN Police Station - East Division

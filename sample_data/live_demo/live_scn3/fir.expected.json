@@ -1,0 +1,70 @@
+{
+  "scenario_key": "LIVE_SCN3",
+  "CrimeNo": "129191018202600001",
+  "CaseNo": "202600001",
+  "PoliceStationID": 1018,
+  "PoliceStationName": "Dharwad Cyber Crime Police Station",
+  "DistrictID": 2919,
+  "DistrictName": "Dharwad",
+  "CaseCategoryID": 1,
+  "CaseStatusID": 1,
+  "CrimeMajorHeadID": 101,
+  "CrimeMinorHeadID": 1012,
+  "CrimeRegisteredDate": "2026-06-26",
+  "complainant": {
+    "name": "Sandeep Traders (Prop. Sandeep Kulkarni)",
+    "age": 42,
+    "occupation": "MSME Owner",
+    "gender": "M"
+  },
+  "accused": [
+    {
+      "person_id_label": "A1",
+      "name": "Unknown / Under Investigation",
+      "AccusedMasterID": 2000006,
+      "age": 0,
+      "gender": "M",
+      "occupation": "Unknown",
+      "is_arrested": false,
+      "_note": "Own AccusedMasterID; un-merged"
+    }
+  ],
+  "charged_sections": [
+    {
+      "act_code": "ITACT",
+      "section_code": "66D"
+    },
+    {
+      "act_code": "BNS",
+      "section_code": "318"
+    },
+    {
+      "act_code": "PMLA",
+      "section_code": "3"
+    }
+  ],
+  "revealed_identifiers": {
+    "accounts": [
+      "5530123456789001"
+    ],
+    "imeis": [],
+    "upis": [],
+    "phones": []
+  },
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129061017202600001",
+      "via_identifier": "5530123456789001",
+      "identifier_type": "account_no",
+      "_note": "BRIDGE_ACC_03 is the shared bridge account; lights up existing Belagavi case"
+    },
+    {
+      "historical_case_crime_no": "129191018202600002",
+      "via_identifier": "5530123456789001",
+      "identifier_type": "account_no",
+      "_note": "BRIDGE_ACC_03 is the shared bridge account; lights up existing Belagavi case"
+    }
+  ],
+  "extension_extraction_target": {},
+  "_note": "Live Accused rows have own AccusedMasterIDs. No RESOLVED_AS/LINKED_TO pre-baked."
+}

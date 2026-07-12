@@ -1,0 +1,62 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129041013202600001
+Case No.         : 202600001
+Police Station   : Bunder Police Station
+District         : Mangaluru
+Date Registered  : 2026-04-18
+Date of Offence  : 2026-04-14
+IO Officer       : Manjunath Gowda
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Priya Kamath
+Age              : 54 years
+Occupation       : Chartered Accountant
+Address          : 23, MG Road Layout, Mangaluru
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN1_H02
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 7701234567890022
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-04-14T10:45  |  call received from fake TRAI number
+  2026-04-14T10:50  |  call transferred to fake CBI officer
+  2026-04-14T11:00  |  digital arrest initiated via Skype
+  2026-04-14T11:15  |  first fund transfer
+  2026-04-14T17:45  |  fraud realised
+  2026-04-18T10:45  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H02  ->  To: 7701234567890022  |  Rs. 900,000  |  Channel: IMPS
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H02  ->  To: 7701234567890022  |  Rs. 900,000  |  Channel: IMPS
+  2026-04-14  |  From: 7701234567890022  ->  To: 9842017633250001  |  Rs. 1,800,000  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000002
+PoliceStationID  : 1013
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7004
+Lat/Long         : 12.949329, 74.860698
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Mangaluru, 2026-04-18
+Signature of Complainant: Priya Kamath
+Signature of Recording Officer: Manjunath Gowda, Bunder Police Station

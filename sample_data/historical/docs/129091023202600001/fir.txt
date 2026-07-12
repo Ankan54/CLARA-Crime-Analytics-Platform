@@ -1,0 +1,66 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129091023202600001
+Case No.         : 202600001
+Police Station   : Shivamogga CEN Police Station
+District         : Shivamogga
+Date Registered  : 2026-06-16
+Date of Offence  : 2026-06-12
+IO Officer       : Basavaraj Gudadinni
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Shivarudrappa Bhat
+Age              : 18 years
+Occupation       : Engineering Student
+Address          : 16, Colony Road, Shivamogga
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_06
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655003, 4440988776655006, 4440988776655004
+  IMEI Numbers   : 353816081234501
+  UPI VPAs       : dailywork003@fino, worker006@icici, quickjob004@oksbi
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.141
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-12T23:14  |  Telegram task group invite
+  2026-06-13T01:14  |  small test payment received
+  2026-06-13T23:14  |  initial deposit paid
+  2026-06-16T23:14  |  withdrawal blocked
+  2026-06-16T23:14  |  FIR filed
+  2026-06-19T23:14  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-13  |  From: VICTIM_ACC_FIR_SCN4_BURST_06  ->  To: 4440988776655003  |  Rs. 7,989  |  Channel: UPI
+  2026-06-14  |  From: VICTIM_ACC_FIR_SCN4_BURST_06  ->  To: 4440988776655006  |  Rs. 7,989  |  Channel: UPI
+  2026-06-14  |  From: VICTIM_ACC_FIR_SCN4_BURST_06  ->  To: 4440988776655004  |  Rs. 7,989  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000015
+PoliceStationID  : 1023
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7010
+Lat/Long         : 13.884579, 75.518411
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Shivamogga, 2026-06-16
+Signature of Complainant: Shivarudrappa Bhat
+Signature of Recording Officer: Basavaraj Gudadinni, Shivamogga CEN Police Station

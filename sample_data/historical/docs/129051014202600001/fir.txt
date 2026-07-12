@@ -1,0 +1,64 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129051014202600001
+Case No.         : 202600001
+Police Station   : Hubballi CEN Police Station
+District         : Hubballi-Dharwad
+Date Registered  : 2026-04-17
+Date of Offence  : 2026-04-14
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Manjunath Hegde
+Age              : 67 years
+Occupation       : Retired Engineer
+Address          : 74, Brigade Road Layout, Hubballi-Dharwad
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN1_H03
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 7701234567890033
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-04-14T11:30  |  call received from fake TRAI number
+  2026-04-14T11:35  |  call transferred to fake CBI officer
+  2026-04-14T11:45  |  digital arrest initiated via Skype
+  2026-04-14T12:00  |  first fund transfer
+  2026-04-14T14:30  |  fraud realised
+  2026-04-17T11:30  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H03  ->  To: 7701234567890033  |  Rs. 375,000  |  Channel: UPI
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H03  ->  To: 7701234567890033  |  Rs. 375,000  |  Channel: UPI
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H03  ->  To: 7701234567890033  |  Rs. 375,000  |  Channel: UPI
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H03  ->  To: 7701234567890033  |  Rs. 375,000  |  Channel: UPI
+  2026-04-14  |  From: 7701234567890033  ->  To: 9842017633250001  |  Rs. 1,500,000  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000003
+PoliceStationID  : 1014
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7005
+Lat/Long         : 15.39193, 75.133722
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Hubballi-Dharwad, 2026-04-17
+Signature of Complainant: Manjunath Hegde
+Signature of Recording Officer: Ravi Krishnamurthy, Hubballi CEN Police Station

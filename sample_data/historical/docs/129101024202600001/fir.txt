@@ -1,0 +1,66 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129101024202600001
+Case No.         : 202600001
+Police Station   : Davanagere Cyber Crime Station
+District         : Davanagere
+Date Registered  : 2026-06-16
+Date of Offence  : 2026-06-12
+IO Officer       : Deepa Kamath
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Sandeep Kamath
+Age              : 28 years
+Occupation       : MBA Student
+Address          : 51, 1st Main, Davanagere
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_04
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655001, 4440988776655007, 4440988776655004
+  IMEI Numbers   : 353816081234502
+  UPI VPAs       : earnfast001@paytm, jobapp007@hdfcbank, quickjob004@oksbi
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.144
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-12T07:15  |  Telegram task group invite
+  2026-06-12T09:15  |  small test payment received
+  2026-06-13T07:15  |  initial deposit paid
+  2026-06-16T07:15  |  withdrawal blocked
+  2026-06-16T07:15  |  FIR filed
+  2026-06-22T07:15  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-13  |  From: VICTIM_ACC_FIR_SCN4_BURST_04  ->  To: 4440988776655001  |  Rs. 7,598  |  Channel: UPI
+  2026-06-13  |  From: VICTIM_ACC_FIR_SCN4_BURST_04  ->  To: 4440988776655007  |  Rs. 7,598  |  Channel: UPI
+  2026-06-13  |  From: VICTIM_ACC_FIR_SCN4_BURST_04  ->  To: 4440988776655004  |  Rs. 7,598  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000013
+PoliceStationID  : 1024
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 14.414501, 75.943387
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Davanagere, 2026-06-16
+Signature of Complainant: Sandeep Kamath
+Signature of Recording Officer: Deepa Kamath, Davanagere Cyber Crime Station

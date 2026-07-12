@@ -1,0 +1,66 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011007202600001
+Case No.         : 202600001
+Police Station   : Koramangala Cyber Crime Station
+District         : Bengaluru Urban
+Date Registered  : 2026-06-24
+Date of Offence  : 2026-06-23
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Deepa Shetty
+Age              : 23 years
+Occupation       : Engineering Student
+Address          : 200, Colony Road, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_02
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655002, 4440988776655001, 4440988776655005
+  IMEI Numbers   : 353816081234501
+  UPI VPAs       : taskpro002@airtel, earnfast001@paytm, simpletask005@okhdfcbank
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.143
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-23T04:15  |  Telegram task group invite
+  2026-06-23T06:15  |  small test payment received
+  2026-06-24T04:15  |  initial deposit paid
+  2026-06-24T04:15  |  FIR filed
+  2026-06-28T04:15  |  withdrawal blocked
+  2026-06-29T04:15  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-24  |  From: VICTIM_ACC_FIR_SCN4_BURST_02  ->  To: 4440988776655002  |  Rs. 28,280  |  Channel: UPI
+  2026-06-24  |  From: VICTIM_ACC_FIR_SCN4_BURST_02  ->  To: 4440988776655001  |  Rs. 28,280  |  Channel: UPI
+  2026-06-24  |  From: VICTIM_ACC_FIR_SCN4_BURST_02  ->  To: 4440988776655005  |  Rs. 28,280  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000011
+PoliceStationID  : 1007
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.968672, 77.627663
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-06-24
+Signature of Complainant: Deepa Shetty
+Signature of Recording Officer: Ravi Krishnamurthy, Koramangala Cyber Crime Station

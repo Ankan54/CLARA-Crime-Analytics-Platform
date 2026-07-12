@@ -1,0 +1,61 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011002202500001
+Case No.         : 202500001
+Police Station   : CEN Police Station - West Division
+District         : Bengaluru Urban
+Date Registered  : 2025-11-17
+Date of Offence  : 2025-11-10
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Deepa Nair
+Age              : 24 years
+Occupation       : Job Seeker
+Address          : 73, Main Street, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Imran Shek (Age: 27, Gender: M)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN2_H03
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 8810987654321003
+  UPI VPAs       : imran.transactions@axl
+  Phone Numbers  : 9611234567
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-11-10T00:00  |  fake job offer received
+  2025-11-11T00:00  |  registration fee paid
+  2025-11-15T00:00  |  multiple advance payments
+  2025-11-17T00:00  |  FIR filed
+  2025-11-18T00:00  |  contact lost
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-11-10  |  From: VICTIM_ACC_FIR_SCN2_H03  ->  To: 8810987654321003  |  Rs. 800,000  |  Channel: NEFT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000007
+PoliceStationID  : 1002
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1017
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.988603, 77.580428
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-11-17
+Signature of Complainant: Deepa Nair
+Signature of Recording Officer: Kavitha Reddy, CEN Police Station - West Division

@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011004202400001
+Case No.         : 202400001
+Police Station   : CEN Police Station - North Division
+District         : Bengaluru Urban
+Date Registered  : 2024-08-16
+Date of Offence  : 2024-08-15
+IO Officer       : Priya Shankar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Lakshmi Krishnamurthy
+Age              : 34 years
+Occupation       : Software Engineer
+Address          : 46, Ring Road, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Imraan Sheikh (Age: 28, Gender: M)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN2_H01
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 8810987654321001
+  UPI VPAs       : imran.transactions@axl
+  Phone Numbers  : 9611234567
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2024-08-15T00:00  |  loan app downloaded
+  2024-08-16T00:00  |  FIR filed
+  2024-08-22T00:00  |  harassing calls started
+  2024-08-25T00:00  |  coerced payment made
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2024-08-15  |  From: VICTIM_ACC_FIR_SCN2_H01  ->  To: 8810987654321001  |  Rs. 150,000  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000005
+PoliceStationID  : 1004
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1016
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.962454, 77.598797
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2024-08-16
+Signature of Complainant: Lakshmi Krishnamurthy
+Signature of Recording Officer: Priya Shankar, CEN Police Station - North Division

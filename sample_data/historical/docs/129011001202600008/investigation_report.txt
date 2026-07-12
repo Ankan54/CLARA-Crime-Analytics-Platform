@@ -1,0 +1,37 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000023
+Crime No.        : 129011001202600008
+Case No.         : 202600008
+CaseMasterID     : 1000054
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2026-03-18
+IO Officer       : Girish Rao (EmployeeID: 5009)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹480,660 via IMPS. Account BG64567105083 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG64567105083
+  UPI VPAs       : virupaks79@okicici
+  Phone Numbers  : 9466881217
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-08T07:51  |  investment offer on WhatsApp
+  2026-03-11T07:51  |  test withdrawal succeeded
+  2026-03-15T07:51  |  large investment transferred
+  2026-03-18T07:51  |  withdrawal blocked
+  2026-03-20T07:51  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-08  |  From: VICTIM_ACC_FIR_BG_325  ->  To: BG64567105083  |  Rs. 480,660  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-03-18
+Signature of IO: Girish Rao, CEN Police Station - East Division

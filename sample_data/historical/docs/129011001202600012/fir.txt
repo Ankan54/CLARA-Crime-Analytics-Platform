@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202600012
+Case No.         : 202600012
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2026-01-11
+Date of Offence  : 2026-01-04
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Sunitha Mallaiah
+Age              : 20 years
+Occupation       : Student
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 3 PMLA, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_333
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG72908629670
+  UPI VPAs       : sunitham31@okicici
+  Phone Numbers  : 9834217678
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-04T22:34  |  recruited to share bank account
+  2026-01-09T22:34  |  account used for illegal transfers
+  2026-02-03T22:34  |  account frozen
+  2026-02-08T22:34  |  FIR filed against account holder
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-04  |  From: VICTIM_ACC_FIR_BG_333  ->  To: BG72908629670  |  Rs. 352,514  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000062
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 102
+CrimeSubHeadID   : 1020
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 13.060423, 77.554592
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-01-11
+Signature of Complainant: Sunitha Mallaiah
+Signature of Recording Officer: Ravi Krishnamurthy, CEN Police Station - East Division

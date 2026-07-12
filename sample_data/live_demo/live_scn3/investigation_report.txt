@@ -1,0 +1,12 @@
+INVESTIGATION REPORT
+Case: 129191018202600001
+
+MONEY TRAIL SUMMARY
+BRIDGE_ACC_03 (5530123456789001) links this case to Belagavi digital arrest ring. ~Rs 6,20,000 still sitting in downstream accounts.
+
+NEWLY IDENTIFIED IDENTIFIERS
+  accounts: 5530123456789001
+
+LINK ASSERTIONS (for validation)
+  -> Historical case 129061017202600001 via account_no: 5530123456789001
+  -> Historical case 129191018202600002 via account_no: 5530123456789001

@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500005
+Case No.         : 202500005
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-09-25
+Date of Offence  : 2025-09-20
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Basavaraj Subramaniam
+Age              : 34 years
+Occupation       : Government Employee
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_311
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG90359220980
+  UPI VPAs       : basavara59@okicici
+  Phone Numbers  : 9677403584
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-09-20T11:34  |  fake bank call received
+  2025-09-20T11:37  |  OTP shared
+  2025-09-20T11:39  |  account drained
+  2025-09-21T11:34  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-09-20  |  From: VICTIM_ACC_FIR_BG_311  ->  To: BG90359220980  |  Rs. 341,484  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000040
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1015
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 13.106312, 77.586098
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-09-25
+Signature of Complainant: Basavaraj Subramaniam
+Signature of Recording Officer: Ravi Krishnamurthy, CEN Police Station - East Division

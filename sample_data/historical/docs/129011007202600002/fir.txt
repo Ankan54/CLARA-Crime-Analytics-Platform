@@ -1,0 +1,67 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011007202600002
+Case No.         : 202600002
+Police Station   : Koramangala Cyber Crime Station
+District         : Bengaluru Urban
+Date Registered  : 2026-06-26
+Date of Offence  : 2026-06-22
+IO Officer       : Basavaraj Gudadinni
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Harish Desai
+Age              : 21 years
+Occupation       : Unemployed Graduate
+Address          : 155, Cross Road, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_07
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655006, 4440988776655001, 4440988776655004, 4440988776655002
+  IMEI Numbers   : 353816081234501
+  UPI VPAs       : worker006@icici, earnfast001@paytm, quickjob004@oksbi, taskpro002@airtel
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.142
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-22T10:04  |  Telegram task group invite
+  2026-06-22T12:04  |  small test payment received
+  2026-06-23T10:04  |  initial deposit paid
+  2026-06-26T10:04  |  FIR filed
+  2026-06-27T10:04  |  withdrawal blocked
+  2026-06-29T10:04  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-23  |  From: VICTIM_ACC_FIR_SCN4_BURST_07  ->  To: 4440988776655006  |  Rs. 12,437  |  Channel: UPI
+  2026-06-23  |  From: VICTIM_ACC_FIR_SCN4_BURST_07  ->  To: 4440988776655001  |  Rs. 12,437  |  Channel: UPI
+  2026-06-23  |  From: VICTIM_ACC_FIR_SCN4_BURST_07  ->  To: 4440988776655004  |  Rs. 12,437  |  Channel: UPI
+  2026-06-23  |  From: VICTIM_ACC_FIR_SCN4_BURST_07  ->  To: 4440988776655002  |  Rs. 12,437  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000016
+PoliceStationID  : 1007
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.923443, 77.599828
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-06-26
+Signature of Complainant: Harish Desai
+Signature of Recording Officer: Basavaraj Gudadinni, Koramangala Cyber Crime Station

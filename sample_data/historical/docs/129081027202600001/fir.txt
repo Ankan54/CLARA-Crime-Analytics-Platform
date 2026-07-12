@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129081027202600001
+Case No.         : 202600001
+Police Station   : Ballari CEN Police Station
+District         : Ballari
+Date Registered  : 2026-01-17
+Date of Offence  : 2026-01-14
+IO Officer       : Venkatesh Kumar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Sunitha Sharma
+Age              : 34 years
+Occupation       : IT Professional
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_312
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG25973052265
+  UPI VPAs       : sunithas25@okicici
+  Phone Numbers  : 9523342545
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-14T22:56  |  fake bank SMS received
+  2026-01-14T23:06  |  credentials entered on fake site
+  2026-01-15T00:56  |  account accessed by fraudster
+  2026-01-15T22:56  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-14  |  From: VICTIM_ACC_FIR_BG_312  ->  To: BG25973052265  |  Rs. 487,982  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000041
+PoliceStationID  : 1027
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1019
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 15.117477, 76.914436
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Ballari, 2026-01-17
+Signature of Complainant: Sunitha Sharma
+Signature of Recording Officer: Venkatesh Kumar, Ballari CEN Police Station

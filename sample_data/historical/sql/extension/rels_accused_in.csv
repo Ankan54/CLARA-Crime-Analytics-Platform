@@ -1,0 +1,4 @@
+AccusedMasterID,CaseMasterID,source_caseid,observed_date,confidence,role
+2000001,1000005,1000005,2024-08-16,1.0,accused
+2000002,1000006,1000006,2025-03-28,1.0,accused
+2000003,1000007,1000007,2025-11-17,1.0,accused

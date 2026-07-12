@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000031
+Crime No.        : 129011001202600012
+Case No.         : 202600012
+CaseMasterID     : 1000062
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2026-01-15
+IO Officer       : Ravi Krishnamurthy (EmployeeID: 5005)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹352,514 via UPI. Account BG72908629670 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG72908629670
+  UPI VPAs       : sunitham31@okicici
+  Phone Numbers  : 9834217678
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-04T22:34  |  recruited to share bank account
+  2026-01-09T22:34  |  account used for illegal transfers
+  2026-02-03T22:34  |  account frozen
+  2026-02-08T22:34  |  FIR filed against account holder
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-04  |  From: VICTIM_ACC_FIR_BG_333  ->  To: BG72908629670  |  Rs. 352,514  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-01-15
+Signature of IO: Ravi Krishnamurthy, CEN Police Station - East Division

@@ -1,0 +1,11 @@
+CourtID,CourtName,DistrictID,StateID,Active
+7001,"Court of Additional Chief Metropolitan Magistrate, Bengaluru",2901,29,1
+7002,"Court of Chief Judicial Magistrate, Bengaluru",2901,29,1
+7003,"Court of Chief Judicial Magistrate, Mysuru",2903,29,1
+7004,"Court of Chief Judicial Magistrate, Mangaluru",2904,29,1
+7005,"Court of Chief Judicial Magistrate, Hubballi",2905,29,1
+7006,"Court of Chief Judicial Magistrate, Belagavi",2906,29,1
+7007,"Court of Chief Judicial Magistrate, Dharwad",2919,29,1
+7008,"Court of Chief Judicial Magistrate, Tumakuru",2911,29,1
+7009,"Court of Chief Judicial Magistrate, Kalaburagi",2907,29,1
+7010,"Court of Chief Judicial Magistrate, Shivamogga",2909,29,1

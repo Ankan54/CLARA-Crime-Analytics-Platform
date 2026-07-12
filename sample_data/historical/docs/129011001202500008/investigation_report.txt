@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000015
+Crime No.        : 129011001202500008
+Case No.         : 202500008
+CaseMasterID     : 1000046
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2025-08-26
+IO Officer       : Suresh Patil (EmployeeID: 5008)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹352,779 via UPI. Account BG51222558104 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG51222558104
+  UPI VPAs       : geethala18@okicici
+  Phone Numbers  : 9922295834
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-07T10:12  |  fake job offer received
+  2025-08-08T10:12  |  registration fee paid
+  2025-08-17T10:12  |  offer turned out fake
+  2025-08-18T10:12  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-07  |  From: VICTIM_ACC_FIR_BG_317  ->  To: BG51222558104  |  Rs. 352,779  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-08-26
+Signature of IO: Suresh Patil, CEN Police Station - East Division

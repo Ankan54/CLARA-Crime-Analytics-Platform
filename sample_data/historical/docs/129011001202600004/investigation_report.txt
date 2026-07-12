@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000008
+Crime No.        : 129011001202600004
+Case No.         : 202600004
+CaseMasterID     : 1000038
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2026-04-16
+IO Officer       : Kavitha Reddy (EmployeeID: 5010)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹296,983 via IMPS. Account BG71901301368 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG71901301368
+  UPI VPAs       : saralash91@okicici
+  Phone Numbers  : 9517310810
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-23T00:28  |  fake job offer received
+  2026-03-24T00:28  |  registration fee paid
+  2026-04-02T00:28  |  offer turned out fake
+  2026-04-03T00:28  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-23  |  From: VICTIM_ACC_FIR_BG_309  ->  To: BG71901301368  |  Rs. 296,983  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-04-16
+Signature of IO: Kavitha Reddy, CEN Police Station - East Division

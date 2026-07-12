@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500003
+Case No.         : 202500003
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-11-28
+Date of Offence  : 2025-11-24
+IO Officer       : Basavaraj Gudadinni
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Vinod Naidu
+Age              : 59 years
+Occupation       : Businessman
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_306
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG59026049626
+  Phone Numbers  : 9304967461
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-11-24T16:09  |  call from fake official
+  2025-11-24T16:19  |  digital arrest threat
+  2025-11-24T16:39  |  fund transfer
+  2025-11-26T16:09  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-11-24  |  From: VICTIM_ACC_FIR_BG_306  ->  To: BG59026049626  |  Rs. 2,658,148  |  Channel: NEFT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000035
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 15.210201, 76.490256
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-11-28
+Signature of Complainant: Vinod Naidu
+Signature of Recording Officer: Basavaraj Gudadinni, CEN Police Station - East Division

@@ -1,0 +1,66 @@
+node_id,full_name,role,age,gender,occupation,district
+ACC:2000001,Imraan Sheikh,accused,28,M,Unemployed,Bengaluru Urban
+ACC:2000002,I. Shaikh,accused,35,M,Unemployed,Tumakuru
+ACC:2000003,Imran Shek,accused,27,M,Unemployed,Bengaluru Urban
+COMP:3000001,Suresh Venkataraman,complainant,61,M,Retired IAS Officer,Mysuru
+COMP:3000002,Priya Kamath,complainant,54,F,Chartered Accountant,Mangaluru
+COMP:3000003,Manjunath Hegde,complainant,67,M,Retired Engineer,Hubballi-Dharwad
+COMP:3000004,Nagaraj Swamy,complainant,63,M,Other,Hassan
+COMP:3000005,Lakshmi Krishnamurthy,complainant,34,F,Software Engineer,Bengaluru Urban
+COMP:3000006,Harish Patil,complainant,28,M,Bank Employee,Tumakuru
+COMP:3000007,Deepa Nair,complainant,24,F,Job Seeker,Bengaluru Urban
+COMP:3000008,Siddaraju Hiremath,complainant,58,M,Retired Professor,Belagavi
+COMP:3000009,Kavitha Desai,complainant,38,F,IT Professional,Dharwad
+COMP:3000010,Renuka Lamani,complainant,18,M,Student,Bengaluru Urban
+COMP:3000011,Deepa Shetty,complainant,23,F,Engineering Student,Bengaluru Urban
+COMP:3000012,Lakshmi Reddy,complainant,22,M,Unemployed Graduate,Mysuru
+COMP:3000013,Sandeep Kamath,complainant,28,M,MBA Student,Davanagere
+COMP:3000014,Meena Nair,complainant,19,M,Student,Hubballi-Dharwad
+COMP:3000015,Shivarudrappa Bhat,complainant,18,F,Engineering Student,Shivamogga
+COMP:3000016,Harish Desai,complainant,21,M,Unemployed Graduate,Bengaluru Urban
+COMP:3000017,Kantharaju Venkataraman,complainant,23,M,Engineering Student,Bengaluru Urban
+COMP:3000018,Pradeep Lamani,complainant,28,F,Student,Chikkaballapur
+COMP:3000019,Shobha Krishnamurthy,complainant,24,F,Part-time Worker,Mangaluru
+COMP:3000020,Nagaraj Gowda,complainant,20,M,Unemployed Graduate,Bengaluru Urban
+COMP:3000021,Ramesh Shetty,complainant,24,M,Fresher,Davanagere
+COMP:3000022,Renuka Hegde,complainant,22,F,Engineering Student,Hubballi-Dharwad
+COMP:3000023,Siddappa Nair,complainant,27,F,Student,Chikkaballapur
+COMP:3000024,Mohan Venkataraman,complainant,23,M,Part-time Worker,Chikkaballapur
+COMP:3000025,Shakuntala Gaonkar,complainant,26,F,Fresher,Hassan
+COMP:3000026,Thimmaiah Sharma,complainant,22,F,Student,Mysuru
+COMP:3000027,Naveen Shetty,complainant,28,F,Job Seeker,Hubballi-Dharwad
+COMP:3000028,Radha Hegde,complainant,24,M,Unemployed Graduate,Shivamogga
+COMP:3000029,Rajesh Gaonkar,complainant,29,M,Small Business Owner,Bengaluru Rural
+COMP:3000030,Ajay Venkataraman,complainant,47,M,Retired Professor,Bengaluru Urban
+COMP:3000031,Ajay Acharya,complainant,34,M,MSME Owner,Hassan
+COMP:3000032,Pradeep Veeranna,complainant,37,M,Software Engineer,Ramanagara
+COMP:3000033,Ajay Patel,complainant,45,M,Government Employee,Chikkamagaluru
+COMP:3000034,Harish Lamani,complainant,24,M,Student,Kolar
+COMP:3000035,Vinod Naidu,complainant,59,M,Businessman,Vijayanagara
+COMP:3000036,Siddappa Iyer,complainant,21,M,Job Seeker,Chamarajanagara
+COMP:3000037,Venkatesh Veeranna,complainant,31,M,Government Employee,Kodagu
+COMP:3000038,Sarala Shastri,complainant,19,F,Part-time Worker,Kodagu
+COMP:3000039,Meena Krishnamurthy,complainant,70,F,Chartered Accountant,Udupi
+COMP:3000040,Basavaraj Subramaniam,complainant,34,M,Government Employee,Bengaluru Rural
+COMP:3000041,Sunitha Sharma,complainant,34,F,IT Professional,Ballari
+COMP:3000042,Sandeep Gaonkar,complainant,39,M,Trader,Vijayapura
+COMP:3000043,Shiva Bhat,complainant,28,M,IT Professional,Chitradurga
+COMP:3000044,Mangala Veeranna,complainant,37,F,IT Professional,Chikkaballapur
+COMP:3000045,Nalini Shastri,complainant,39,F,MSME Owner,Bengaluru Rural
+COMP:3000046,Geetha Lamani,complainant,20,F,Fresher,Kodagu
+COMP:3000047,Vinod Subramaniam,complainant,38,M,Government Employee,Bengaluru Rural
+COMP:3000048,Shanthi Naidu,complainant,31,F,Businessman,Bengaluru Urban
+COMP:3000049,Sunitha Patil,complainant,37,F,Software Engineer,Ramanagara
+COMP:3000050,Nalini Patil,complainant,19,F,Fresher,Bidar
+COMP:3000051,Bhavana Patel,complainant,32,F,Bank Employee,Kodagu
+COMP:3000052,Arjun Kamath,complainant,30,M,Trader,Bagalkot
+COMP:3000053,Rohit Kulkarni,complainant,19,M,Job Seeker,Vijayapura
+COMP:3000054,Virupaksha Kamath,complainant,36,M,Software Engineer,Bengaluru Rural
+COMP:3000055,Ambika Acharya,complainant,50,F,Retired IAS Officer,Kodagu
+COMP:3000056,Lakshmi Reddy,complainant,52,F,Contractor,Bengaluru Urban
+COMP:3000057,Arun Murthy,complainant,44,M,Bank Employee,Yadgir
+COMP:3000058,Lakshmi Lamani,complainant,28,F,Engineering Student,Mandya
+COMP:3000059,Bhavana Gaonkar,complainant,53,F,Retired Engineer,Chitradurga
+COMP:3000060,Basavaraj Acharya,complainant,33,M,IT Professional,Bagalkot
+COMP:3000061,Meena Murthy,complainant,53,F,Retired Engineer,Kalaburagi
+COMP:3000062,Sunitha Mallaiah,complainant,20,F,Student,Bengaluru Rural

@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202600003
+Case No.         : 202600003
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2026-04-06
+Date of Offence  : 2026-04-03
+IO Officer       : Nirmala Shetty
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Siddappa Iyer
+Age              : 21 years
+Occupation       : Job Seeker
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_307
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG41943151749
+  UPI VPAs       : siddappa52@okicici
+  Phone Numbers  : 9482479207
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-04-03T03:39  |  task group invite
+  2026-04-04T03:39  |  first deposit to unlock tasks
+  2026-04-08T03:39  |  withdrawal refused
+  2026-04-09T03:39  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-04-03  |  From: VICTIM_ACC_FIR_BG_307  ->  To: BG41943151749  |  Rs. 283,059  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000036
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 11.911649, 77.202107
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-04-06
+Signature of Complainant: Siddappa Iyer
+Signature of Recording Officer: Nirmala Shetty, CEN Police Station - East Division

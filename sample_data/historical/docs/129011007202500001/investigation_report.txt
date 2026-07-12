@@ -1,0 +1,35 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000017
+Crime No.        : 129011007202500001
+Case No.         : 202500001
+CaseMasterID     : 1000048
+Police Station   : Koramangala Cyber Crime Station
+District         : Bengaluru Urban
+Report Date      : 2025-09-01
+IO Officer       : Savitha Nagaraj (EmployeeID: 5004)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹136,308 via UPI. Account BG77291767160 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG77291767160
+  UPI VPAs       : shanthin93@okicici
+  Phone Numbers  : 9856064317
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-15T09:01  |  fake UPI request sent
+  2025-08-15T09:06  |  payment made under confusion
+  2025-08-16T09:01  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-15  |  From: VICTIM_ACC_FIR_BG_319  ->  To: BG77291767160  |  Rs. 136,308  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-09-01
+Signature of IO: Savitha Nagaraj, Koramangala Cyber Crime Station

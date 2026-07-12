@@ -1,0 +1,68 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129061017202600001
+Case No.         : 202600001
+Police Station   : Tilakwadi Police Station
+District         : Belagavi
+Date Registered  : 2026-02-08
+Date of Offence  : 2026-02-05
+IO Officer       : Anand Hegde
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Siddaraju Hiremath
+Age              : 58 years
+Occupation       : Retired Professor
+Address          : 22, Station Road, Belagavi
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN3_H01
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 5530123456789001
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-02-05T14:30  |  call from fake CBI officer
+  2026-02-05T14:45  |  digital arrest via WhatsApp video
+  2026-02-05T15:00  |  first fund transfer (NEFT)
+  2026-02-06T09:00  |  fraud realised next morning
+  2026-02-08T14:30  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-02-05  |  From: VICTIM_ACC_SCN3_H01  ->  To: 5530123456789001  |  Rs. 1,200,000  |  Channel: NEFT
+  2026-02-05  |  From: 5530123456789001  ->  To: 5530123456789002  |  Rs. 1,200,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789011  |  Rs. 90,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789011  ->  To: TR7NHqjeKQxGTCi8q8ZY4pL17cMd3wqv9N  |  Rs. 90,000  |  Channel: crypto
+  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789012  |  Rs. 90,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789012  ->  To: TR7NHqjeKQxGTCi8q8ZY4pL17cMd3wqv9N  |  Rs. 90,000  |  Channel: crypto
+  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789013  |  Rs. 90,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789014  |  Rs. 90,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789015  |  Rs. 90,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789015  ->  To: TR7NHqjeKQxGTCi8q8ZY4pL17cMd3wqv9N  |  Rs. 90,000  |  Channel: crypto
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000008
+PoliceStationID  : 1017
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7006
+Lat/Long         : 15.826888, 74.496503
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Belagavi, 2026-02-08
+Signature of Complainant: Siddaraju Hiremath
+Signature of Recording Officer: Anand Hegde, Tilakwadi Police Station

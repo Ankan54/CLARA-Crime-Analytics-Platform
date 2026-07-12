@@ -1,0 +1,65 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129101024202600002
+Case No.         : 202600002
+Police Station   : Davanagere Cyber Crime Station
+District         : Davanagere
+Date Registered  : 2026-06-15
+Date of Offence  : 2026-06-12
+IO Officer       : Venkatesh Kumar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Ramesh Shetty
+Age              : 24 years
+Occupation       : Fresher
+Address          : 21, Colony Road, Davanagere
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_12
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655002, 4440988776655001
+  IMEI Numbers   : 353816081234503
+  UPI VPAs       : taskpro002@airtel, earnfast001@paytm
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.143
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-12T22:43  |  Telegram task group invite
+  2026-06-13T00:43  |  small test payment received
+  2026-06-13T22:43  |  initial deposit paid
+  2026-06-15T22:43  |  FIR filed
+  2026-06-19T22:43  |  withdrawal blocked
+  2026-06-19T22:43  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-13  |  From: VICTIM_ACC_FIR_SCN4_BURST_12  ->  To: 4440988776655002  |  Rs. 28,005  |  Channel: UPI
+  2026-06-13  |  From: VICTIM_ACC_FIR_SCN4_BURST_12  ->  To: 4440988776655001  |  Rs. 28,005  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000021
+PoliceStationID  : 1024
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 14.511454, 75.904272
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Davanagere, 2026-06-15
+Signature of Complainant: Ramesh Shetty
+Signature of Recording Officer: Venkatesh Kumar, Davanagere Cyber Crime Station

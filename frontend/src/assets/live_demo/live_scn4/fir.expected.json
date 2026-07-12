@@ -1,0 +1,75 @@
+{
+  "scenario_key": "LIVE_SCN4",
+  "CrimeNo": "129011002202600001",
+  "CaseNo": "202600001",
+  "PoliceStationID": 1002,
+  "PoliceStationName": "CEN Police Station - West Division",
+  "DistrictID": 2901,
+  "DistrictName": "Bengaluru Urban",
+  "CaseCategoryID": 1,
+  "CaseStatusID": 1,
+  "CrimeMajorHeadID": 101,
+  "CrimeMinorHeadID": 1013,
+  "CrimeRegisteredDate": "2026-06-26",
+  "complainant": {
+    "name": "Arjun K",
+    "age": 21,
+    "occupation": "Engineering Student",
+    "gender": "M"
+  },
+  "accused": [
+    {
+      "person_id_label": "A1",
+      "name": "Unknown / Under Investigation",
+      "AccusedMasterID": 2000007,
+      "age": 0,
+      "gender": "M",
+      "occupation": "Unknown",
+      "is_arrested": false,
+      "_note": "Own AccusedMasterID; un-merged"
+    }
+  ],
+  "charged_sections": [
+    {
+      "act_code": "ITACT",
+      "section_code": "66D"
+    },
+    {
+      "act_code": "BNS",
+      "section_code": "318"
+    }
+  ],
+  "revealed_identifiers": {
+    "accounts": [],
+    "imeis": [
+      "353816081234501"
+    ],
+    "ips": [
+      "103.74.19.141"
+    ],
+    "upis": [],
+    "phones": []
+  },
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129011008202600001",
+      "via_identifier": "353816081234501",
+      "identifier_type": "imei",
+      "_note": "Shared IMEI from SCN4 pool links to burst ring cases"
+    },
+    {
+      "historical_case_crime_no": "129011007202600001",
+      "via_identifier": "353816081234501",
+      "identifier_type": "imei",
+      "_note": "Shared IMEI from SCN4 pool links to burst ring cases"
+    },
+    {
+      "historical_case_crime_no": "129031010202600002",
+      "via_identifier": "353816081234501",
+      "identifier_type": "imei",
+      "_note": "Shared IMEI from SCN4 pool links to burst ring cases"
+    }
+  ],
+  "extension_extraction_target": {},
+  "_note": "Live Accused rows have own AccusedMasterIDs. No RESOLVED_AS/LINKED_TO pre-baked."
+}

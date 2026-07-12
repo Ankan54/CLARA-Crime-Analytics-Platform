@@ -1,0 +1,16 @@
+node_id,name,requires_63
+ET_BANK_STMT,Bank Account Statement,1
+ET_TXN_RECEIPT,Payment Transaction Receipt,1
+ET_SCREENSHOT,Messaging App Screenshot,1
+ET_CDR,Call Detail Records (CDR),0
+ET_IMEI_REG,IMEI Registration Record,0
+ET_KYC,Bank KYC Documents,0
+ET_DEVICE_DUMP,Seized Device Forensic Dump,1
+ET_IP_LOG,Server/Application Login Log,1
+ET_CRYPTO_TXN,Cryptocurrency Transaction Record,0
+ET_VICTIM_STMT,Victim's Sworn Statement,0
+ET_WITNESS_STMT,Witness Statement,0
+ET_UPI_LOG,UPI Transaction Log (NPCI),1
+ET_AADHAAR,Aadhaar/PAN Verification Record,0
+ET_EMAIL,Email Communication Record,1
+ET_SOCIAL_MEDIA,Social Media Profile/Post,1

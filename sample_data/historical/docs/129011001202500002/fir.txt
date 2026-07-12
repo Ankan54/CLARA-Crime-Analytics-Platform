@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500002
+Case No.         : 202500002
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-11-28
+Date of Offence  : 2025-11-25
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Pradeep Veeranna
+Age              : 37 years
+Occupation       : Software Engineer
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_303
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG66373121445
+  UPI VPAs       : pradeepv95@okicici
+  Phone Numbers  : 9680613283
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-11-25T02:26  |  befriended on social media
+  2025-11-30T02:26  |  compromising call recorded
+  2025-12-01T02:26  |  blackmail demand received
+  2025-12-03T02:26  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-11-25  |  From: VICTIM_ACC_FIR_BG_303  ->  To: BG66373121445  |  Rs. 392,918  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000032
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1018
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.705868, 77.248838
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-11-28
+Signature of Complainant: Pradeep Veeranna
+Signature of Recording Officer: Ravi Krishnamurthy, CEN Police Station - East Division

@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011003202600001
+Case No.         : 202600001
+Police Station   : CEN Police Station - South Division
+District         : Bengaluru Urban
+Date Registered  : 2026-05-23
+Date of Offence  : 2026-05-20
+IO Officer       : Suresh Patil
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Ajay Venkataraman
+Age              : 47 years
+Occupation       : Retired Professor
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_301
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG47854412967
+  Phone Numbers  : 9225535993
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-05-20T00:31  |  call from fake official
+  2026-05-20T00:41  |  digital arrest threat
+  2026-05-20T01:01  |  fund transfer
+  2026-05-22T00:31  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-05-20  |  From: VICTIM_ACC_FIR_BG_301  ->  To: BG47854412967  |  Rs. 2,175,185  |  Channel: NEFT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000030
+PoliceStationID  : 1003
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.964867, 77.597198
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-05-23
+Signature of Complainant: Ajay Venkataraman
+Signature of Recording Officer: Suresh Patil, CEN Police Station - South Division

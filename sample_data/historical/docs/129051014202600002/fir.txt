@@ -1,0 +1,67 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129051014202600002
+Case No.         : 202600002
+Police Station   : Hubballi CEN Police Station
+District         : Hubballi-Dharwad
+Date Registered  : 2026-06-09
+Date of Offence  : 2026-06-05
+IO Officer       : Anand Hegde
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Renuka Hegde
+Age              : 22 years
+Occupation       : Engineering Student
+Address          : 180, Cross Road, Hubballi-Dharwad
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_13
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655005, 4440988776655004, 4440988776655003, 4440988776655006
+  IMEI Numbers   : 353816081234503
+  UPI VPAs       : simpletask005@okhdfcbank, quickjob004@oksbi, dailywork003@fino, worker006@icici
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.143
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-05T21:33  |  Telegram task group invite
+  2026-06-05T23:33  |  small test payment received
+  2026-06-06T21:33  |  initial deposit paid
+  2026-06-07T21:33  |  withdrawal blocked
+  2026-06-09T21:33  |  FIR filed
+  2026-06-10T21:33  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-06  |  From: VICTIM_ACC_FIR_SCN4_BURST_13  ->  To: 4440988776655005  |  Rs. 2,557  |  Channel: UPI
+  2026-06-06  |  From: VICTIM_ACC_FIR_SCN4_BURST_13  ->  To: 4440988776655004  |  Rs. 2,557  |  Channel: UPI
+  2026-06-06  |  From: VICTIM_ACC_FIR_SCN4_BURST_13  ->  To: 4440988776655003  |  Rs. 2,557  |  Channel: UPI
+  2026-06-07  |  From: VICTIM_ACC_FIR_SCN4_BURST_13  ->  To: 4440988776655006  |  Rs. 2,557  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000022
+PoliceStationID  : 1014
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7005
+Lat/Long         : 15.32757, 75.101241
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Hubballi-Dharwad, 2026-06-09
+Signature of Complainant: Renuka Hegde
+Signature of Recording Officer: Anand Hegde, Hubballi CEN Police Station

@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011007202500001
+Case No.         : 202500001
+Police Station   : Koramangala Cyber Crime Station
+District         : Bengaluru Urban
+Date Registered  : 2025-08-18
+Date of Offence  : 2025-08-15
+IO Officer       : Savitha Nagaraj
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Shanthi Naidu
+Age              : 31 years
+Occupation       : Businessman
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_319
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG77291767160
+  UPI VPAs       : shanthin93@okicici
+  Phone Numbers  : 9856064317
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-15T09:01  |  fake UPI request sent
+  2025-08-15T09:06  |  payment made under confusion
+  2025-08-16T09:01  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-15  |  From: VICTIM_ACC_FIR_BG_319  ->  To: BG77291767160  |  Rs. 136,308  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000048
+PoliceStationID  : 1007
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1014
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 13.004067, 77.610629
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-08-18
+Signature of Complainant: Shanthi Naidu
+Signature of Recording Officer: Savitha Nagaraj, Koramangala Cyber Crime Station

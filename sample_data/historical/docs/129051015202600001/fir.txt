@@ -1,0 +1,66 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129051015202600001
+Case No.         : 202600001
+Police Station   : Navanagar Police Station
+District         : Hubballi-Dharwad
+Date Registered  : 2026-06-16
+Date of Offence  : 2026-06-14
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Meena Nair
+Age              : 19 years
+Occupation       : Student
+Address          : 31, Cross Road, Hubballi-Dharwad
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_05
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655003, 4440988776655006, 4440988776655005
+  IMEI Numbers   : 353816081234501
+  UPI VPAs       : dailywork003@fino, worker006@icici, simpletask005@okhdfcbank
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.143
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-14T05:15  |  Telegram task group invite
+  2026-06-14T07:15  |  small test payment received
+  2026-06-15T05:15  |  initial deposit paid
+  2026-06-16T05:15  |  FIR filed
+  2026-06-19T05:15  |  withdrawal blocked
+  2026-06-22T05:15  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-15  |  From: VICTIM_ACC_FIR_SCN4_BURST_05  ->  To: 4440988776655003  |  Rs. 19,378  |  Channel: UPI
+  2026-06-15  |  From: VICTIM_ACC_FIR_SCN4_BURST_05  ->  To: 4440988776655006  |  Rs. 19,378  |  Channel: UPI
+  2026-06-15  |  From: VICTIM_ACC_FIR_SCN4_BURST_05  ->  To: 4440988776655005  |  Rs. 19,378  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000014
+PoliceStationID  : 1015
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7005
+Lat/Long         : 15.413583, 75.153005
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Hubballi-Dharwad, 2026-06-16
+Signature of Complainant: Meena Nair
+Signature of Recording Officer: Ravi Krishnamurthy, Navanagar Police Station

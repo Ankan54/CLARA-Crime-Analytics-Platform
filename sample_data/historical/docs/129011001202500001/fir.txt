@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500001
+Case No.         : 202500001
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-12-15
+Date of Offence  : 2025-12-10
+IO Officer       : Manjunath Gowda
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Rajesh Gaonkar
+Age              : 29 years
+Occupation       : Small Business Owner
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_300
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG85604479315
+  UPI VPAs       : rajeshga88@okicici
+  Phone Numbers  : 9697361173
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-12-10T04:51  |  befriended on social media
+  2025-12-15T04:51  |  compromising call recorded
+  2025-12-16T04:51  |  blackmail demand received
+  2025-12-18T04:51  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-12-10  |  From: VICTIM_ACC_FIR_BG_300  ->  To: BG85604479315  |  Rs. 332,835  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000029
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1018
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 13.141222, 77.560349
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-12-15
+Signature of Complainant: Rajesh Gaonkar
+Signature of Recording Officer: Manjunath Gowda, CEN Police Station - East Division

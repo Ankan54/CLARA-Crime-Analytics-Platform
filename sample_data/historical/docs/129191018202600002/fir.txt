@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129191018202600002
+Case No.         : 202600002
+Police Station   : Dharwad Cyber Crime Police Station
+District         : Dharwad
+Date Registered  : 2026-01-23
+Date of Offence  : 2026-01-18
+IO Officer       : Priya Shankar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Kavitha Desai
+Age              : 38 years
+Occupation       : IT Professional
+Address          : 45, Hubli Road, Dharwad
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 3 PMLA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN3_H02
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 5530123456789002
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-10T09:00  |  WhatsApp investment group invite
+  2026-01-12T10:00  |  initial test withdrawal of ₹5K
+  2026-01-18T11:30  |  ₹5L investment transferred
+  2026-01-22T14:00  |  withdrawal blocked, contact lost
+  2026-01-23T11:00  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-18  |  From: VICTIM_ACC_SCN3_H02  ->  To: 5530123456789002  |  Rs. 500,000  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000009
+PoliceStationID  : 1018
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1012
+CaseStatusID     : 1
+CourtID          : 7007
+Lat/Long         : 15.411059, 75.006226
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Dharwad, 2026-01-23
+Signature of Complainant: Kavitha Desai
+Signature of Recording Officer: Priya Shankar, Dharwad Cyber Crime Police Station

@@ -1,0 +1,40 @@
+OccupationID,OccupationName
+1,Student
+2,Doctor
+3,Retired Professor
+4,Retired Engineer
+5,Retired IAS Officer
+6,Chartered Accountant
+7,Senior Manager
+8,Businessman
+9,Fresher
+10,Part-time Worker
+11,Job Seeker
+12,Engineering Student
+13,MBA Student
+14,Unemployed Graduate
+15,Software Engineer
+16,IT Professional
+17,Bank Employee
+18,Teacher
+19,Government Employee
+20,Small Business Owner
+21,Shop Owner
+22,Trader
+23,Contractor
+24,Transport Operator
+25,MSME Owner
+26,Homemaker
+27,Daily Wage Worker
+28,Auto Driver
+29,Delivery Worker
+30,Unemployed
+31,Freelancer
+32,Small Trader
+33,Call Centre Agent
+34,Data Entry Operator
+35,Money Lender
+36,Property Dealer
+37,Consultant
+38,Finance Broker
+39,Other

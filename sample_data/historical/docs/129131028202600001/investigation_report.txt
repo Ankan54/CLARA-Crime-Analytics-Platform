@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000022
+Crime No.        : 129131028202600001
+Case No.         : 202600001
+CaseMasterID     : 1000053
+Police Station   : Vijayapura CEN Police Station
+District         : Vijayapura
+Report Date      : 2026-04-06
+IO Officer       : Deepa Kamath (EmployeeID: 5007)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹376,087 via NEFT. Account BG70025550114 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG70025550114
+  UPI VPAs       : rohitkul69@okicici
+  Phone Numbers  : 9716603953
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-27T10:59  |  loan app installed
+  2026-03-27T11:59  |  personal data harvested
+  2026-04-10T10:59  |  harassment calls started
+  2026-04-16T10:59  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-27  |  From: VICTIM_ACC_FIR_BG_324  ->  To: BG70025550114  |  Rs. 376,087  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Vijayapura, 2026-04-06
+Signature of IO: Deepa Kamath, Vijayapura CEN Police Station

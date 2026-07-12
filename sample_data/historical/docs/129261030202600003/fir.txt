@@ -1,0 +1,56 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129261030202600003
+Case No.         : 202600003
+Police Station   : Chikkaballapur CEN Police Station
+District         : Chikkaballapur
+Date Registered  : 2026-05-16
+Date of Offence  : 2026-05-14
+IO Officer       : Manjunath Gowda
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Mohan Venkataraman
+Age              : 23 years
+Occupation       : Part-time Worker
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BASE_01
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : INDP_ACC_BASE_01_63262
+  UPI VPAs       : baseline.task01@okicici
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-05-14T09:20  |  Instagram message about reel liking job
+  2026-05-15T09:20  |  first task completed, small payment
+  2026-05-16T09:20  |  money deposited to unlock premium tasks
+  2026-05-16T09:20  |  FIR filed
+  2026-05-19T09:20  |  withdrawal refused
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000024
+PoliceStationID  : 1030
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 13.422615, 77.735892
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Chikkaballapur, 2026-05-16
+Signature of Complainant: Mohan Venkataraman
+Signature of Recording Officer: Manjunath Gowda, Chikkaballapur CEN Police Station

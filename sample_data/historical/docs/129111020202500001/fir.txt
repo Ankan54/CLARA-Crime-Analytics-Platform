@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129111020202500001
+Case No.         : 202500001
+Police Station   : SS Puram Police Station
+District         : Tumakuru
+Date Registered  : 2025-03-28
+Date of Offence  : 2025-03-22
+IO Officer       : Nirmala Shetty
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Harish Patil
+Age              : 28 years
+Occupation       : Bank Employee
+Address          : 78, Main Street, Tumakuru
+
+ACCUSED DETAILS
+---------------
+  A1. I. Shaikh (Age: 35, Gender: M)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN2_H02
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 8810987654321002
+  UPI VPAs       : imran.transactions@axl
+  Phone Numbers  : 9611234567
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-03-22T00:00  |  fake bank call received
+  2025-03-22T00:10  |  OTP shared under duress
+  2025-03-22T01:00  |  account debit noticed
+  2025-03-28T00:00  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-03-22  |  From: VICTIM_ACC_FIR_SCN2_H02  ->  To: 8810987654321002  |  Rs. 400,000  |  Channel: NEFT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000006
+PoliceStationID  : 1020
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1015
+CaseStatusID     : 1
+CourtID          : 7008
+Lat/Long         : 13.347769, 77.061018
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Tumakuru, 2025-03-28
+Signature of Complainant: Harish Patil
+Signature of Recording Officer: Nirmala Shetty, SS Puram Police Station

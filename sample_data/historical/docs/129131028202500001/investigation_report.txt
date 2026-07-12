@@ -1,0 +1,35 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000012
+Crime No.        : 129131028202500001
+Case No.         : 202500001
+CaseMasterID     : 1000042
+Police Station   : Vijayapura CEN Police Station
+District         : Vijayapura
+Report Date      : 2025-08-31
+IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹24,706 via IMPS. Account BG82261993550 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG82261993550
+  UPI VPAs       : sandeepg91@okicici
+  Phone Numbers  : 9669996947
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-09T08:13  |  fake UPI request sent
+  2025-08-09T08:18  |  payment made under confusion
+  2025-08-10T08:13  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-09  |  From: VICTIM_ACC_FIR_BG_313  ->  To: BG82261993550  |  Rs. 24,706  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Vijayapura, 2025-08-31
+Signature of IO: Venkatesh Kumar, Vijayapura CEN Police Station

@@ -1,0 +1,4 @@
+AccusedMasterID,OccupationID,CasteID,ReligionID,Address,IsArrested,ResidenceDistrict
+2000001,30,1,5,Last seen in Bengaluru Urban area (unverified),0,Bengaluru Urban
+2000002,30,1,5,Last seen in Tumakuru area (unverified),0,Tumakuru
+2000003,30,1,5,Last seen in Bengaluru Urban area (unverified),0,Bengaluru Urban

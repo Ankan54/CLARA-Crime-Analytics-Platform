@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000007
+Crime No.        : 129011001202500004
+Case No.         : 202500004
+CaseMasterID     : 1000037
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2025-09-23
+IO Officer       : Deepa Kamath (EmployeeID: 5007)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹70,714 via UPI. Account BG27792504963 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG27792504963
+  UPI VPAs       : venkates74@okicici
+  Phone Numbers  : 9961196548
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-09-03T09:16  |  fake bank SMS received
+  2025-09-03T09:26  |  credentials entered on fake site
+  2025-09-03T11:16  |  account accessed by fraudster
+  2025-09-04T09:16  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-09-03  |  From: VICTIM_ACC_FIR_BG_308  ->  To: BG27792504963  |  Rs. 70,714  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-09-23
+Signature of IO: Deepa Kamath, CEN Police Station - East Division

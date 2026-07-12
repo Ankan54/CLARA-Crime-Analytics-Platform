@@ -1,0 +1,18 @@
+INVESTIGATION REPORT
+Case: 129011005202600001
+
+MONEY TRAIL SUMMARY
+Accused 'Imran S.' used phone 9611234567, UPI imran.transactions@axl, IMEI 351756078901234. Platform entity resolution should merge with historical aliases.
+
+NEWLY IDENTIFIED IDENTIFIERS
+  imeis: 351756078901234
+  upis: imran.transactions@axl
+  phones: 9611234567
+
+LINK ASSERTIONS (for validation)
+  -> Historical case 129011004202400001 via imei: 351756078901234
+  -> Historical case 129111020202500001 via imei: 351756078901234
+  -> Historical case 129011002202500001 via imei: 351756078901234
+  -> Historical case 129011004202400001 via upi: imran.transactions@axl
+  -> Historical case 129111020202500001 via upi: imran.transactions@axl
+  -> Historical case 129011002202500001 via upi: imran.transactions@axl

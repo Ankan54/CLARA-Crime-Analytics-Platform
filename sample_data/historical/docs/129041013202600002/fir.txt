@@ -1,0 +1,65 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129041013202600002
+Case No.         : 202600002
+Police Station   : Bunder Police Station
+District         : Mangaluru
+Date Registered  : 2026-06-10
+Date of Offence  : 2026-06-08
+IO Officer       : Priya Shankar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Shobha Krishnamurthy
+Age              : 24 years
+Occupation       : Part-time Worker
+Address          : 90, 1st Main, Mangaluru
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_10
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655003, 4440988776655006
+  IMEI Numbers   : 353816081234502
+  UPI VPAs       : dailywork003@fino, worker006@icici
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.141
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-08T14:23  |  Telegram task group invite
+  2026-06-08T16:23  |  small test payment received
+  2026-06-09T14:23  |  initial deposit paid
+  2026-06-10T14:23  |  withdrawal blocked
+  2026-06-10T14:23  |  FIR filed
+  2026-06-14T14:23  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-09  |  From: VICTIM_ACC_FIR_SCN4_BURST_10  ->  To: 4440988776655003  |  Rs. 47,482  |  Channel: UPI
+  2026-06-09  |  From: VICTIM_ACC_FIR_SCN4_BURST_10  ->  To: 4440988776655006  |  Rs. 47,482  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000019
+PoliceStationID  : 1013
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7004
+Lat/Long         : 12.892349, 74.849026
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Mangaluru, 2026-06-10
+Signature of Complainant: Shobha Krishnamurthy
+Signature of Recording Officer: Priya Shankar, Bunder Police Station

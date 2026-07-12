@@ -1,0 +1,61 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500006
+Case No.         : 202500006
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-08-07
+Date of Offence  : 2025-08-06
+IO Officer       : Girish Rao
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Shiva Bhat
+Age              : 28 years
+Occupation       : IT Professional
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 3 PMLA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_314
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG81215044848
+  UPI VPAs       : shivabha25@okicici
+  Phone Numbers  : 9451025437
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-06T22:14  |  investment offer on WhatsApp
+  2025-08-09T22:14  |  test withdrawal succeeded
+  2025-08-13T22:14  |  large investment transferred
+  2025-08-16T22:14  |  withdrawal blocked
+  2025-08-18T22:14  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-06  |  From: VICTIM_ACC_FIR_BG_314  ->  To: BG81215044848  |  Rs. 76,039  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000043
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1012
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 14.265562, 76.423739
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-08-07
+Signature of Complainant: Shiva Bhat
+Signature of Recording Officer: Girish Rao, CEN Police Station - East Division

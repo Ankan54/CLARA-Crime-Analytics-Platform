@@ -1,0 +1,61 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500009
+Case No.         : 202500009
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-10-29
+Date of Offence  : 2025-10-25
+IO Officer       : Girish Rao
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Vinod Subramaniam
+Age              : 38 years
+Occupation       : Government Employee
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 3 PMLA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_318
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG64245529443
+  UPI VPAs       : vinodsub49@okicici
+  Phone Numbers  : 9828329713
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-10-25T01:00  |  investment offer on WhatsApp
+  2025-10-28T01:00  |  test withdrawal succeeded
+  2025-11-01T01:00  |  large investment transferred
+  2025-11-04T01:00  |  withdrawal blocked
+  2025-11-06T01:00  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-10-25  |  From: VICTIM_ACC_FIR_BG_318  ->  To: BG64245529443  |  Rs. 252,791  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000047
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1012
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 13.056913, 77.534991
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-10-29
+Signature of Complainant: Vinod Subramaniam
+Signature of Recording Officer: Girish Rao, CEN Police Station - East Division

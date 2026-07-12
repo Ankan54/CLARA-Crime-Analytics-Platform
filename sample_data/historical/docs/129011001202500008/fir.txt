@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500008
+Case No.         : 202500008
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-08-13
+Date of Offence  : 2025-08-07
+IO Officer       : Suresh Patil
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Geetha Lamani
+Age              : 20 years
+Occupation       : Fresher
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_317
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG51222558104
+  UPI VPAs       : geethala18@okicici
+  Phone Numbers  : 9922295834
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-07T10:12  |  fake job offer received
+  2025-08-08T10:12  |  registration fee paid
+  2025-08-17T10:12  |  offer turned out fake
+  2025-08-18T10:12  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-07  |  From: VICTIM_ACC_FIR_BG_317  ->  To: BG51222558104  |  Rs. 352,779  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000046
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1017
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.385555, 75.840982
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-08-13
+Signature of Complainant: Geetha Lamani
+Signature of Recording Officer: Suresh Patil, CEN Police Station - East Division

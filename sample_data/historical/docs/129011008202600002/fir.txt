@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011008202600002
+Case No.         : 202600002
+Police Station   : HSR Layout Cyber Crime Station
+District         : Bengaluru Urban
+Date Registered  : 2026-01-18
+Date of Offence  : 2026-01-17
+IO Officer       : Ravi Krishnamurthy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Lakshmi Reddy
+Age              : 52 years
+Occupation       : Contractor
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_327
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG15448669871
+  UPI VPAs       : lakshmir54@okicici
+  Phone Numbers  : 9529075305
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-17T07:51  |  fake UPI request sent
+  2026-01-17T07:56  |  payment made under confusion
+  2026-01-18T07:51  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-17  |  From: VICTIM_ACC_FIR_BG_327  ->  To: BG15448669871  |  Rs. 354,552  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000056
+PoliceStationID  : 1008
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1014
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.96461, 77.617211
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-01-18
+Signature of Complainant: Lakshmi Reddy
+Signature of Recording Officer: Ravi Krishnamurthy, HSR Layout Cyber Crime Station

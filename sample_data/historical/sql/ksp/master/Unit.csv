@@ -1,0 +1,31 @@
+UnitID,UnitName,TypeID,ParentUnit,NationalityID,StateID,DistrictID,Active
+1001,CEN Police Station - East Division,2,,1,29,2901,1
+1002,CEN Police Station - West Division,2,,1,29,2901,1
+1003,CEN Police Station - South Division,2,,1,29,2901,1
+1004,CEN Police Station - North Division,2,,1,29,2901,1
+1005,Whitefield Cyber Crime Police Station,3,,1,29,2901,1
+1006,Electronic City Cyber Crime Station,3,,1,29,2901,1
+1007,Koramangala Cyber Crime Station,3,,1,29,2901,1
+1008,HSR Layout Cyber Crime Station,3,,1,29,2901,1
+1009,Mysuru CEN Police Station,2,,1,29,2903,1
+1010,Chamundipuram Police Station,1,,1,29,2903,1
+1011,Devaraja Police Station,1,,1,29,2903,1
+1012,Mangaluru Cyber Crime Police Station,3,,1,29,2904,1
+1013,Bunder Police Station,1,,1,29,2904,1
+1014,Hubballi CEN Police Station,2,,1,29,2905,1
+1015,Navanagar Police Station,1,,1,29,2905,1
+1016,Belagavi CEN Police Station,2,,1,29,2906,1
+1017,Tilakwadi Police Station,1,,1,29,2906,1
+1018,Dharwad Cyber Crime Police Station,3,,1,29,2919,1
+1019,Tumakuru CEN Police Station,2,,1,29,2911,1
+1020,SS Puram Police Station,1,,1,29,2911,1
+1021,Kalaburagi CEN Police Station,2,,1,29,2907,1
+1022,Raichur Cyber Crime Station,3,,1,29,2912,1
+1023,Shivamogga CEN Police Station,2,,1,29,2909,1
+1024,Davanagere Cyber Crime Station,3,,1,29,2910,1
+1025,Hassan CEN Police Station,2,,1,29,2914,1
+1026,Udupi CEN Police Station,2,,1,29,2915,1
+1027,Ballari CEN Police Station,2,,1,29,2908,1
+1028,Vijayapura CEN Police Station,2,,1,29,2913,1
+1029,Kolar CEN Police Station,2,,1,29,2927,1
+1030,Chikkaballapur CEN Police Station,2,,1,29,2926,1

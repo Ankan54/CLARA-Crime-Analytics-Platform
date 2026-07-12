@@ -1,0 +1,59 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129141025202600003
+Case No.         : 202600003
+Police Station   : Hassan CEN Police Station
+District         : Hassan
+Date Registered  : 2026-05-15
+Date of Offence  : 2026-05-14
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Ajay Acharya
+Age              : 34 years
+Occupation       : MSME Owner
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_302
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG33085184581
+  UPI VPAs       : ajayacha43@okicici
+  Phone Numbers  : 9753754077
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-05-14T06:04  |  fake UPI request sent
+  2026-05-14T06:09  |  payment made under confusion
+  2026-05-15T06:04  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-05-14  |  From: VICTIM_ACC_FIR_BG_302  ->  To: BG33085184581  |  Rs. 166,283  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000031
+PoliceStationID  : 1025
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1014
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 12.9982, 76.122935
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Hassan, 2026-05-15
+Signature of Complainant: Ajay Acharya
+Signature of Recording Officer: Kavitha Reddy, Hassan CEN Police Station

@@ -1,0 +1,35 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000009
+Crime No.        : 129151026202600001
+Case No.         : 202600001
+CaseMasterID     : 1000039
+Police Station   : Udupi CEN Police Station
+District         : Udupi
+Report Date      : 2026-03-13
+IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹593,825 via NEFT. Account BG32427096475 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG32427096475
+  Phone Numbers  : 9886818568
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-05T21:41  |  call from fake official
+  2026-03-05T21:51  |  digital arrest threat
+  2026-03-05T22:11  |  fund transfer
+  2026-03-07T21:41  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-05  |  From: VICTIM_ACC_FIR_BG_310  ->  To: BG32427096475  |  Rs. 593,825  |  Channel: NEFT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Udupi, 2026-03-13
+Signature of IO: Venkatesh Kumar, Udupi CEN Police Station

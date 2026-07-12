@@ -1,0 +1,11 @@
+CrimeSubHeadID,CrimeHeadID,CrimeHeadName,SeqID,Active
+1011,101,Digital Arrest / Fake Official Threat,1,1
+1012,101,Fake Investment / Stock Market Fraud,2,1
+1013,101,Online Task / Job Scam,3,1
+1014,101,UPI Payment Fraud,4,1
+1015,101,OTP Theft / SIM Swap Fraud,5,1
+1016,101,Predatory Loan App Fraud,6,1
+1017,101,Fake Job / Placement Fraud,7,1
+1018,101,Sextortion / Honey Trap,8,1
+1019,101,Phishing / Vishing / Fake Bank,9,1
+1020,102,Mule Account / Money Mule Recruitment,10,1

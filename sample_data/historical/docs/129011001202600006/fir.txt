@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202600006
+Case No.         : 202600006
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2026-03-12
+Date of Offence  : 2026-03-07
+IO Officer       : Venkatesh Kumar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Nalini Patil
+Age              : 19 years
+Occupation       : Fresher
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_321
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG29028523818
+  UPI VPAs       : nalinipa83@okicici
+  Phone Numbers  : 9708939813
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-07T16:59  |  loan app installed
+  2026-03-07T17:59  |  personal data harvested
+  2026-03-21T16:59  |  harassment calls started
+  2026-03-27T16:59  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-03-07  |  From: VICTIM_ACC_FIR_BG_321  ->  To: BG29028523818  |  Rs. 37,297  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000050
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1016
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 17.954036, 77.527418
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-03-12
+Signature of Complainant: Nalini Patil
+Signature of Recording Officer: Venkatesh Kumar, CEN Police Station - East Division

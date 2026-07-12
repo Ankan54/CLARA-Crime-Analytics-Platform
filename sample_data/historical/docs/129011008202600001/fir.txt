@@ -1,0 +1,65 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011008202600001
+Case No.         : 202600001
+Police Station   : HSR Layout Cyber Crime Station
+District         : Bengaluru Urban
+Date Registered  : 2026-06-12
+Date of Offence  : 2026-06-10
+IO Officer       : Anand Hegde
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Renuka Lamani
+Age              : 18 years
+Occupation       : Student
+Address          : 82, Colony Road, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_01
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655007, 4440988776655001
+  IMEI Numbers   : 353816081234505
+  UPI VPAs       : jobapp007@hdfcbank, earnfast001@paytm
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.142
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-10T13:08  |  Telegram task group invite
+  2026-06-10T15:08  |  small test payment received
+  2026-06-11T13:08  |  initial deposit paid
+  2026-06-12T13:08  |  withdrawal blocked
+  2026-06-12T13:08  |  FIR filed
+  2026-06-18T13:08  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-11  |  From: VICTIM_ACC_FIR_SCN4_BURST_01  ->  To: 4440988776655007  |  Rs. 21,854  |  Channel: UPI
+  2026-06-11  |  From: VICTIM_ACC_FIR_SCN4_BURST_01  ->  To: 4440988776655001  |  Rs. 21,854  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000010
+PoliceStationID  : 1008
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.961599, 77.603462
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-06-12
+Signature of Complainant: Renuka Lamani
+Signature of Recording Officer: Anand Hegde, HSR Layout Cyber Crime Station

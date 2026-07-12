@@ -1,0 +1,65 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129031010202600002
+Case No.         : 202600002
+Police Station   : Chamundipuram Police Station
+District         : Mysuru
+Date Registered  : 2026-06-21
+Date of Offence  : 2026-06-19
+IO Officer       : Manjunath Gowda
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Lakshmi Reddy
+Age              : 22 years
+Occupation       : Unemployed Graduate
+Address          : 95, Colony Road, Mysuru
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_03
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655003, 4440988776655005
+  IMEI Numbers   : 353816081234505
+  UPI VPAs       : dailywork003@fino, simpletask005@okhdfcbank
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.142
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-19T03:47  |  Telegram task group invite
+  2026-06-19T05:47  |  small test payment received
+  2026-06-20T03:47  |  initial deposit paid
+  2026-06-21T03:47  |  withdrawal blocked
+  2026-06-21T03:47  |  FIR filed
+  2026-06-29T03:47  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-20  |  From: VICTIM_ACC_FIR_SCN4_BURST_03  ->  To: 4440988776655003  |  Rs. 14,917  |  Channel: UPI
+  2026-06-20  |  From: VICTIM_ACC_FIR_SCN4_BURST_03  ->  To: 4440988776655005  |  Rs. 14,917  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000012
+PoliceStationID  : 1010
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7003
+Lat/Long         : 12.323119, 76.609765
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Mysuru, 2026-06-21
+Signature of Complainant: Lakshmi Reddy
+Signature of Recording Officer: Manjunath Gowda, Chamundipuram Police Station

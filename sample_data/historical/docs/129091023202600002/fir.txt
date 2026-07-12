@@ -1,0 +1,56 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129091023202600002
+Case No.         : 202600002
+Police Station   : Shivamogga CEN Police Station
+District         : Shivamogga
+Date Registered  : 2026-02-15
+Date of Offence  : 2026-02-13
+IO Officer       : Priya Shankar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Radha Hegde
+Age              : 24 years
+Occupation       : Unemployed Graduate
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BASE_05
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : INDP_ACC_BASE_05_48409
+  UPI VPAs       : baseline.task05@okicici
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-02-13T01:14  |  Instagram message about reel liking job
+  2026-02-14T01:14  |  first task completed, small payment
+  2026-02-15T01:14  |  money deposited to unlock premium tasks
+  2026-02-15T01:14  |  FIR filed
+  2026-02-18T01:14  |  withdrawal refused
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000028
+PoliceStationID  : 1023
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7010
+Lat/Long         : 13.944152, 75.56781
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Shivamogga, 2026-02-15
+Signature of Complainant: Radha Hegde
+Signature of Recording Officer: Priya Shankar, Shivamogga CEN Police Station

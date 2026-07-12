@@ -1,0 +1,66 @@
+{
+  "scenario_key": "LIVE_SCN1",
+  "CrimeNo": "129011001202600001",
+  "newly_revealed_identifiers": {
+    "imeis": [
+      "867537042195016"
+    ],
+    "upis": [
+      "raghu.ctrl@ybl"
+    ]
+  },
+  "money_trail_summary": "AGG_ACC_01 (9842017633250001) links to 3 historical ring cases. Controller IMEI 867537042195016 and UPI raghu.ctrl@ybl revealed by KYC check.",
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129031010202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    },
+    {
+      "historical_case_crime_no": "129041013202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    },
+    {
+      "historical_case_crime_no": "129051014202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    },
+    {
+      "historical_case_crime_no": "129141025202600001",
+      "via_identifier": "9842017633250001",
+      "identifier_type": "account_no",
+      "_note": "Aggregation account AGG_ACC_01 is the shared link"
+    }
+  ],
+  "extension_extraction_target": {
+    "devices": [
+      {
+        "IMEI": "867537042195016"
+      }
+    ],
+    "upis": [
+      {
+        "VPA": "raghu.ctrl@ybl"
+      }
+    ],
+    "rels_uses": [
+      {
+        "to_object_id": "867537042195016",
+        "object_type": "imeis",
+        "source_caseid": "129011001202600001",
+        "confidence": 1.0
+      },
+      {
+        "to_object_id": "raghu.ctrl@ybl",
+        "object_type": "upis",
+        "source_caseid": "129011001202600001",
+        "confidence": 1.0
+      }
+    ]
+  },
+  "_note": "Live IR reveals identifiers not present in historical data."
+}

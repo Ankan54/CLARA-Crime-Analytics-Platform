@@ -1,0 +1,14 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT (PRELIMINARY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129051015202600002
+Case No.         : 202600002
+CaseMasterID     : 1000027
+Police Station   : Navanagar Police Station
+Report Date      : 2026-01-29
+IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
+
+Status           : Case under investigation. Preliminary enquiry completed.
+                   Cyber Cell notified. Further investigation ongoing.
+
+Signature: Venkatesh Kumar, Navanagar Police Station

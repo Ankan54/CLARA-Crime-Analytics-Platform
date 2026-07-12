@@ -1,0 +1,63 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129031010202600001
+Case No.         : 202600001
+Police Station   : Chamundipuram Police Station
+District         : Mysuru
+Date Registered  : 2026-04-18
+Date of Offence  : 2026-04-14
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Suresh Venkataraman
+Age              : 61 years
+Occupation       : Retired IAS Officer
+Address          : 48, MG Road Layout, Mysuru
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN1_H01
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 7701234567890011
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-04-14T10:15  |  call received from fake TRAI number
+  2026-04-14T10:20  |  call transferred to fake CBI officer
+  2026-04-14T10:30  |  digital arrest initiated via Skype
+  2026-04-14T10:45  |  first fund transfer
+  2026-04-15T06:15  |  fraud realised
+  2026-04-18T10:15  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H01  ->  To: 7701234567890011  |  Rs. 700,000  |  Channel: NEFT
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H01  ->  To: 7701234567890011  |  Rs. 700,000  |  Channel: NEFT
+  2026-04-14  |  From: VICTIM_ACC_FIR_SCN1_H01  ->  To: 7701234567890011  |  Rs. 700,000  |  Channel: NEFT
+  2026-04-14  |  From: 7701234567890011  ->  To: 9842017633250001  |  Rs. 2,100,000  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000001
+PoliceStationID  : 1010
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7003
+Lat/Long         : 12.249655, 76.659022
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Mysuru, 2026-04-18
+Signature of Complainant: Suresh Venkataraman
+Signature of Recording Officer: Kavitha Reddy, Chamundipuram Police Station

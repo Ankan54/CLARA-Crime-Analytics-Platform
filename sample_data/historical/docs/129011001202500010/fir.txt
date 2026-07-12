@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500010
+Case No.         : 202500010
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-09-23
+Date of Offence  : 2025-09-19
+IO Officer       : Savitha Nagaraj
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Bhavana Patel
+Age              : 32 years
+Occupation       : Bank Employee
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_322
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG24670331435
+  UPI VPAs       : bhavanap89@okicici
+  Phone Numbers  : 9958195262
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-09-19T12:21  |  befriended on social media
+  2025-09-24T12:21  |  compromising call recorded
+  2025-09-25T12:21  |  blackmail demand received
+  2025-09-27T12:21  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-09-19  |  From: VICTIM_ACC_FIR_BG_322  ->  To: BG24670331435  |  Rs. 197,375  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000051
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1018
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.313108, 75.84149
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-09-23
+Signature of Complainant: Bhavana Patel
+Signature of Recording Officer: Savitha Nagaraj, CEN Police Station - East Division

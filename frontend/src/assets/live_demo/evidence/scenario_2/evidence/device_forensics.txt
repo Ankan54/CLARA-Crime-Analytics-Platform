@@ -1,0 +1,5 @@
+Device IMEI: 351756078901234
+Linked UPI: imran.transactions@axl
+Phone: 9611234567
+Note: Same IMEI found across 3 prior cases under different accused names.
+Platform entity resolution should surface this cross-case link.

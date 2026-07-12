@@ -1,0 +1,56 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129051015202600002
+Case No.         : 202600002
+Police Station   : Navanagar Police Station
+District         : Hubballi-Dharwad
+Date Registered  : 2026-01-29
+Date of Offence  : 2026-01-24
+IO Officer       : Venkatesh Kumar
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Naveen Shetty
+Age              : 28 years
+Occupation       : Job Seeker
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BASE_04
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : INDP_ACC_BASE_04_84588
+  UPI VPAs       : baseline.task04@okicici
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-24T12:37  |  Instagram message about reel liking job
+  2026-01-25T12:37  |  first task completed, small payment
+  2026-01-26T12:37  |  money deposited to unlock premium tasks
+  2026-01-29T12:37  |  withdrawal refused
+  2026-01-29T12:37  |  FIR filed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000027
+PoliceStationID  : 1015
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7005
+Lat/Long         : 15.325335, 75.115609
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Hubballi-Dharwad, 2026-01-29
+Signature of Complainant: Naveen Shetty
+Signature of Recording Officer: Venkatesh Kumar, Navanagar Police Station

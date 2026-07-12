@@ -1,0 +1,56 @@
+{
+  "scenario_key": "LIVE_SCN2",
+  "CrimeNo": "129011005202600001",
+  "newly_revealed_identifiers": {
+    "imeis": [
+      "351756078901234"
+    ],
+    "upis": [
+      "imran.transactions@axl"
+    ],
+    "phones": [
+      "9611234567"
+    ]
+  },
+  "money_trail_summary": "Accused 'Imran S.' used phone 9611234567, UPI imran.transactions@axl, IMEI 351756078901234. Platform entity resolution should merge with historical aliases.",
+  "connects_to": [
+    {
+      "historical_case_crime_no": "129011004202400001",
+      "via_identifier": "351756078901234",
+      "identifier_type": "imei",
+      "_note": "IMEI DEV_IMEI_02 shared across all alias-accused cases"
+    },
+    {
+      "historical_case_crime_no": "129111020202500001",
+      "via_identifier": "351756078901234",
+      "identifier_type": "imei",
+      "_note": "IMEI DEV_IMEI_02 shared across all alias-accused cases"
+    },
+    {
+      "historical_case_crime_no": "129011002202500001",
+      "via_identifier": "351756078901234",
+      "identifier_type": "imei",
+      "_note": "IMEI DEV_IMEI_02 shared across all alias-accused cases"
+    },
+    {
+      "historical_case_crime_no": "129011004202400001",
+      "via_identifier": "imran.transactions@axl",
+      "identifier_type": "upi",
+      "_note": "UPI_02 is the shared VPA across alias cases"
+    },
+    {
+      "historical_case_crime_no": "129111020202500001",
+      "via_identifier": "imran.transactions@axl",
+      "identifier_type": "upi",
+      "_note": "UPI_02 is the shared VPA across alias cases"
+    },
+    {
+      "historical_case_crime_no": "129011002202500001",
+      "via_identifier": "imran.transactions@axl",
+      "identifier_type": "upi",
+      "_note": "UPI_02 is the shared VPA across alias cases"
+    }
+  ],
+  "extension_extraction_target": {},
+  "_note": "Live IR reveals identifiers not present in historical data."
+}

@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500012
+Case No.         : 202500012
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-09-07
+Date of Offence  : 2025-09-01
+IO Officer       : Savitha Nagaraj
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Basavaraj Acharya
+Age              : 33 years
+Occupation       : IT Professional
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_331
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG68587929977
+  UPI VPAs       : basavara25@okicici
+  Phone Numbers  : 9803183269
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-09-01T15:47  |  fake bank SMS received
+  2025-09-01T15:57  |  credentials entered on fake site
+  2025-09-01T17:47  |  account accessed by fraudster
+  2025-09-02T15:47  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-09-01  |  From: VICTIM_ACC_FIR_BG_331  ->  To: BG68587929977  |  Rs. 15,123  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000060
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1019
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 16.150749, 75.686101
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-09-07
+Signature of Complainant: Basavaraj Acharya
+Signature of Recording Officer: Savitha Nagaraj, CEN Police Station - East Division

@@ -1,0 +1,65 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011005202600002
+Case No.         : 202600002
+Police Station   : Whitefield Cyber Crime Police Station
+District         : Bengaluru Urban
+Date Registered  : 2026-06-07
+Date of Offence  : 2026-06-05
+IO Officer       : Deepa Kamath
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Nagaraj Gowda
+Age              : 20 years
+Occupation       : Unemployed Graduate
+Address          : 197, Cross Road, Bengaluru Urban
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_11
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655001, 4440988776655002
+  IMEI Numbers   : 353816081234504
+  UPI VPAs       : earnfast001@paytm, taskpro002@airtel
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.143
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-05T12:32  |  Telegram task group invite
+  2026-06-05T14:32  |  small test payment received
+  2026-06-06T12:32  |  initial deposit paid
+  2026-06-07T12:32  |  FIR filed
+  2026-06-10T12:32  |  withdrawal blocked
+  2026-06-14T12:32  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-06  |  From: VICTIM_ACC_FIR_SCN4_BURST_11  ->  To: 4440988776655001  |  Rs. 19,058  |  Channel: UPI
+  2026-06-06  |  From: VICTIM_ACC_FIR_SCN4_BURST_11  ->  To: 4440988776655002  |  Rs. 19,058  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000020
+PoliceStationID  : 1005
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.949832, 77.600269
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-06-07
+Signature of Complainant: Nagaraj Gowda
+Signature of Recording Officer: Deepa Kamath, Whitefield Cyber Crime Police Station

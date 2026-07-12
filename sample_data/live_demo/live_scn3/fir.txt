@@ -1,0 +1,36 @@
+FIRST INFORMATION REPORT
+Police Station: Dharwad Cyber Crime Police Station   District: Dharwad
+Crime No: 129191018202600001   Case No: 202600001
+Date of Registration: 2026-06-25   Date/Time of Offence: 2026-06-01T00:00:00 to 2026-06-24T23:59:00
+Complainant: Sandeep Traders (Prop. Sandeep Kulkarni), Age 42, Occupation: MSME Owner
+Accused: Unknown / Under Investigation
+Sections: IT Act S.66D, BNS S.318, PMLA S.3
+---
+**First Information Report (FIR)**
+
+**Complainant:** Sandeep Kulkarni  
+**Address:** Sandeep Traders, 123/A, Industrial Estate, Dharwad, Karnataka - 580001  
+**Date:** [Insert Date]  
+**Time:** [Insert Time]  
+**Police Station:** Dharwad City Police Station
+
+**Complainant's Statement:**
+
+I, Sandeep Kulkarni, son of Mr. Prakash Kulkarni, a resident of Dharwad, Karnataka, and the proprietor of Sandeep Traders, an MSME dealing in wholesale textiles, hereby report that I have been defrauded of Rs 28,00,000 through a fake investment scam.
+
+On [Insert Date], I was approached by an individual named Rahul Mehta, who claimed to be a financial advisor. He introduced me to a trading app named "ProfitMax Trade" and assured me of high returns on my investment through stock trading. Trusting his credentials and the promising returns, I transferred the aforementioned amount into the bank account 5530123456789001 (IFSC UBIN0557301, Union Bank of India) on [Insert Date].
+
+However, after a few days, I noticed unusual activities in my bank account and was unable to contact Rahul Mehta. Upon investigation, I discovered that the trading app "ProfitMax Trade" was a fraudulent platform designed to deceive investors. The funds have been transferred out of my account and are currently inaccessible.
+
+I request the police to take necessary action against the perpetrators involved in this scam and recover my lost amount. I have attached all relevant documents, including bank statements and communication records with the accused, for your perusal.
+
+**Complainant's Signature:**  
+**Sandeep Kulkarni**  
+**Date:** [Insert Date]  
+
+**Police Officer's Note:**  
+The above statement has been recorded and the case has been registered under relevant sections of the Indian Penal Code. Further investigation is underway.
+
+**Signature:**  
+[Police Officer's Name]  
+[Police Station Stamp]

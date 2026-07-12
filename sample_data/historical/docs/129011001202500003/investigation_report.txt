@@ -1,0 +1,35 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000006
+Crime No.        : 129011001202500003
+Case No.         : 202500003
+CaseMasterID     : 1000035
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2025-12-11
+IO Officer       : Basavaraj Gudadinni (EmployeeID: 5011)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹2,658,148 via UPI. Account BG59026049626 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG59026049626
+  Phone Numbers  : 9304967461
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-11-24T16:09  |  call from fake official
+  2025-11-24T16:19  |  digital arrest threat
+  2025-11-24T16:39  |  fund transfer
+  2025-11-26T16:09  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-11-24  |  From: VICTIM_ACC_FIR_BG_306  ->  To: BG59026049626  |  Rs. 2,658,148  |  Channel: NEFT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-12-11
+Signature of IO: Basavaraj Gudadinni, CEN Police Station - East Division

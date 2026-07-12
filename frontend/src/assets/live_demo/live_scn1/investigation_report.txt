@@ -1,0 +1,15 @@
+INVESTIGATION REPORT
+Case: 129011001202600001
+
+MONEY TRAIL SUMMARY
+AGG_ACC_01 (9842017633250001) links to 3 historical ring cases. Controller IMEI 867537042195016 and UPI raghu.ctrl@ybl revealed by KYC check.
+
+NEWLY IDENTIFIED IDENTIFIERS
+  imeis: 867537042195016
+  upis: raghu.ctrl@ybl
+
+LINK ASSERTIONS (for validation)
+  -> Historical case 129031010202600001 via account_no: 9842017633250001
+  -> Historical case 129041013202600001 via account_no: 9842017633250001
+  -> Historical case 129051014202600001 via account_no: 9842017633250001
+  -> Historical case 129141025202600001 via account_no: 9842017633250001

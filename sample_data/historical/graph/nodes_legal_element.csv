@@ -1,0 +1,30 @@
+node_id,section_id,name
+LE_66C_1,IT_66C,Fraudulent/dishonest intent
+LE_66C_2,IT_66C,Electronic signature or password used
+LE_66C_3,IT_66C,Identity features belongs to victim
+LE_66D_1,IT_66D,Personation via computer resource
+LE_66D_2,IT_66D,Inducement to deliver property/money
+LE_66D_3,IT_66D,Use of communication device
+LE_43_1,IT_43,Unauthorised access to computer system
+LE_43_2,IT_43,Data theft or manipulation
+LE_72_1,IT_72,Breach of confidentiality
+LE_72_2,IT_72,Breach of contractual duty of privacy
+LE_318_1,BNS_318,Deception of the victim
+LE_318_2,BNS_318,Fraudulent or dishonest inducement
+LE_318_3,BNS_318,Delivery of property or financial loss
+LE_318_4,BNS_318,Damage to the deceived person
+LE_319_1,BNS_319,Pretending to be another person
+LE_319_2,BNS_319,Knowledge of false identity
+LE_319_3,BNS_319,Victim acted on false identity
+LE_PMLA_1,PMLA_3,Proceeds of crime involved
+LE_PMLA_2,PMLA_3,Layering or integration of funds
+LE_PMLA_3,PMLA_3,Knowingly facilitating money laundering
+LE_PMLA_4,PMLA_3,Cross-border or crypto element
+LE_BSA_63_1,BSA_63,Electronic record produced in proceedings
+LE_BSA_63_2,BSA_63,Certificate under Section 63 filed
+LE_BSA_63_3,BSA_63,Device integrity established
+LE_BSA_63_4,BSA_63,Hash value / chain of custody maintained
+LE_BNSS_94_1,BNSS_94,Summons for bank records issued
+LE_BNSS_94_2,BNSS_94,Records produced and authenticated
+LE_BNSS_175_1,BNSS_175,Witness summoned during investigation
+LE_BNSS_175_2,BNSS_175,Statement recorded under BNSS

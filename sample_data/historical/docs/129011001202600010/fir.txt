@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202600010
+Case No.         : 202600010
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2026-02-01
+Date of Offence  : 2026-01-31
+IO Officer       : Anand Hegde
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Lakshmi Lamani
+Age              : 28 years
+Occupation       : Engineering Student
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_329
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG84455438916
+  UPI VPAs       : lakshmil68@okicici
+  Phone Numbers  : 9764231018
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-31T08:42  |  task group invite
+  2026-02-01T08:42  |  first deposit to unlock tasks
+  2026-02-05T08:42  |  withdrawal refused
+  2026-02-06T08:42  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-31  |  From: VICTIM_ACC_FIR_BG_329  ->  To: BG84455438916  |  Rs. 386,331  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000058
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 12.529842, 76.929805
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-02-01
+Signature of Complainant: Lakshmi Lamani
+Signature of Recording Officer: Anand Hegde, CEN Police Station - East Division

@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129271029202500001
+Case No.         : 202500001
+Police Station   : Kolar CEN Police Station
+District         : Kolar
+Date Registered  : 2025-09-21
+Date of Offence  : 2025-09-18
+IO Officer       : Savitha Nagaraj
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Harish Lamani
+Age              : 24 years
+Occupation       : Student
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 3 PMLA, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_305
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG47966341235
+  UPI VPAs       : harishla82@okicici
+  Phone Numbers  : 9534308020
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-09-18T17:31  |  recruited to share bank account
+  2025-09-23T17:31  |  account used for illegal transfers
+  2025-10-18T17:31  |  account frozen
+  2025-10-23T17:31  |  FIR filed against account holder
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-09-18  |  From: VICTIM_ACC_FIR_BG_305  ->  To: BG47966341235  |  Rs. 49,029  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000034
+PoliceStationID  : 1029
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 102
+CrimeSubHeadID   : 1020
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 13.129916, 78.101994
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Kolar, 2025-09-21
+Signature of Complainant: Harish Lamani
+Signature of Recording Officer: Savitha Nagaraj, Kolar CEN Police Station

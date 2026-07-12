@@ -1,0 +1,60 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129011001202500011
+Case No.         : 202500011
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Date Registered  : 2025-08-13
+Date of Offence  : 2025-08-09
+IO Officer       : Girish Rao
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Arun Murthy
+Age              : 44 years
+Occupation       : Bank Employee
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_BG_328
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG73118731555
+  UPI VPAs       : arunmurt20@okicici
+  Phone Numbers  : 9102020382
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-08-09T00:12  |  fake bank call received
+  2025-08-09T00:15  |  OTP shared
+  2025-08-09T00:17  |  account drained
+  2025-08-10T00:12  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-08-09  |  From: VICTIM_ACC_FIR_BG_328  ->  To: BG73118731555  |  Rs. 219,723  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000057
+PoliceStationID  : 1001
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1015
+CaseStatusID     : 1
+CourtID          : 7002
+Lat/Long         : 16.742963, 77.093158
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-08-13
+Signature of Complainant: Arun Murthy
+Signature of Recording Officer: Girish Rao, CEN Police Station - East Division

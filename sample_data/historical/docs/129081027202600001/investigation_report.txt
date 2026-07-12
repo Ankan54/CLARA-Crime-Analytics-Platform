@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000011
+Crime No.        : 129081027202600001
+Case No.         : 202600001
+CaseMasterID     : 1000041
+Police Station   : Ballari CEN Police Station
+District         : Ballari
+Report Date      : 2026-02-10
+IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹487,982 via UPI. Account BG25973052265 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG25973052265
+  UPI VPAs       : sunithas25@okicici
+  Phone Numbers  : 9523342545
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-14T22:56  |  fake bank SMS received
+  2026-01-14T23:06  |  credentials entered on fake site
+  2026-01-15T00:56  |  account accessed by fraudster
+  2026-01-15T22:56  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-14  |  From: VICTIM_ACC_FIR_BG_312  ->  To: BG25973052265  |  Rs. 487,982  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Ballari, 2026-02-10
+Signature of IO: Venkatesh Kumar, Ballari CEN Police Station

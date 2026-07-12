@@ -1,0 +1,67 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129261030202600002
+Case No.         : 202600002
+Police Station   : Chikkaballapur CEN Police Station
+District         : Chikkaballapur
+Date Registered  : 2026-06-12
+Date of Offence  : 2026-06-09
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Siddappa Nair
+Age              : 27 years
+Occupation       : Student
+Address          : 111, 1st Main, Chikkaballapur
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BURST_14
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : 4440988776655006, 4440988776655001, 4440988776655003, 4440988776655005
+  IMEI Numbers   : 353816081234505
+  UPI VPAs       : worker006@icici, earnfast001@paytm, dailywork003@fino, simpletask005@okhdfcbank
+  Phone Numbers  : 3538160812
+  IP Addresses   : 103.74.19.143
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-06-09T07:10  |  Telegram task group invite
+  2026-06-09T09:10  |  small test payment received
+  2026-06-10T07:10  |  initial deposit paid
+  2026-06-12T07:10  |  FIR filed
+  2026-06-13T07:10  |  withdrawal blocked
+  2026-06-17T07:10  |  contact lost with operators
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-06-10  |  From: VICTIM_ACC_FIR_SCN4_BURST_14  ->  To: 4440988776655006  |  Rs. 5,849  |  Channel: UPI
+  2026-06-10  |  From: VICTIM_ACC_FIR_SCN4_BURST_14  ->  To: 4440988776655001  |  Rs. 5,849  |  Channel: UPI
+  2026-06-10  |  From: VICTIM_ACC_FIR_SCN4_BURST_14  ->  To: 4440988776655003  |  Rs. 5,849  |  Channel: UPI
+  2026-06-10  |  From: VICTIM_ACC_FIR_SCN4_BURST_14  ->  To: 4440988776655005  |  Rs. 5,849  |  Channel: UPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000023
+PoliceStationID  : 1030
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 13.481484, 77.761252
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Chikkaballapur, 2026-06-12
+Signature of Complainant: Siddappa Nair
+Signature of Recording Officer: Kavitha Reddy, Chikkaballapur CEN Police Station

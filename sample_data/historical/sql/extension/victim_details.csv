@@ -1,0 +1,63 @@
+VictimMasterID,OccupationID,CasteID,ReligionID,Address,Mobile,LossAmount,ResidenceDistrict
+4000001,5,1,5,"48, MG Road Layout, Mysuru",,2100000,Mysuru
+4000002,6,1,5,"23, MG Road Layout, Mangaluru",,1800000,Mangaluru
+4000003,4,1,5,"74, Brigade Road Layout, Hubballi-Dharwad",,1500000,Hubballi-Dharwad
+4000004,39,1,5,"12, MG Road, Hassan",,980000,Hassan
+4000005,15,1,5,"46, Ring Road, Bengaluru Urban",,150000,Bengaluru Urban
+4000006,17,1,5,"78, Main Street, Tumakuru",,400000,Tumakuru
+4000007,11,1,5,"73, Main Street, Bengaluru Urban",,800000,Bengaluru Urban
+4000008,3,1,5,"22, Station Road, Belagavi",,1200000,Belagavi
+4000009,16,1,5,"45, Hubli Road, Dharwad",,500000,Dharwad
+4000010,1,1,5,"82, Colony Road, Bengaluru Urban",,43708,Bengaluru Urban
+4000011,12,1,5,"200, Colony Road, Bengaluru Urban",,84840,Bengaluru Urban
+4000012,14,1,5,"95, Colony Road, Mysuru",,29834,Mysuru
+4000013,13,1,5,"51, 1st Main, Davanagere",,22794,Davanagere
+4000014,1,1,5,"31, Cross Road, Hubballi-Dharwad",,58134,Hubballi-Dharwad
+4000015,12,1,5,"16, Colony Road, Shivamogga",,23967,Shivamogga
+4000016,14,1,5,"155, Cross Road, Bengaluru Urban",,49749,Bengaluru Urban
+4000017,12,1,5,"126, Colony Road, Bengaluru Urban",,59522,Bengaluru Urban
+4000018,1,1,5,"12, Cross Road, Chikkaballapur",,72964,Chikkaballapur
+4000019,10,1,5,"90, 1st Main, Mangaluru",,94965,Mangaluru
+4000020,14,1,5,"197, Cross Road, Bengaluru Urban",,38116,Bengaluru Urban
+4000021,9,1,5,"21, Colony Road, Davanagere",,56010,Davanagere
+4000022,12,1,5,"180, Cross Road, Hubballi-Dharwad",,10228,Hubballi-Dharwad
+4000023,1,1,5,"111, 1st Main, Chikkaballapur",,23398,Chikkaballapur
+4000024,10,1,5,,,26952,Chikkaballapur
+4000025,9,1,5,,,19400,Hassan
+4000026,1,1,5,,,17827,Mysuru
+4000027,11,1,5,,,19609,Hubballi-Dharwad
+4000028,14,1,5,,,8260,Shivamogga
+4000029,20,1,5,,,332835,Bengaluru Rural
+4000030,3,1,5,,,2175185,Bengaluru Urban
+4000031,25,1,5,,,166283,Hassan
+4000032,15,1,5,,,392918,Ramanagara
+4000033,19,1,5,,,328830,Chikkamagaluru
+4000034,1,1,5,,,49029,Kolar
+4000035,8,1,5,,,2658148,Vijayanagara
+4000036,11,1,5,,,283059,Chamarajanagara
+4000037,19,1,5,,,70714,Kodagu
+4000038,10,1,5,,,296983,Kodagu
+4000039,6,1,5,,,593825,Udupi
+4000040,19,1,5,,,341484,Bengaluru Rural
+4000041,16,1,5,,,487982,Ballari
+4000042,22,1,5,,,24706,Vijayapura
+4000043,16,1,5,,,76039,Chitradurga
+4000044,16,1,5,,,317042,Chikkaballapur
+4000045,25,1,5,,,230835,Bengaluru Rural
+4000046,9,1,5,,,352779,Kodagu
+4000047,19,1,5,,,252791,Bengaluru Rural
+4000048,8,1,5,,,136308,Bengaluru Urban
+4000049,15,1,5,,,417235,Ramanagara
+4000050,9,1,5,,,37297,Bidar
+4000051,17,1,5,,,197375,Kodagu
+4000052,22,1,5,,,402770,Bagalkot
+4000053,11,1,5,,,376087,Vijayapura
+4000054,15,1,5,,,480660,Bengaluru Rural
+4000055,5,1,5,,,2050847,Kodagu
+4000056,23,1,5,,,354552,Bengaluru Urban
+4000057,17,1,5,,,219723,Yadgir
+4000058,12,1,5,,,386331,Mandya
+4000059,4,1,5,,,2006000,Chitradurga
+4000060,16,1,5,,,15123,Bagalkot
+4000061,4,1,5,,,471273,Kalaburagi
+4000062,1,1,5,,,352514,Bengaluru Rural

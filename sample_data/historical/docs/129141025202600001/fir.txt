@@ -1,0 +1,54 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129141025202600001
+Case No.         : 202600001
+Police Station   : Hassan CEN Police Station
+District         : Hassan
+Date Registered  : 2026-03-12
+Date of Offence  : 2026-03-10
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Nagaraj Swamy
+Age              : 63 years
+Occupation       : Other
+Address          : 12, MG Road, Hassan
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN1_DECOY
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : DECOY00000000001
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-03-10T14:00  |  call from TRAI about call routing fraud
+  2026-03-10T14:10  |  transferred to fake official on Google Meet
+  2026-03-10T14:45  |  fund transfer to RBI compliance account
+  2026-03-12T14:00  |  FIR filed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000004
+PoliceStationID  : 1025
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1011
+CaseStatusID     : 1
+CourtID          : 7001
+Lat/Long         : 12.980828, 76.058104
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Hassan, 2026-03-12
+Signature of Complainant: Nagaraj Swamy
+Signature of Recording Officer: Kavitha Reddy, Hassan CEN Police Station

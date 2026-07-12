@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000027
+Crime No.        : 129011001202600010
+Case No.         : 202600010
+CaseMasterID     : 1000058
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2026-02-20
+IO Officer       : Anand Hegde (EmployeeID: 5006)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹386,331 via IMPS. Account BG84455438916 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG84455438916
+  UPI VPAs       : lakshmil68@okicici
+  Phone Numbers  : 9764231018
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-01-31T08:42  |  task group invite
+  2026-02-01T08:42  |  first deposit to unlock tasks
+  2026-02-05T08:42  |  withdrawal refused
+  2026-02-06T08:42  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2026-01-31  |  From: VICTIM_ACC_FIR_BG_329  ->  To: BG84455438916  |  Rs. 386,331  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2026-02-20
+Signature of IO: Anand Hegde, CEN Police Station - East Division

@@ -1,0 +1,16 @@
+EvidenceTypeID,Name,Description,Requires63Certificate
+ET_BANK_STMT,Bank Account Statement,"Certified copy of account transactions from bank, showing credits and debits.",1
+ET_TXN_RECEIPT,Payment Transaction Receipt,UPI/IMPS/NEFT transaction screenshot or receipt with timestamp and reference ID.,1
+ET_SCREENSHOT,Messaging App Screenshot,"Screenshot of conversation on WhatsApp, Telegram, Skype, or similar platform.",1
+ET_CDR,Call Detail Records (CDR),Subscriber call records from telecom operator showing incoming/outgoing calls and IMEI.,0
+ET_IMEI_REG,IMEI Registration Record,CEIR or TAFCOP records confirming device registration and associated SIM cards.,0
+ET_KYC,Bank KYC Documents,"Know Your Customer documents (Aadhaar, PAN, photo) linked to a bank account.",0
+ET_DEVICE_DUMP,Seized Device Forensic Dump,"Forensic extraction from a seized mobile device (call logs, messages, installed apps).",1
+ET_IP_LOG,Server/Application Login Log,IP address and timestamp logs from an application server or platform.,1
+ET_CRYPTO_TXN,Cryptocurrency Transaction Record,"On-chain transaction record for a crypto wallet address (USDT, BTC, ETH).",0
+ET_VICTIM_STMT,Victim's Sworn Statement,Written statement by victim recorded before magistrate or IO.,0
+ET_WITNESS_STMT,Witness Statement,Statement by a third-party witness.,0
+ET_UPI_LOG,UPI Transaction Log (NPCI),Transaction log from NPCI or payment app showing UPI ID and VPA linkage.,1
+ET_AADHAAR,Aadhaar/PAN Verification Record,UIDAI or IT Dept record confirming identity of account holder.,0
+ET_EMAIL,Email Communication Record,Email thread showing communication related to the offence.,1
+ET_SOCIAL_MEDIA,Social Media Profile/Post,Screenshot or archived record of social media profile or communication.,1

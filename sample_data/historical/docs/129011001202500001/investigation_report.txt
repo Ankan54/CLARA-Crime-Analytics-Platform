@@ -1,0 +1,36 @@
+KARNATAKA STATE POLICE
+INVESTIGATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report ID        : IR:5000001
+Crime No.        : 129011001202500001
+Case No.         : 202500001
+CaseMasterID     : 1000029
+Police Station   : CEN Police Station - East Division
+District         : Bengaluru Urban
+Report Date      : 2025-12-29
+IO Officer       : Manjunath Gowda (EmployeeID: 5003)
+Accused          : Unknown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INVESTIGATION FINDINGS
+Victim transferred ₹332,835 via IMPS. Account BG85604479315 flagged as mule.
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : BG85604479315
+  UPI VPAs       : rajeshga88@okicici
+  Phone Numbers  : 9697361173
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2025-12-10T04:51  |  befriended on social media
+  2025-12-15T04:51  |  compromising call recorded
+  2025-12-16T04:51  |  blackmail demand received
+  2025-12-18T04:51  |  FIR filed
+
+FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
+------------------------------------------------
+  2025-12-10  |  From: VICTIM_ACC_FIR_BG_300  ->  To: BG85604479315  |  Rs. 332,835  |  Channel: IMPS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Bengaluru Urban, 2025-12-29
+Signature of IO: Manjunath Gowda, CEN Police Station - East Division
