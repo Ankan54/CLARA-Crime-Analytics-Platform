@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BASE_02
+On 22nd March 2026, the complainant, Ms. Renuka Kamath, aged 28 years, a fresher currently residing in Chikkaballapur, appeared before the station to report a case of cyber fraud involving deceptive task-based employment. Ms. Kamath stated that while searching for online employment opportunities, she was contacted by unidentified fraudsters who lured her with promises of high commissions for completing simple tasks.
+
+Trusting the authenticity of the offer, the victim was guided to perform specific tasks on a fraudulent digital platform. During the course of this interaction, the fraudsters manipulated her into transferring funds under the pretense of account activation and task completion requirements. Consequently, Ms. Kamath transferred a total sum of Rs. 19,118 (Nineteen Thousand One Hundred and Eighteen Rupees) to the bank accounts provided by the accused.
+
+Crucial digital identifiers related to the fraudulent transaction were noted during the investigation. The transaction reference recorded by the victim is INDP_ACC_BASE_02_85592, and the beneficiary entity linked to the fraud was identified as baseline.task02@okicici. The accused individuals, using fake identities and fabricated online profiles, induced the victim to part with her money, thereafter becoming untraceable. This act constitutes cheating and criminal breach of trust under the relevant sections of the Bharatiya Nyaya Sanhita and the Information Technology Act. A thorough investigation is requested to trace the funds and apprehend the cyber criminals involved in this task scam.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : INDP_ACC_BASE_02_85592

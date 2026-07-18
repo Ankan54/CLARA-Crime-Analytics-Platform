@@ -7,6 +7,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# WeasyPrint system libs (Pango/Cairo) + fonts for polished PDF reports with Indic text.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpango-1.0-0 libpangocairo-1.0-0 libcairo2 \
+    libgdk-pixbuf-2.0-0 libffi-dev shared-mime-info \
+    fonts-dejavu-core fontconfig \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 COPY backend/requirements.appsail.txt ./requirements.txt
@@ -15,6 +22,10 @@ RUN uv pip install --system --no-cache -r requirements.txt
 COPY backend/app ./app
 COPY backend/migrations ./migrations
 COPY .env /.env
+
+# Bundle the Indic-capable face so WeasyPrint can resolve it via fontconfig.
+COPY backend/app/assistant/skills/fonts/NotoSansKSP-Regular.ttf /usr/share/fonts/truetype/ksp/NotoSansKSP-Regular.ttf
+RUN fc-cache -f
 
 EXPOSE 9000
 

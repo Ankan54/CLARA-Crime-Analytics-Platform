@@ -45,6 +45,10 @@ class AssistantState(TypedDict, total=False):
 
     # --- supervisor output ---------------------------------------------------
     plan: list[dict[str, Any]]         # [{key, display, agent, subtask}, ...]
+    direct_answer: str | None          # set for identity/refuse (guardrail bypass)
+
+    # --- per-branch input, delivered via Send (NOT reduced) ------------------
+    plan: list[dict[str, Any]]         # [{key, display, agent, subtask}, ...]
 
     # --- per-branch input, delivered via Send (NOT reduced) ------------------
     specialist_key: str

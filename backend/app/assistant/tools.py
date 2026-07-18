@@ -32,6 +32,7 @@ from langchain_core.tools import StructuredTool
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from ..config import settings
 from ..db import SessionLocal
 from . import stores
 from .emitter import RunEmitter, StepHandle
@@ -54,6 +55,43 @@ CURRENT_SPECIALIST: ContextVar[str | None] = ContextVar("current_specialist", de
 # Set by service.py so case-scoped tools can default to "this case" when the officer
 # says "this case" and the LLM passes nothing.
 CURRENT_CASE_ID: ContextVar[int | None] = ContextVar("current_case_id", default=None)
+
+# Soft cap on raw exploratory queries (run_sql_select / run_cypher_read) per specialist step.
+# The conv LLM tends to re-verify a parameterised tool's answer with many redundant raw
+# queries; after the cap the raw-query tools return a "stop and answer" message instead of
+# running, which converges the loop without a crash. graph.py resets this to [0] per branch.
+RAW_QUERY_COUNT: ContextVar[list[int] | None] = ContextVar("raw_query_count", default=None)
+RAW_QUERY_SOFT_CAP = 8
+
+
+def _raw_query_gate() -> str | None:
+    counter = RAW_QUERY_COUNT.get()
+    if counter is None:
+        return None
+    counter[0] += 1
+    if counter[0] > RAW_QUERY_SOFT_CAP:
+        return (
+            f"You have already run {counter[0] - 1} raw exploratory queries in this step. That is "
+            "enough — STOP querying now and write your finding from the results the tools already "
+            "returned. Do not run another raw query."
+        )
+    return None
+
+FRIENDLY_TOOL_TITLES: dict[str, str] = {
+    "trace_money_flow": "Tracing the money trail",
+    "run_sql_select": "Searching the records",
+    "run_cypher_read": "Exploring the connections",
+    "find_similar_cases": "Finding cases with the same pattern",
+    "legal_checklist": "Checking prosecutability",
+    "find_precedents": "Looking up precedents",
+    "get_case_summary": "Pulling the case file",
+    "expand_entity": "Looking up an entity",
+    "person_history": "Checking offender history",
+    "find_links_between_cases": "Looking for shared identities",
+    "detect_community": "Detecting organised clusters",
+    "query_case_stats": "Gathering statistics",
+    "run_python": "Running analysis code",
+}
 
 MAX_ROWS = 200          # hard cap on any table artifact / raw query
 MAX_TRAIL_HOPS = 6      # money-trail recursion depth
@@ -348,6 +386,9 @@ def _guard_sql(sql: str) -> str | None:
 
 def run_sql_select(sql: str, purpose: str = "") -> str:
     """Run a read-only SELECT against Postgres for questions the other tools don't cover."""
+    gate = _raw_query_gate()
+    if gate:
+        return gate
     emitter = _emitter()
     error = _guard_sql(sql)
     if error:
@@ -406,8 +447,9 @@ def _step(emitter: RunEmitter | None, agent: str, title: str, **kw: Any) -> Iter
             if not k.startswith("_") and k not in {"emitter", "session", "handle", "self"}
             and isinstance(v, (str, int, float, bool, list, tuple, dict, type(None)))
         }
+    friendly_title = FRIENDLY_TOOL_TITLES.get(tool_name or "", title)
     with emitter.step(
-        agent, "tool_call", title,
+        agent, "tool_call", friendly_title,
         specialist=CURRENT_SPECIALIST.get(), tool_name=tool_name, tool_input=tool_input,
         **kw,
     ) as handle:  # type: ignore[arg-type]
@@ -916,7 +958,11 @@ def detect_community(case_refs: list[str] | None = None, crime_type: str = "", d
                 where.append("(csh.CrimeHeadName ILIKE :ct OR ch.CrimeGroupName ILIKE :ct)")
                 params["ct"] = f"%{crime_type}%"
             if days:
-                where.append("c.CrimeRegisteredDate >= NOW() - (:d || ' days')::interval")
+                # Fixed demo anchor, not NOW(): the surge cluster is dated relative to
+                # settings.demo_reference_date; comparing to the real clock ages it out.
+                where.append("c.CrimeRegisteredDate >= (:ref)::timestamptz - (:d || ' days')::interval "
+                             "AND c.CrimeRegisteredDate <= (:ref)::timestamptz")
+                params["ref"] = settings.demo_reference_date
                 params["d"] = str(int(days))
             case_ids = [r["case_id"] for r in _rows(session, f"""
                 SELECT c.CaseMasterID AS case_id FROM CaseMaster c
@@ -1024,6 +1070,9 @@ def _guard_cypher(cypher: str) -> str | None:
 
 def run_cypher_read(cypher: str, purpose: str = "") -> str:
     """Run a read-only Cypher query for graph questions the other tools don't cover."""
+    gate = _raw_query_gate()
+    if gate:
+        return gate
     emitter = _emitter()
     error = _guard_cypher(cypher)
     if error:

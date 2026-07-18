@@ -26,7 +26,13 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_304
+On 12 April 2026, I, Ajay Patel, aged 45 years, working as a Government Employee and residing in Chikkamagaluru, wish to report a serious financial fraud. Approximately three weeks prior to filing this report, I received a WhatsApp message from an unknown number introducing me to a "High-Yield Stock Investment Group." The sender claimed to be a professional market analyst and invited me to download a mobile application for trading.
+
+Believing the offer to be genuine, I installed the fake trading app, which displayed a sophisticated interface mimicking a legitimate stock trading platform. The fraudsters operated a WhatsApp group where they shared daily stock tips and, crucially, posted numerous fake profit screenshots showing massive returns on small investments. Trusting these fabricated success stories, I was induced to invest my personal savings.
+
+Between 01 April 2026 and 10 April 2026, I transferred a total sum of Rs. 328,830 to the fraudsters via multiple UPI transactions. The beneficiary details for these transfers included the VPA `ajaypate67@okicici` and the bank account number `BG28261026675`. The app interface showed my portfolio balance growing rapidly, encouraging me to invest further.
+
+However, when I attempted to withdraw the accumulated profits on 11 April 2026, the application displayed an error message stating that my account was "frozen" due to server maintenance. When I attempted to contact the support team via the number `9644425867`, my calls went unanswered. Subsequently, I was removed from the WhatsApp group and blocked. It is now evident that I have been cheated of Rs. 328,830 through this elaborate investment scam.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG28261026675

@@ -26,7 +26,9 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_09
+The complainant Pradeep Lamani, aged 28, a Student from Chikkaballapur, states that on 2026-06-15 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 72,964 across 8 transactions to UPI IDs jobapp007@hdfcbank, worker006@icici, earnfast001@paytm, taskpro002@airtel and account 4440988776655007. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable.
+
+Further investigation into the digital footprint revealed that the fraudulent application was hosted on the IP address 103.74.19.143. Analysis of the financial trail indicated that the funds were subsequently diverted into multiple bank accounts, specifically account numbers 4440988776655006, 4440988776655001, and 4440988776655002. Additionally, another mobile number linked to the operation, 353816081234501, has been identified in the communication logs. A case is registered for further investigation.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655007, 4440988776655006, 4440988776655001, 4440988776655002

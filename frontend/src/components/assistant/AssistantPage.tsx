@@ -23,6 +23,7 @@ import { ArtifactDrawer } from "./ArtifactDrawer";
 import { AssistantTracePage } from "./AssistantTracePage";
 import { AssistantIcon } from "./icons";
 import { UserProfileMenu } from "../UserProfileMenu";
+import { useToast } from "../ToastProvider";
 
 const SESSIONS_KEY = "aegis.assistant.sessions.v2";
 const LEGACY_SESSIONS_KEY = "aegis.assistant.sessions.v1";
@@ -164,8 +165,18 @@ function applyEvent(message: AssistantMessage, event: AssistantEvent): Assistant
     case "step": {
       const steps = message.steps ? [...message.steps] : [];
       const index = steps.findIndex((step) => step.id === event.step.id);
-      if (index >= 0) steps[index] = event.step;
-      else steps.push(event.step);
+      if (index >= 0) {
+        // Preserve code/retrieval already streamed onto this step if the new step
+        // payload doesn't carry them (common for status-only updates).
+        const prev = steps[index];
+        steps[index] = {
+          ...event.step,
+          code: event.step.code ?? prev.code,
+          retrieval: event.step.retrieval ?? prev.retrieval,
+        };
+      } else {
+        steps.push(event.step);
+      }
       return { ...message, steps };
     }
     case "answer_delta":
@@ -185,8 +196,29 @@ function applyEvent(message: AssistantMessage, event: AssistantEvent): Assistant
       const steps = message.steps ? [...message.steps] : [];
       const stepId = event.code.stepId;
       const index = stepId ? steps.findIndex((step) => step.id === stepId) : -1;
+      const statusFromPhase =
+        event.code.phase === "error" || event.code.success === false
+          ? "error"
+          : event.code.phase === "done"
+            ? "done"
+            : "running";
       if (index >= 0) {
-        steps[index] = { ...steps[index], code: event.code };
+        steps[index] = {
+          ...steps[index],
+          code: event.code,
+          status: event.code.phase === "template" ? steps[index].status : statusFromPhase,
+        };
+      } else if (stepId) {
+        // Streaming template phase can arrive before a tool_call step exists -- upsert one.
+        steps.push({
+          id: stepId,
+          agent: "supervisor",
+          kind: "tool_call",
+          title: event.code.phase === "template" ? "Writing Python" : "Running Python",
+          status: statusFromPhase,
+          toolName: "run_python",
+          code: event.code,
+        });
       }
       return { ...message, steps };
     }
@@ -199,7 +231,7 @@ function applyEvent(message: AssistantMessage, event: AssistantEvent): Assistant
     case "done":
       return { ...message, status: "complete" };
     case "error":
-      return { ...message, status: "error", content: message.content || event.message };
+      return { ...message, status: "error", error: event.message };
     default:
       return message;
   }
@@ -296,6 +328,7 @@ function readLanguageFromUrl(): AssistantLanguage {
 }
 
 export function AssistantPage() {
+  const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
   const navigationType = useNavigationType();
@@ -316,7 +349,6 @@ export function AssistantPage() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [resolvingContext, setResolvingContext] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [caseOptions, setCaseOptions] = useState<CaseSummary[]>([]);
   const [drawerArtifact, setDrawerArtifact] = useState<AssistantArtifact | null>(null);
   // What the officer just picked in the Scenario dropdown, shown immediately. Selecting
@@ -330,6 +362,8 @@ export function AssistantPage() {
   // reflect the officer's choice the instant they make it, independent of how long
   // resolution takes.
   const [pendingScenarioId, setPendingScenarioId] = useState<string | null>(null);
+  const [scenarioMenuOpen, setScenarioMenuOpen] = useState(false);
+  const scenarioMenuRef = useRef<HTMLDivElement | null>(null);
   // Holds the live run so Stop can reach it, and so a new message detaches the old
   // stream before starting another.
   const runRef = useRef<AssistantRunHandle | null>(null);
@@ -382,6 +416,40 @@ export function AssistantPage() {
   const hasTrace = Boolean(activeSession?.activeRunId);
 
   useEffect(() => {
+    if (!scenarioMenuOpen) {
+      return;
+    }
+    // Attach on next tick so the opening click doesn't immediately close, and so
+    // native <select> option picks (which can land outside the popover DOM) still
+    // fire onChange before we tear the menu down.
+    const attachId = window.setTimeout(() => {
+      function onPointerDown(event: PointerEvent) {
+        const root = scenarioMenuRef.current;
+        if (!root || root.contains(event.target as Node)) {
+          return;
+        }
+        window.setTimeout(() => setScenarioMenuOpen(false), 0);
+      }
+      function onKey(event: KeyboardEvent) {
+        if (event.key === "Escape") {
+          setScenarioMenuOpen(false);
+        }
+      }
+      document.addEventListener("pointerdown", onPointerDown);
+      document.addEventListener("keydown", onKey);
+      cleanup = () => {
+        document.removeEventListener("pointerdown", onPointerDown);
+        document.removeEventListener("keydown", onKey);
+      };
+    }, 0);
+    let cleanup: (() => void) | undefined;
+    return () => {
+      window.clearTimeout(attachId);
+      cleanup?.();
+    };
+  }, [scenarioMenuOpen]);
+
+  useEffect(() => {
     let cancelled = false;
     // Backend caps limit at 200 (Query(..., le=200) in routers/cases.py) -- 250 here
     // 422'd on every load, silently leaving the case-context picker empty (confirmed
@@ -400,6 +468,25 @@ export function AssistantPage() {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  // Deep-link from scenario briefings: /assistant?scenario=<id> creates a session
+  // for that demo once on mount (does not re-fire when the officer later clears context).
+  const bootstrappedScenarioRef = useRef(false);
+  useEffect(() => {
+    if (bootstrappedScenarioRef.current) {
+      return;
+    }
+    const requested = new URLSearchParams(location.search).get("scenario");
+    if (!requested || !DEMO_SCENARIOS.some((item) => item.id === requested)) {
+      return;
+    }
+    bootstrappedScenarioRef.current = true;
+    if (activeSession?.scenarioId === requested) {
+      return;
+    }
+    void handleSelectScenario(requested);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount bootstrap only
   }, []);
 
   useEffect(() => {
@@ -508,7 +595,6 @@ export function AssistantPage() {
     setSessions((current) => [session, ...current]);
     setActiveSessionId(session.id);
     setDrawerArtifact(null);
-    setError(null);
     stickToBottomRef.current = true;
   }
 
@@ -538,7 +624,6 @@ export function AssistantPage() {
       setSessions((current) => [session, ...current]);
       setActiveSessionId(session.id);
       setDrawerArtifact(null);
-      setError(null);
       setPendingScenarioId(null);
       return;
     }
@@ -548,7 +633,6 @@ export function AssistantPage() {
       return;
     }
     setResolvingContext(true);
-    setError(null);
     try {
       const caseId = await resolveCaseId(scenario.crimeNo);
       const session = createSession({
@@ -562,7 +646,7 @@ export function AssistantPage() {
       setDrawerArtifact(null);
       setInput("");
     } catch (resolveError) {
-      setError(resolveError instanceof Error ? resolveError.message : "Failed to resolve scenario context.");
+      toast.error(resolveError instanceof Error ? resolveError.message : "Failed to resolve scenario context.");
     } finally {
       setResolvingContext(false);
       setPendingScenarioId(null);
@@ -682,7 +766,6 @@ export function AssistantPage() {
     );
     setInput("");
     setBusy(true);
-    setError(null);
 
     function handleEvent(event: AssistantEvent): void {
       setSessions((current) =>
@@ -729,7 +812,7 @@ export function AssistantPage() {
         runRef.current = null;
       } else if (event.type === "error") {
         setBusy(false);
-        setError(event.message);
+        toast.error(event.message);
         runRef.current = null;
       }
     }
@@ -753,7 +836,7 @@ export function AssistantPage() {
       );
     } catch (sendErr) {
       setBusy(false);
-      setError(sendErr instanceof Error ? sendErr.message : "Assistant request failed.");
+      toast.error(sendErr instanceof Error ? sendErr.message : "Assistant request failed.");
     }
   }
 
@@ -802,7 +885,7 @@ export function AssistantPage() {
             <h2>{activeSession?.title ?? "Assistant"}</h2>
           </div>
           <div className="assistant-topbar-controls">
-            <label className="assistant-select-stack">
+            <label className="assistant-select-stack assistant-language-select">
               <span>{copy.language}</span>
               <select
                 className="scenario-dropdown"
@@ -815,52 +898,69 @@ export function AssistantPage() {
                 <option value="kn">Kannada</option>
               </select>
             </label>
-            <details className="assistant-context-menu">
-              <summary className="btn btn-ghost">
+            <div
+              className={`assistant-context-menu${scenarioMenuOpen ? " is-open" : ""}`}
+              ref={scenarioMenuRef}
+            >
+              <button
+                type="button"
+                className="btn btn-ghost"
+                aria-expanded={scenarioMenuOpen}
+                aria-haspopup="dialog"
+                onClick={() => setScenarioMenuOpen((open) => !open)}
+              >
                 <AssistantIcon name="panel" />
-                {activeScenario?.shortTitle ?? "Context"}
-              </summary>
-              <div className="assistant-context-popover">
-                <label className="assistant-select-stack">
-                  <span>Scenario</span>
-                  <select
-                    className="scenario-dropdown"
-                    value={pendingScenarioId ?? activeScenario?.id ?? ""}
-                    onChange={(event) => void handleSelectScenario(event.target.value)}
-                    disabled={busy || resolvingContext}
-                  >
-                    <option value="">{copy.freeForm}</option>
-                    {DEMO_SCENARIOS.map((scenario) => (
-                      <option key={scenario.id} value={scenario.id}>
-                        {scenario.shortTitle} — {scenario.ingestHook}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="assistant-select-stack">
-                  <span>{copy.caseContext}</span>
-                  <select
-                    className="scenario-dropdown"
-                    value={caseSelectValue}
-                    onChange={(event) => handleSelectCaseContext(event.target.value)}
-                    disabled={busy || resolvingContext}
-                  >
-                    <option value="">No case selected</option>
-                    {activeScenario && (
-                      <option value={`crime:${activeScenario.crimeNo}`}>
-                        {activeScenario.crimeNo}
-                        {activeSession?.caseId == null ? " · Not ingested yet" : " · Scenario default"}
-                      </option>
-                    )}
-                    {caseOptions.map((caseSummary) => (
-                      <option key={caseSummary.case_master_id} value={`case:${caseSummary.case_master_id}`}>
-                        Case {caseSummary.case_master_id} · {caseSummary.crime_no || caseSummary.case_no || "Unknown"}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            </details>
+                {activeScenario?.shortTitle ?? copy.selectScenario}
+              </button>
+              {scenarioMenuOpen ? (
+                <div className="assistant-context-popover" role="dialog" aria-label={copy.selectScenario}>
+                  <label className="assistant-select-stack">
+                    <span>{copy.selectScenario}</span>
+                    <select
+                      className="scenario-dropdown"
+                      value={pendingScenarioId ?? activeScenario?.id ?? ""}
+                      onChange={(event) => {
+                        setScenarioMenuOpen(false);
+                        void handleSelectScenario(event.target.value);
+                      }}
+                      disabled={busy || resolvingContext}
+                    >
+                      <option value="">{copy.freeForm}</option>
+                      {DEMO_SCENARIOS.map((scenario) => (
+                        <option key={scenario.id} value={scenario.id}>
+                          {scenario.shortTitle} — {scenario.ingestHook}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="assistant-select-stack">
+                    <span>{copy.caseContext}</span>
+                    <select
+                      className="scenario-dropdown"
+                      value={caseSelectValue}
+                      onChange={(event) => {
+                        setScenarioMenuOpen(false);
+                        handleSelectCaseContext(event.target.value);
+                      }}
+                      disabled={busy || resolvingContext}
+                    >
+                      <option value="">No case selected</option>
+                      {activeScenario && (
+                        <option value={`crime:${activeScenario.crimeNo}`}>
+                          {activeScenario.crimeNo}
+                          {activeSession?.caseId == null ? " · Not ingested yet" : " · Scenario default"}
+                        </option>
+                      )}
+                      {caseOptions.map((caseSummary) => (
+                        <option key={caseSummary.case_master_id} value={`case:${caseSummary.case_master_id}`}>
+                          Case {caseSummary.case_master_id} · {caseSummary.crime_no || caseSummary.case_no || "Unknown"}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              ) : null}
+            </div>
             <button
               type="button"
               className="btn btn-ghost assistant-trace-open"
@@ -874,8 +974,6 @@ export function AssistantPage() {
             <UserProfileMenu />
           </div>
         </header>
-
-        {error && <p className="alert alert-danger assistant-alert">{error}</p>}
 
         {traceRunId ? (
           <div className="assistant-trace-wrap">
@@ -901,6 +999,11 @@ export function AssistantPage() {
                   message={message}
                   onOpenArtifact={setDrawerArtifact}
                   onAction={handleAction}
+                  onRetry={message.status === "error" ? () => {
+                    const msgs = activeSession?.messages ?? [];
+                    const prevUser = msgs.slice(0, msgs.indexOf(message)).reverse().find((m: typeof message) => m.role === "user");
+                    if (prevUser) sendMessage(prevUser.content);
+                  } : undefined}
                   activeArtifactId={drawerArtifact?.id}
                   busy={busy}
                 />
@@ -922,6 +1025,7 @@ export function AssistantPage() {
                 onSend={() => void sendMessage(input)}
                 onStop={handleStop}
                 busy={busy || resolvingContext}
+                language={activeLanguage}
               />
             </div>
           </>

@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN2_H01
+On 2024-08-15, Lakshmi Krishnamurthy, a 34-year-old Software Engineer residing in Bengaluru Urban, reported a harrowing incident of cyber harassment and financial fraud involving a predatory instant loan application. Facing an immediate financial crunch, the victim had downloaded an unverified loan app that promised instant liquidity with minimal documentation. Without clear disclosure of terms, a meager loan amount was disbursed to her account. However, the application clandestinely harvested her personal data, including her entire contact list and gallery images.
+
+Within days, the agents of the lending service initiated aggressive recovery tactics that far exceeded the principal amount. When the victim expressed her inability to pay the exorbitant interest, the perpetrators resorted to severe defamation. They morphed her photographs into obscene and explicit images and disseminated these fabricated images to her family members and professional contacts via WhatsApp. The perpetrators demanded an unfair repayment of 150,000, threatening to continue the harassment and public shaming if the amount was not cleared immediately.
+
+The communications originated from mobile number 9611234567. The threat messages explicitly referenced transaction IDs 8810987654321001 and demanded payment to the Unified Payments Interface (UPI) ID imran.transactions@axl. The victim, acting under extreme mental duress and to protect her reputation, transferred the amount, but the harassment continued. This constitutes an offense involving criminal intimidation, extortion, and violation of privacy. The accused have caused severe mental trauma and wrongful loss to the complainant.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 8810987654321001

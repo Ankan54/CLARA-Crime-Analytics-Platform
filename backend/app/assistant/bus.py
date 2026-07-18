@@ -80,6 +80,31 @@ def artifacts_of(run_id: str) -> list[dict[str, Any]]:
     return [e["artifact"] for e in _history.get(run_id, ()) if e.get("type") == "artifact"]
 
 
+def citations_of(run_id: str) -> list[dict[str, Any]]:
+    return [e["citation"] for e in _history.get(run_id, ()) if e.get("type") == "citation"]
+
+
+def context_inventory(run_id: str) -> str:
+    """Compact block listing artifacts + citations so specialists can refer back to them."""
+    arts = artifacts_of(run_id)
+    cites = citations_of(run_id)
+    if not arts and not cites:
+        return ""
+    lines: list[str] = []
+    if arts:
+        lines.append("Artifacts generated so far this turn (id / title / format / url):")
+        for a in arts:
+            lines.append(
+                f"- {a.get('id')}: {a.get('title')!r} [{a.get('format') or a.get('kind')}] "
+                f"{a.get('url') or ''}"
+            )
+    if cites:
+        lines.append("Citations gathered so far:")
+        for c in cites[:12]:
+            lines.append(f"- [{c.get('id')}] {c.get('label')} ({c.get('source')})")
+    return "\n".join(lines)
+
+
 def _sweep() -> None:
     """Drop history for runs that finished over RETENTION_SECONDS ago.
 

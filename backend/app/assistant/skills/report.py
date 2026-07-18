@@ -242,7 +242,20 @@ def render_report_html(
 
 
 def html_to_pdf(html: str) -> bytes:
-    """Render to PDF bytes. Raises if xhtml2pdf reports errors."""
+    """Render HTML to PDF bytes.
+
+    Tries WeasyPrint first (strong CSS3, Linux/Docker). Falls back to xhtml2pdf when
+    WeasyPrint or its system libs (Pango/Cairo) are unavailable -- typically native
+    Windows without GTK. Neither engine runs JavaScript, so charts must already be
+    embedded as static images in the HTML.
+    """
+    try:
+        from weasyprint import HTML as WeasyHTML  # type: ignore
+
+        return WeasyHTML(string=html, base_url=".").write_pdf()
+    except Exception as weasy_exc:
+        logger.info("report: WeasyPrint unavailable (%s); falling back to xhtml2pdf", weasy_exc)
+
     from xhtml2pdf import pisa
 
     buffer = io.BytesIO()

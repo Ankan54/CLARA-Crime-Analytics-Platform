@@ -26,7 +26,13 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_303
+On 25th November 2025, at approximately 21:30 hours, I, Pradeep Veeranna, aged 37 years, residing in Ramanagara and working as a Software Engineer, wish to lodge a complaint regarding a case of sextortion and cyber fraud.
+
+The incident began when I received a friend request on a social media platform from an unknown female profile. Accepting the request, I engaged in conversation, which eventually led to an invitation for a private video call. During the video interaction, the accused engaged me in explicit conversation and recorded my activities without my knowledge or consent. Immediately following the call, the accused disconnected and began blackmailing me, threatening to circ the obscene video recording to my family members, friends, and professional contacts if I did not pay a substantial sum of money.
+
+Terrified of the potential social stigma and damage to my reputation, I complied with the demands. The accused forced me to transfer a total amount of ₹392,918 through multiple transactions. The funds were transferred to the UPI ID `pradeepv95@okicici`. The accused also conducted frequent communications via the mobile number `9680613283` to coordinate the extortion. Additionally, a transaction reference number `BG66373121445` was generated during one of the payment processes.
+
+It has come to my realization that I have been honey-trapped and cheated of my hard-earned money. I request the police to register an FIR against the unknown accused under relevant sections of the IT Act and IPC for extortion, criminal intimidation, and cheating, and to assist in recovering the lost funds.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG66373121445

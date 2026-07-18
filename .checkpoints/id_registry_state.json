@@ -299,5 +299,34 @@
   "victim_counter": 4000062,
   "report_counter": 5000031,
   "ext_obj_counter": 6000062,
-  "live_reserved": {}
+  "live_reserved": {
+    "LIVE_SCN1": {
+      "station_id": "PS_BLR_CEN_01",
+      "unit_id": 1001,
+      "district_id": 2901,
+      "crime_no": "129011001202690001",
+      "case_no": "202690001"
+    },
+    "LIVE_SCN2": {
+      "station_id": "PS_BLR_CYBER_01",
+      "unit_id": 1005,
+      "district_id": 2901,
+      "crime_no": "129011005202690002",
+      "case_no": "202690002"
+    },
+    "LIVE_SCN3": {
+      "station_id": "PS_DWD_01",
+      "unit_id": 1018,
+      "district_id": 2919,
+      "crime_no": "129191018202690003",
+      "case_no": "202690003"
+    },
+    "LIVE_SCN4": {
+      "station_id": "PS_BLR_CEN_02",
+      "unit_id": 1002,
+      "district_id": 2901,
+      "crime_no": "129011002202690004",
+      "case_no": "202690004"
+    }
+  }
 }

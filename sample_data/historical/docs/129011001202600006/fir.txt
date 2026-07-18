@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_323
+The complainant, Shri Arjun Kamath, aged 30 years, a Trader by profession and a resident of Bagalkot, appeared before the station to lodge a report regarding a cyber fraud incident. On 2026-03-11, at approximately 14:30 hours, the complainant received a call from an individual posing as a customer interested in purchasing goods from his trading business. The caller expressed urgency to make a payment and stated he would transfer the funds online.
+
+Subsequently, the fraudster tricked the complainant into initiating a transaction by sending a fake 'collect' request via a UPI application. Under the pretext of verifying the account details to send money, the accused manipulated the complainant into entering his UPI credentials. The complainant, believing he was receiving funds, inadvertently approved a collect request or scanned a malicious QR code sent by the accused. As a result, instead of receiving the payment, a sum of Rs. 402,770 was instantly debited from his bank account.
+
+The transaction details provided by the complainant reveal that the funds were transferred to the fraudulent VPA identifier **arjunkam83@okicici**. Further technical data indicates the involvement of the mobile number **9622744248** and the transaction reference ID **BG41010877260**. The complainant realized the deception only upon receiving the debit notification from his bank. He alleges that unknown miscreants have cheated him by abusing digital payment mechanisms, causing him a wrongful financial loss. A case is therefore registered for further investigation.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG41010877260

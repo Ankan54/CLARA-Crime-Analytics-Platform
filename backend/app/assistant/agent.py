@@ -22,6 +22,7 @@ from langgraph.prebuilt import create_react_agent
 
 from ..llm import build_llm_pair
 from ..config import settings
+from .persona import CLARA_IDENTITY, NO_INTERNALS
 from .tools import build_tools
 
 logger = logging.getLogger(__name__)
@@ -35,7 +36,9 @@ MAX_ITERATIONS = 10
 
 LANGUAGE_NAMES = {"en": "English", "hi": "Hindi (हिन्दी)", "kn": "Kannada (ಕನ್ನಡ)"}
 
-SYSTEM_PROMPT = """You are the Crime Intelligence Assistant for the Karnataka State Police, helping an Investigating Officer (IO) work cyber and financial crime cases.
+SYSTEM_PROMPT = f"""{CLARA_IDENTITY}
+
+{NO_INTERNALS}
 
 You answer from three stores, through tools only:
 - SQL (Postgres): the record of facts — cases, people, charges, transactions, evidence.
@@ -111,6 +114,17 @@ def _case_clause(case_context: dict[str, Any] | None) -> str:
     )
 
 
+def _date_clause() -> str:
+    # The demo data is anchored to a fixed date; the agent must treat that as "today"
+    # when the officer asks about recent windows ("last few weeks", "this month"), or
+    # its date math drifts against the real clock and the surge/trend beats break.
+    return (
+        f"\n\n## Today's date\n\nFor all date reasoning treat today as "
+        f"{settings.demo_reference_date}. Compute any 'recent'/'last N days'/'this month' "
+        f"window relative to this date, not the real-world current date."
+    )
+
+
 def build_system_prompt(
     language: str = "en",
     case_context: dict[str, Any] | None = None,
@@ -118,6 +132,7 @@ def build_system_prompt(
 ) -> str:
     return (
         SYSTEM_PROMPT
+        + _date_clause()
         + _case_clause(case_context)
         + _memory_clause(memories or [])
         + _language_clause(language)

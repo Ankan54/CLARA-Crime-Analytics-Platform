@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_321
+On 07-03-2026, the complainant, Nalini Patil, aged 19 years, a fresher residing in Bidar, appeared before the station to lodge a report regarding a serious case of cybercrime and extortion. Nalini stated that she had been facing acute financial constraints and, seeking immediate funds, downloaded a predatory instant loan application on her mobile device. Upon installation, the application forced her to grant extensive permissions, including access to her contacts and gallery, which she consented to under the assumption it was mandatory for verification.
+
+Subsequently, a loan amount of ₹37,297 was credited to her account. However, the app displayed a repayment schedule with exorbitant interest rates and an impossible tenure. When Nalini failed to repay the unfair amount within the short deadline, the operators began a campaign of harassment. They harvested her personal contact list and began calling her family members and friends. The perpetrators sent morphed, obscene photographs of Nalini to her relatives via WhatsApp, accompanied by abusive messages demanding immediate repayment and threatening to ruin her social reputation.
+
+The threats were routed through the mobile number 9708939813. The transaction reference for the disbursement was identified as BG29028523818, and the beneficiary UPI ID linked to the transaction was nalinipa83@okicici. The accused have willfully trespassed into her private life, caused mental trauma, and threatened her modesty. The act constitutes offenses of extortion, criminal intimidation, and violation of privacy under the relevant sections of the Bharatiya Nyaya Sanhita, 2023, and the Information Technology Act, 2000. A case is hereby registered and investigation is taken up.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG29028523818

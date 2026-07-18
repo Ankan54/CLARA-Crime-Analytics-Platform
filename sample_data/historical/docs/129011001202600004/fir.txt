@@ -26,7 +26,13 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_320
+I, Sunitha Patil, aged 37 years, working as a Software Engineer and currently residing in Ramanagara, hereby submit this report regarding a major investment fraud. The incident occurred between January 2026 and February 8, 2026, wherein I was deceived by unknown individuals operating a fake stock trading scheme.
+
+In mid-January, I received a message on WhatsApp from a person claiming to be a senior portfolio manager. He invited me to join an exclusive "VIP Investment Group" promising high returns on stock trading. Trusting the professional nature of the communication, I downloaded a mobile application provided by the fraudsters, which mimicked a legitimate trading interface. To establish credibility, the accused consistently shared fake profit screenshots in the group chat, showing other members earning massive profits daily.
+
+Convinced by these visuals, I proceeded to invest a total of 417,235. I made several transactions to the bank account details provided by the administrator. Specifically, I transferred funds referencing the identifiers 9179116734 and BG96612869449, and received confirmations on my UPI ID sunithap93@okicici. The app interface showed my portfolio growing to a substantial amount, luring me into investing more.
+
+However, on February 8, 2026, when I attempted to withdraw a portion of my accrued profits, the request was denied. The app displayed a notification stating that I needed to pay a "penalty clearance fee" to access my funds. Shortly after I questioned this demand, I was removed from the WhatsApp group, and the customer support contacts stopped responding. The accused have effectively blocked all communication and stolen my hard-earned money. I request immediate legal action against the culprits.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG96612869449

@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_326
+On 12th May 2026, at approximately 10:45 AM, I, Ambika Acharya, a retired IAS Officer residing in Kodagu, received an unsolicited call on my mobile number 9132253270. The caller, identifying himself as an official from the "Narcotics Control Bureau," stated that a parcel containing narcotic substances had been intercepted by customs at the Delhi courier hub. He alleged that this parcel was booked using my identity credentials and was destined for an international location.
+
+The caller claimed that my involvement in this **parcel interception** was a serious violation of the NDPS Act. When I protested my innocence, he threatened immediate arrest by a local police team. He subsequently transferred the call to a purported "Senior NCB Officer" to verify the legal proceedings. This fake officer instructed me that to avoid immediate detention, I must cooperate in a digital verification process. He demanded I remain on a continuous WhatsApp video call to ensure I was not communicating with anyone else and to verify my location.
+
+Under the guise of checking my financial background for "money laundering links," the scammer coerced me to reveal my banking details. He insisted that I must transfer my savings to a specified government account to obtain a "clearance certificate" which would prove my innocence in the drug trafficking case. Fearing for my reputation and liberty, I complied with the instructions while remaining under digital surveillance. I transferred a total sum of Rs. 2,050,847 in multiple tranches to the beneficiary account number **BG88235313465**. The caller disconnected immediately after the transaction was confirmed. I realized I had been deceived by a sophisticated digital arrest operation.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG88235313465

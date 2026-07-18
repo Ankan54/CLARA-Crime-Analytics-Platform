@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_327
+On 2026-01-17, I, Lakshmi Reddy, aged 52, a resident of Bengaluru Urban and working as a Contractor, wish to report a grave incident of cyber fraud. The ordeal began when I received a call from an individual posing as a representative from a well-known online payment platform. The caller expressed an urgent need to verify my UPI credentials to resolve a purported technical glitch affecting my account.
+
+Under the guise of assisting me, the fraudster manipulated me into opening my UPI application. I was under the distinct impression that the process initiated would result in a credit transfer to my bank account. However, in a calculated deception, the fraudster sent a 'collect' request of ₹354,552. Misled by the caller’s instructions and believing I was receiving funds, I inadvertently entered my UPI PIN, authorizing the transaction. Moments later, I received a debit notification, realizing I had been scammed into paying the amount instead of receiving it.
+
+The transaction details on my screen confirm the transfer to the fraudulent party. The critical identifiers associated with this crime are the mobile number 9529075305 used by the impersonator, the Beneficiary VPA ID lakshmir54@okicici, and the Transaction Reference ID BG15448669871. I request the registration of this FIR and a thorough investigation into the misappropriation of ₹354,552.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG15448669871

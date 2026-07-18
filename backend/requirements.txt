@@ -31,3 +31,10 @@ markdown>=3.6
 pypdf>=4.2.0
 python-docx>=1.1.0
 beautifulsoup4>=4.12.0
+# Agent code-execution artifacts (charts + tabular analysis via the run_python tool).
+matplotlib>=3.8.0
+pandas>=2.2.0
+plotly>=5.24.0
+# Polished HTML->PDF. WeasyPrint is primary (needs Pango/Cairo on Linux/Docker);
+# xhtml2pdf above stays as the Windows/native fallback when system libs are absent.
+weasyprint>=62.0

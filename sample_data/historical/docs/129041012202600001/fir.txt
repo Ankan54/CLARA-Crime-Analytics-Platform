@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BASE_04
+On 03/04/2026, the complainant, Shanthi Iyengar, an 18-year-old MBA student residing in Mangaluru, appeared before this station to report a case of cyber fraud involving a task-based scam. In her statement, she detailed that she was approached by unknown perpetrators via a digital communication platform who lured her with the prospect of earning quick monetary rewards by completing simple online tasks.
+
+Trusting the fraudulent offer, the victim engaged with the provided interface and was coerced into depositing funds to initiate the tasks and unlock higher commissions. Following the instructions provided by the scammers, Shanthi proceeded to transfer a total sum of Rs. 10,264 through multiple transactions. The fraudsters ceased communication and blocked her access to the platform immediately after the funds were received.
+
+During the course of the investigation, the victim provided crucial digital identifiers associated with the fraudulent activity. The specific identifiers mentioned are INDP_ACC_BASE_04_78448 and the beneficiary ID baseline.task04@okicici. These details are essential for tracing the cyber trail and identifying the culprits. The incident constitutes cheating and impersonation under the relevant sections of the Bharatiya Nyaya Sanhita and the Information Technology Act. A case is hereby registered, and efforts are underway to freeze the implicated accounts and trace the origin of the fraudulent communications to apprehend the accused persons.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : INDP_ACC_BASE_04_78448

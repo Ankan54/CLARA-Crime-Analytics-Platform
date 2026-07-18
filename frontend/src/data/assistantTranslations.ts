@@ -101,6 +101,7 @@ const UI_COPY: Record<
     suggestedQuestions: string;
     composerPlaceholder: string;
     language: string;
+    selectScenario: string;
     caseContext: string;
     showTraces: string;
     showTracesHint: string;
@@ -121,6 +122,7 @@ const UI_COPY: Record<
     suggestedQuestions: "Suggested questions",
     composerPlaceholder: "Ask about timeline, money flow, alias links, or the legal checklist…",
     language: "Language",
+    selectScenario: "Select Scenario",
     caseContext: "Case / Crime context",
     showTraces: "Show traces",
     showTracesHint: "Run one assistant response to open traces",
@@ -140,6 +142,7 @@ const UI_COPY: Record<
     suggestedQuestions: "सुझाए गए प्रश्न",
     composerPlaceholder: "टाइमलाइन, मनी फ्लो, alias लिंक या कानूनी चेकलिस्ट पूछें…",
     language: "भाषा",
+    selectScenario: "परिदृश्य चुनें",
     caseContext: "केस / क्राइम नंबर संदर्भ",
     showTraces: "ट्रेस देखें",
     showTracesHint: "ट्रेस खोलने के लिए पहले एक उत्तर चलाएँ",
@@ -159,6 +162,7 @@ const UI_COPY: Record<
     suggestedQuestions: "ಸೂಚಿಸಲಾದ ಪ್ರಶ್ನೆಗಳು",
     composerPlaceholder: "ಕಾಲರೇಖೆ, ಹಣದ ಹರಿವು, ಅಲಿಯಾಸ್ ಲಿಂಕ್ ಅಥವಾ ಕಾನೂನು ಚೆಕ್‌ಲಿಸ್ಟ್ ಬಗ್ಗೆ ಕೇಳಿ…",
     language: "ಭಾಷೆ",
+    selectScenario: "ಸನ್ನಿವೇಶ ಆಯ್ಕೆಮಾಡಿ",
     caseContext: "ಕೇಸ್ / ಕ್ರೈಂ ಸಂಖ್ಯೆ ಸಂದರ್ಭ",
     showTraces: "ಟ್ರೇಸ್ ತೋರಿಸಿ",
     showTracesHint: "ಟ್ರೇಸ್ ತೆರೆಯಲು ಮೊದಲು ಒಂದು ಉತ್ತರ ರನ್ ಮಾಡಿ",

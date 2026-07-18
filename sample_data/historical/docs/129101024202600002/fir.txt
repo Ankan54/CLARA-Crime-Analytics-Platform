@@ -26,7 +26,7 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_12
+The complainant Ramesh Shetty, aged 24, a Fresher from Davanagere, states that on 2026-06-12 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 56,010 across 4 transactions to UPI IDs taskpro002@airtel, earnfast001@paytm and account 4440988776655002. Technical analysis revealed the fraudulent app was hosted on the IP address 103.74.19.143. Furthermore, investigation traced fund diversions to another bank account 4440988776655001. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable, and another associated number 353816081234503 was also identified during the inquiry.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655002, 4440988776655001

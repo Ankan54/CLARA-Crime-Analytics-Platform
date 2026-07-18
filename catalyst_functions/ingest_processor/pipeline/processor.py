@@ -897,6 +897,11 @@ class IngestProcessor:
             all_entity_uids.extend(entity_uids)
             logger.debug("phase_b file=%s sql_load done, graph_load entity_uids=%d", filename, len(entity_uids))
 
+            # A device-dump IR may carry an operator roster -> role-typed Person nodes.
+            # Runs after graph load so the devices/UPIs it links to already exist as nodes.
+            if file_entry.get("doc_type") == "IR":
+                self._enrich_operator_roster(file_entry.get("raw_text") or "")
+
             self._update_stage("VECTOR_LOAD", file=filename)
             chunk_ids = self._load_vector(file_entry, entity_uids)
             all_chunk_ids.extend(chunk_ids)
@@ -990,6 +995,153 @@ class IngestProcessor:
                     ),
                 )
         self.pg.commit()
+
+    def _enrich_case_geo_victim(self) -> None:
+        """Populate EXT_CaseGeo (district/pincode/lat-long) and a Victim row for a live case.
+
+        The extractor doesn't reliably produce a district/pincode/geo or a Victim (only a
+        ComplainantDetails), so live cases showed district "unknown" and no victim on every
+        summary/spatial query while historical cases had both. District is derived from the
+        case's PoliceStation (deterministic), and lat/long/pincode from the centroid of
+        existing cases in that district (so live cases plot on the hotspot map). The
+        complainant is mirrored to a Victim row -- for these cyber-fraud FIRs they are the
+        same person, which is how the historical data is shaped too. Idempotent: skips rows
+        that already exist, so a re-ingest doesn't duplicate.
+        """
+        cid = self.params.case_id
+        with self.pg.cursor() as cur:
+            cur.execute(
+                """
+                SELECT d.DistrictName AS district
+                FROM CaseMaster c
+                JOIN Unit u ON u.UnitID = c.PoliceStationID
+                JOIN District d ON d.DistrictID = u.DistrictID
+                WHERE c.CaseMasterID = %s
+                """,
+                (cid,),
+            )
+            row = cur.fetchone()
+            district = row["district"] if row else None
+            if district:
+                cur.execute(
+                    """
+                    SELECT ROUND(AVG(c.Latitude)::numeric, 6) AS lat,
+                           ROUND(AVG(c.Longitude)::numeric, 6) AS lon,
+                           MODE() WITHIN GROUP (ORDER BY g.Pincode) AS pincode
+                    FROM CaseMaster c
+                    JOIN EXT_CaseGeo g ON g.CaseMasterID = c.CaseMasterID
+                    WHERE g.IncidentDistrict = %s AND c.CaseMasterID <> %s
+                    """,
+                    (district, cid),
+                )
+                cen = cur.fetchone() or {}
+                lat, lon, pincode = cen.get("lat"), cen.get("lon"), cen.get("pincode")
+                cur.execute("SELECT 1 FROM EXT_CaseGeo WHERE CaseMasterID = %s", (cid,))
+                if not cur.fetchone():
+                    geo_id = self._next_int_id("EXT_CaseGeo", "GeoID")
+                    cur.execute(
+                        "INSERT INTO EXT_CaseGeo (GeoID, CaseMasterID, IncidentDistrict, Pincode) VALUES (%s, %s, %s, %s)",
+                        (geo_id, cid, district, pincode),
+                    )
+                cur.execute(
+                    "UPDATE CaseMaster SET Latitude = COALESCE(Latitude, %s), Longitude = COALESCE(Longitude, %s) WHERE CaseMasterID = %s",
+                    (lat, lon, cid),
+                )
+            cur.execute("SELECT 1 FROM Victim WHERE CaseMasterID = %s", (cid,))
+            if not cur.fetchone():
+                next_id = self._next_int_id("Victim", "VictimMasterID")
+                cur.execute(
+                    """
+                    INSERT INTO Victim (VictimMasterID, CaseMasterID, VictimName, AgeYear, GenderID)
+                    SELECT %s, CaseMasterID, ComplainantName, AgeYear, GenderID
+                    FROM ComplainantDetails WHERE CaseMasterID = %s LIMIT 1
+                    """,
+                    (next_id, cid),
+                )
+        self.pg.commit()
+
+    # Roster line: "Ravi V | caller | IMEI 353816081234501" or "... | UPI ring.ctrl04@ybl".
+    _ROSTER_LINE_RE = re.compile(
+        r"^\s*([A-Za-z][\w .'\-]+?)\s*\|\s*(\w+)\s*\|\s*(IMEI|UPI)\s+(\S+)\s*$",
+        re.IGNORECASE | re.MULTILINE,
+    )
+
+    def _enrich_operator_roster(self, raw_text: str) -> None:
+        """Ingest a seized-device operator roster into role-typed Person nodes (Scn4 org chart).
+
+        A device-dump IR can carry an "OPERATOR ROSTER" block listing each operator, their
+        role, and the IMEI/UPI they use. The generic schema has no role concept and LLM
+        extraction of 5+ operators from prose is unreliable, so this parses the block
+        deterministically: one Accused per operator, a `role` property on the graph node, and
+        an OWNS edge to the device/UPI (which the same IR already ingested). That's what the
+        org-chart / role-map question reads. Idempotent by (case, name); safe to re-run.
+        """
+        if "OPERATOR ROSTER" not in raw_text.upper():
+            return
+        block = raw_text[raw_text.upper().index("OPERATOR ROSTER"):]
+        entries = self._ROSTER_LINE_RE.findall(block)
+        if not entries:
+            return
+        cid = self.params.case_id
+        graph_ops: list[dict[str, str]] = []
+        for name, role, id_kind, id_value in entries:
+            name, role, id_kind = name.strip(), role.strip().lower(), id_kind.upper()
+            with self.pg.cursor() as cur:
+                cur.execute("SELECT AccusedMasterID AS id FROM Accused WHERE CaseMasterID = %s AND AccusedName = %s", (cid, name))
+                row = cur.fetchone()
+                if row:
+                    acc_pk = int(row["id"])
+                else:
+                    acc_pk = self._next_int_id("Accused", "AccusedMasterID")
+                    cur.execute("INSERT INTO Accused (AccusedMasterID, CaseMasterID, AccusedName) VALUES (%s, %s, %s)", (acc_pk, cid, name))
+                self.pg.commit()
+            op_uid = self._ensure_entity("Accused", acc_pk, "Person", "Accused")
+            # resolve the object this operator uses (already ingested from the IR's identifiers)
+            obj_uid = None
+            with self.pg.cursor() as cur:
+                if id_kind == "IMEI":
+                    cur.execute("SELECT device_id AS id FROM Device WHERE imei_normalized = %s", (_norm("imei", id_value),))
+                    r = cur.fetchone()
+                    if r:
+                        obj_uid = self._ensure_entity("Device", int(r["id"]), "Object", "Device")
+                else:  # UPI
+                    cur.execute("SELECT upi_id AS id FROM UPIHandle WHERE vpa_normalized = %s", (_norm("upi", id_value),))
+                    r = cur.fetchone()
+                    if r:
+                        obj_uid = self._ensure_entity("UPIHandle", int(r["id"]), "Object", "UPIHandle")
+            graph_ops.append({"op_uid": op_uid, "name": name, "role": role, "obj_uid": obj_uid or ""})
+
+        neo4j_uri = _env("NEO4J_URI")
+        if not neo4j_uri or not _env("NEO4J_PASSWORD"):
+            return
+        from neo4j import GraphDatabase
+
+        driver = GraphDatabase.driver(neo4j_uri, auth=(_env("NEO4J_USERNAME", "neo4j"), _env("NEO4J_PASSWORD")))
+        try:
+            with driver.session() as session:
+                for op in graph_ops:
+                    session.run(
+                        """
+                        MERGE (p {entity_uid: $op_uid})
+                        SET p:Accused, p.display_name = $name, p.role = $role,
+                            p.origin = coalesce(p.origin, 'demo'), p.case_id = $cid, p.run_id = $run_id
+                        WITH p
+                        MATCH (c:CaseMaster {case_id: $cid})
+                        MERGE (p)-[:INVOLVES]->(c)
+                        """,
+                        op_uid=op["op_uid"], name=op["name"], role=op["role"], cid=cid, run_id=self.params.run_id,
+                    )
+                    if op["obj_uid"]:
+                        session.run(
+                            """
+                            MATCH (p {entity_uid: $op_uid}), (o {entity_uid: $obj_uid})
+                            MERGE (p)-[r:OWNS]->(o) SET r.origin = 'demo', r.run_id = $run_id
+                            """,
+                            op_uid=op["op_uid"], obj_uid=op["obj_uid"], run_id=self.params.run_id,
+                        )
+        finally:
+            driver.close()
+        logger.info("operator roster: ingested %d role-typed operators for case %s", len(graph_ops), cid)
 
     def _ensure_entity(self, table_name: str, pk_value: int, entity_type: str, pole_subtype: str, entity_uid: str | None = None) -> str:
         with self.pg.cursor() as cur:
@@ -1400,6 +1552,11 @@ class IngestProcessor:
             txn_edges = self._write_transaction_rows(groups_raw["Transaction"], produced, evidence_id)
         produced["__txn_edges__"] = txn_edges  # type: ignore[assignment]
 
+        # After the FIR's complainant row exists, backfill geo + a mirrored Victim so live
+        # cases match historical ones on district/hotspot/parties.
+        if doc_type == "FIR":
+            self._enrich_case_geo_victim()
+
         return produced, evidence_id
 
     # -- Graph load -------------------------------------------------------
@@ -1461,7 +1618,8 @@ class IngestProcessor:
                             f"""
                             MERGE (n {{entity_uid: $uid}})
                             SET n:{label},
-                                n.origin = coalesce(n.origin, 'demo'), n.run_id = $run_id, n.case_id = $case_id,
+                                n.origin = coalesce(n.origin, 'demo'), n.run_id = $run_id,
+                                n.case_id = coalesce(n.case_id, $case_id),
                                 n.updated_at = datetime($ts),
                                 n.display_name = coalesce($display_name, n.display_name)
                             """,

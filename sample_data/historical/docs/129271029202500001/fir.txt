@@ -26,7 +26,11 @@ Section 3 PMLA, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_305
+On 2025-09-18, the complainant, Harish Lamani, aged 24 years, a student residing in Kolar, reported that he was induced into acting as a money mule through a calculated recruitment scam. The incident began when Harish was approached by an unidentified fraudster who offered him an easy opportunity to earn a commission by simply using his bank account to receive and forward funds. Lured by the promise of quick financial gain, Harish agreed to the arrangement and shared his banking credentials.
+
+Acting on the fraudster's instructions, Harish enabled transactions on his account, which was linked to the UPI ID harishla82@okicici. Subsequently, the fraudsters siphoned an amount of Rs. 49,029 through the account. Investigations revealed that the fraudulent transactions were coordinated using the mobile number 9534308020. Furthermore, the financial trail pointed to a beneficiary account bearing the identifier BG47966341235, to which the funds were ultimately diverted.
+
+Harish realized he had been duped into laundering illicit funds when he faced queries from bank officials regarding the unauthorized movement of money. The accused exploited the victim’s financial naivety to convert him into a conduit for illegal proceeds, causing him a wrongful loss of Rs. 49,029. The acts constitute cheating and fraudulent use of electronic communication. A case is registered for further investigation to trace the recipients of the funds and apprehend the individuals operating the recruitment racket.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG47966341235

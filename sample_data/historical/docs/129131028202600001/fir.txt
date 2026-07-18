@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_324
+On 27th March 2026, Rohit Kulkarni, a 19-year-old job seeker and resident of Vijayapura, filed this report regarding a harrowing ordeal involving a predatory instant loan application. In urgent need of funds to support his job search, Rohit downloaded an app that promised quick disbursals with minimal documentation. Without clearly disclosing the terms, the app coerced him into granting access to his device's contacts, gallery, and location data.
+
+Shortly after the transaction, Rohit realized the app had deducted a massive service fee upfront, leaving him with a fraction of the approved amount. When he failed to make the inflated repayment within the unreasonably short deadline, the app’s operators initiated a campaign of severe harassment and blackmail. The accused accessed Rohit’s contact list and began calling his family members and friends. The harassment escalated when the perpetrators morphed Rohit’s photographs into obscene and explicit images, sending these doctored pictures to his relatives along with messages alleging he was a thief and a fraud.
+
+Under immense psychological pressure and fearing for his family’s reputation, Rohit was coerced into transferring a total of Rs. 376,087 to various bank accounts provided by the fraudsters. Despite these payments, the demands continued. Key identifiers linked to the financial trail and communication include the mobile number 9716603953, the transaction reference ID BG70025550114, and the beneficiary UPI handle rohitkul69@okicici. This case involves acts of cyberstalking, extortion, and intentional insult with intent to provoke a breach of peace, constituting serious offenses under the Information Technology Act and the Indian Penal Code.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG70025550114

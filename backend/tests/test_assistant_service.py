@@ -156,7 +156,9 @@ class TestFailureAndCancel(unittest.IsolatedAsyncioTestCase):
         types = _types("r2")
         self.assertEqual(types[-1], "error")  # never a silent close
         err = [e for e in _events("r2") if e["type"] == "error"][0]
-        self.assertIn("neo4j unreachable", err["message"])
+        # After the CLARA error refactor, the message is a friendly template, not the raw exception.
+        # Verify it's in CLARA voice (transient category) and has the retry guidance.
+        self.assertIn("try again", err["message"].lower())
 
     async def test_cancel_closes_the_turn_and_persists_partial(self):
         started = asyncio.Event()

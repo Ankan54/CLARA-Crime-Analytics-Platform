@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN2_H03
+On 2025-11-10, the complainant, Deepa Nair, aged 24, a resident of Bengaluru Urban, appeared before this station to report a case of cyber fraud and cheating. The victim stated that she had been actively seeking employment and came across an online advertisement for a placement agency promising immediate placements in a reputed multinational corporation. Trusting the professional appearance of the communication, she established contact with the agency representatives.
+
+During the interactions, the fraudsters convinced the victim that she was a selected candidate for a high-paying position, contingent upon the immediate payment of mandatory registration and documentation fees. Under this psychological duress and with the assurance that the amount was refundable against her first salary, Deepa Nair proceeded with the transactions. Over a series of transfers, she was induced to pay a cumulative amount of 800,000. The payments were processed through multiple channels, with the fraudsters providing specific banking identifiers to facilitate the transfer.
+
+The complainant provided the following verbatim details used by the accused to receive the funds: the mobile number 9611234567 was used for coordination, the funds were transferred to the account number 8810987654321003, and further payment links were shared via the email ID imran.transactions@axl. After the final transaction was completed, the perpetrators ceased all communication and blocked the victim’s number. Upon verification, it was discovered that the job offer was fictitious and the placement agency did not exist. A case is hereby registered for further investigation into the matter.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 8810987654321003

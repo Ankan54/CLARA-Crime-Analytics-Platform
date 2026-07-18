@@ -1,0 +1,14 @@
+# Local Linux backend (WeasyPrint PDF path). From repo root:
+#   docker compose -f backend/docker-compose.dev.yml up --build
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile.dev
+    ports:
+      - "9000:9000"
+    env_file:
+      - ../.env
+    volumes:
+      # Hot-reload app code without rebuilding (fonts/deps still need rebuild).
+      - ./app:/app/app

@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BASE_03
+The complainant, Harish Patil, aged 25 years, residing in Chikkaballapur and an Engineering student, appeared before the station to report a cyber fraud incident. On 20th April 2026, while browsing the internet, the victim came across an advertisement offering part-time job opportunities. Enticed by the prospect of earning extra income, he clicked the link and was redirected to a digital platform where he was assigned menial tasks such as liking videos or rating products.
+
+Initially, the victim completed a few tasks and received small monetary returns, which built a sense of trust in the operation. Subsequently, he was assigned a "prepaid task" requiring an initial deposit to unlock a higher commission tier. Believing the platform to be legitimate, the victim proceeded to transfer funds. Over the course of the interaction, he was manipulated into transferring a total sum of Rs. 28,454 through multiple UPI transactions to various bank accounts provided by the fraudulent operators.
+
+Upon completing the transfers, the victim attempted to withdraw his principal amount and the earned commission but found his account frozen on the platform. When he contacted the support team to resolve the issue, they demanded further payments to "verify" his account, at which point he realized he had been deceived. Technical analysis of the transaction logs revealed the unique identifiers INDP_ACC_BASE_03_65220 and the UPI ID baseline.task03@okicici linked to the fraudulent receipt of funds. The accused, acting in concert, have wrongfully gained the amount by impersonating a legitimate task-based service. A case is registered for further investigation into the matter.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : INDP_ACC_BASE_03_65220

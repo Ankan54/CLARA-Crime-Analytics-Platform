@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_318
+On 2025-10-25, complainant Vinod Subramaniam, aged 38 years, residing in Bengaluru Rural and employed as a Government Employee, appeared before the station to report a sophisticated investment fraud. The victim stated that he was added to a WhatsApp group named "VIP Stock Tips Insider" in early October, where fraudsters posing as financial experts promoted a fake stock trading application named 'ProTrade Elite'.
+
+Enticed by the market tips, Vinod was instructed to transfer funds to begin trading. He transferred a total of INR 252,791 across multiple transactions to the beneficiary account BG64245529443. The fraudsters initially gained his trust by showing him a falsified dashboard on the app indicating high returns. They also shared fake profit screenshots within the group, claiming other members were doubling their capital daily.
+
+Believing his investment had grown significantly, Vinod attempted to withdraw a portion of his profits on October 25. However, the app displayed an error message, and he was unable to access his funds. When he contacted the support team via the number 9828329713, he was asked to pay a "clearance fee." Suspecting deceit, Vinod confronted the administrators, who subsequently stopped responding and removed him from the group. Investigations revealed the funds were routed through the UPI ID vinodsub49@okicici. A case is registered for further investigation.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG64245529443

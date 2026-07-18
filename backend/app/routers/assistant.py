@@ -23,7 +23,9 @@ from sqlalchemy import text
 from ..assistant import bus, persistence, service
 from ..assistant.events import AssistantLanguage
 from ..assistant.skills.analysis import build_python_tool
+from ..assistant.skills.files import build_file_tools
 from ..assistant.skills.report import build_report_tool
+from ..assistant import stt as assistant_stt
 from ..config import settings
 from ..db import db_session
 
@@ -66,6 +68,15 @@ class AssistantMessageRequest(BaseModel):
 class AssistantMessageResponse(BaseModel):
     run_id: str
     session_id: str
+
+
+class RefineRequest(BaseModel):
+    text: str = Field(min_length=1)
+    language: AssistantLanguage = "en"
+
+
+class RefineResponse(BaseModel):
+    text: str
 
 
 def _resolve_case_context(case_id: int | None, crime_no: str | None) -> dict[str, Any] | None:
@@ -142,12 +153,44 @@ async def post_message(request: AssistantMessageRequest) -> AssistantMessageResp
             build_python_tool(session_id, run_id),
             build_report_tool(session_id, run_id, request.language, officer,
                               case_ref=(case_context or {}).get("crime_no", "")),
+            *build_file_tools(run_id),
         ],
         on_complete=_on_complete_async,
     )
     logger.info("assistant: run started run_id=%s session=%s lang=%s case=%s",
                 run_id, session_id, request.language, (case_context or {}).get("crime_no"))
     return AssistantMessageResponse(run_id=run_id, session_id=session_id)
+
+
+@ws_router.websocket("/ws/assistant/transcribe")
+async def transcribe_stream(websocket: WebSocket, lang: str = "en") -> None:
+    """Relay browser mic PCM to Sarvam streaming STT.
+
+    Query param `lang` is the UI code (en|hi|kn). Auth for Sarvam stays on the server.
+    Registered before `/ws/assistant/{run_id}` so "transcribe" is not swallowed as a run_id.
+    """
+    await websocket.accept()
+    if lang not in ("en", "hi", "kn"):
+        lang = "en"
+    if not settings.sarvam_api_key:
+        await websocket.send_json({"type": "error", "message": "Sarvam STT is not configured."})
+        await websocket.close()
+        return
+    try:
+        await assistant_stt.relay_transcription(websocket, lang)  # type: ignore[arg-type]
+    except WebSocketDisconnect:
+        logger.info("assistant: transcribe ws disconnected lang=%s", lang)
+    except Exception:
+        logger.exception("assistant: transcribe ws error lang=%s", lang)
+        try:
+            await websocket.send_json({"type": "error", "message": "Transcription failed."})
+        except Exception:
+            pass
+    finally:
+        try:
+            await websocket.close()
+        except Exception:
+            pass
 
 
 @ws_router.websocket("/ws/assistant/{run_id}")
@@ -166,12 +209,10 @@ async def stream_run(websocket: WebSocket, run_id: str) -> None:
             try:
                 event = await asyncio.wait_for(queue.get(), timeout=WS_IDLE_TIMEOUT_SECONDS)
             except asyncio.TimeoutError:
-                # Never leave the UI spinning: it has no onclose handler, so a socket that
-                # simply goes quiet is a permanently-stuck screen.
                 logger.warning("assistant: ws idle timeout run_id=%s", run_id)
                 await websocket.send_json({
                     "type": "error", "run_id": run_id,
-                    "message": "The assistant stopped responding. Please try again.",
+                    "message": "I could not reach the records system just now. Please try again in a moment.",
                 })
                 return
             await websocket.send_json(event)
@@ -191,6 +232,15 @@ async def cancel(run_id: str) -> dict[str, Any]:
     needs no special handling."""
     cancelled = service.cancel_run(run_id)
     return {"run_id": run_id, "cancelled": cancelled}
+
+
+@router.post("/assistant/refine", response_model=RefineResponse)
+async def refine_transcript(request: RefineRequest) -> RefineResponse:
+    """Clean up a voice-dictated query in the officer's selected language."""
+    refined = await asyncio.to_thread(
+        assistant_stt.refine_transcript, request.text, request.language,
+    )
+    return RefineResponse(text=refined)
 
 
 @router.get("/assistant/sessions")

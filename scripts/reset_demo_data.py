@@ -170,6 +170,11 @@ def reset_postgres(dry_run: bool) -> dict[str, int]:
             for table, pk_col in _PERSON_TABLES:
                 _count_and_delete(table, "CaseMasterID = ANY(%(case_ids)s)", {"case_ids": case_ids})
             _count_and_delete("ActSectionAssociation", "CaseMasterID = ANY(%(case_ids)s)", {"case_ids": case_ids})
+            # Case-scoped EXT_* rows the live pipeline now writes (geo, and timeline if added).
+            # They FK to CaseMaster, so they must go before it or the CaseMaster delete
+            # violates FK. (EXT_VictimDetail/EXT_AccusedDetail key on person PKs, deleted above.)
+            for _ext in ("EXT_CaseGeo", "EXT_SubEvent"):
+                _count_and_delete(_ext, "CaseMasterID = ANY(%(case_ids)s)", {"case_ids": case_ids})
             _count_and_delete("CaseMaster", "CaseMasterID = ANY(%(case_ids)s)", {"case_ids": case_ids})
 
         if dry_run:

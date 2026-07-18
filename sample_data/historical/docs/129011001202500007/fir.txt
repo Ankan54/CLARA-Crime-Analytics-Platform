@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_316
+On 09 November 2025, I, Nalini Shastri, aged 39, a resident of Bengaluru Rural and owner of an MSME, wish to report a cyber fraud incident. At approximately 14:30 hours, I received a call from an individual posing as a potential buyer interested in bulk purchasing goods from my enterprise. The caller expressed an immediate desire to transfer a token advance payment to finalize the order and requested my UPI ID to proceed.
+
+I provided my UPI ID, nalinish12@okicici, expecting to receive the funds. However, the caller stated that due to a technical glitch on his end, he was unable to send the money directly and insisted on sending a 'collect' request or a QR code instead. He guided me to check my pending requests on my UPI application. Misled by his professional demeanor and the urgency of the business deal, I accepted a collect request on my device. I was under the impression that this action would verify my account to receive the funds.
+
+Immediately after accepting the request, a sum of Rs. 230,835 was debited from my bank account instead of being credited. I realized I had fallen prey to a fraudulent 'collect' request scam where the victim is tricked into paying instead of receiving money. Upon checking the transaction details, I noted the fraudulent beneficiary identifier as BG16567373140. Furthermore, the mobile number used by the fraudster to contact me was 9614025492. I have not recovered the amount and request the registration of an FIR for further investigation.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG16567373140

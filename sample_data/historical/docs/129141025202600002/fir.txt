@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BASE_05
+The complainant, Sanjay Pillai, aged 19 years, a student of MBA residing in Hassan, appeared before the station on 30th May 2026 to report a case of cyber fraud. The victim stated that while browsing the internet seeking part-time employment to support his education, he came across a lucrative task-based offer. Upon expressing interest, he was contacted by unknown fraudsters who lured him into a digital task scam promising high returns for completing simple online assignments.
+
+Trusting the authenticity of the offer, the victim followed the instructions provided by the scammers. He was asked to perform specific tasks and subsequently transfer funds to a designated bank account to "upgrade" his task level and receive his accumulated commissions. Under this pretext of receiving higher returns, the victim initiated a transaction. Consequently, a sum of Rs. 21,763 was transferred from his personal bank account to the fraudulent entities.
+
+During the course of the deception, the fraudsters utilized specific identifiers to feign legitimacy. The victim was provided with the reference ID **INDP_ACC_BASE_05_53918** for the transaction record. Additionally, the beneficiary account details provided to the victim for the fund transfer were listed under the handle **baseline.task05@okicici**. After the transfer was completed, the fraudsters ceased all communication and blocked the victim's access to the platform. The complainant realized he had been defrauded of his savings. This act constitutes an offense under the Information Technology Act and the Indian Penal Code, involving cheating by impersonation and criminal breach of trust. A detailed investigation is requested to trace the beneficiary account and nab the culprits.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : INDP_ACC_BASE_05_53918

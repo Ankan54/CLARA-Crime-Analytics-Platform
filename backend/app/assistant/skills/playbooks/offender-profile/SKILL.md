@@ -6,9 +6,13 @@ description: "Build an alias-resolution and repeat-offender profile. Use when th
 
 # Offender Profile
 
-Follow this workflow exactly.
+Follow this workflow exactly. `person_history` is the RIGHT tool here — it collapses aliases via
+shared device/UPI/phone. Do NOT hand-write Cypher to resolve aliases; that is what this tool does.
 
-1. Call `person_history` with the name or alias the officer supplied.
+0. Get the accused NAME if you only have a case (person_history needs a name, not a case_id):
+   run_cypher_read: `MATCH (c:CaseMaster {case_id: <case_id>})<-[:INVOLVES]-(a:Accused) RETURN a.display_name`
+   (match on case_id INTEGER or display_name = crime_no, never entity_uid).
+1. Call `person_history` with that name (or the name/alias the officer supplied).
 2. From the returned result, extract:
    - aliases / recorded names
    - shared identifiers proving the link

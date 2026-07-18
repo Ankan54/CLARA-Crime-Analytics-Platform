@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_309
+On 2026-03-23, the complainant, Sarala Shastri, aged 19, a resident of Kodagu working part-time, appeared before this station to report a sophisticated job fraud. She stated that she had been searching for stable employment online when she came across a placement agency claiming to recruit for a multinational company. Enticed by the offer, she contacted the agency, where she was assured of a lucrative position pending the payment of mandatory registration and documentation fees.
+
+Trusting the representations made by the fraudsters, Sarala proceeded to pay a cumulative amount of 296,983. The transactions were conducted digitally, directed to the UPI ID **saralash91@okicici** and linked to the mobile number **9517310810**. Additionally, the accused provided a transaction reference bearing the number **BG71901301368** to lend an air of legitimacy to the bogus recruitment process.
+
+Following the transfers, the complainant attempted to follow up on her application status. However, the agents became unresponsive, ceased all communication, and the promised job appointment letter was never issued. It has since become evident that the placement agency is fictitious and operates solely to siphon money from job seekers under the guise of administrative costs. The acts constitute cheating and criminal breach of trust. A thorough investigation is required to trace the funds and identify the individuals operating the fraudulent recruitment racket.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG71901301368

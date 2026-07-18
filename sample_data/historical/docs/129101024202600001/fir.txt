@@ -26,7 +26,9 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_04
+The complainant Sandeep Kamath, aged 28, a MBA Student from Davanagere, states that on 2026-06-12 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 22,794 across 6 transactions to UPI IDs earnfast001@paytm, jobapp007@hdfcbank, quickjob004@oksbi and account 4440988776655001. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable.
+
+During the course of the investigation, technical analysis of the fraudulent application and transaction logs revealed further digital footprints utilized by the accused. Forensic data traced the backend server communication to the IP address 103.74.19.144, which was active during the deception phase. Further scrutiny of the financial trail identified two additional beneficiary bank accounts, 4440988776655007 and 4440988776655004, which were used to siphon off a portion of the defrauded funds. Additionally, a secondary mobile number linked to the Telegram handle and used for verification purposes was identified as 353816081234502. All these identifiers were actively used in the commission of this cybercrime, and efforts are underway to trace the beneficiaries and the location of the accused.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655001, 4440988776655007, 4440988776655004

@@ -28,14 +28,19 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import StructuredTool
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
+from ..config import settings
 from ..llm import build_llm_pair
 from .emitter import RunEmitter
+from .events import CodePayload
+from .persona import NO_INTERNALS
+from .schema_cards import GRAPH_SCHEMA_CARD, SCHEMA_BY_AGENT, SQL_SCHEMA_CARD, VECTOR_SCHEMA_CARD
 from .tools import CURRENT_EMITTER, CURRENT_SPECIALIST, build_tools
+from . import bus
 
 logger = logging.getLogger(__name__)
 
@@ -48,13 +53,18 @@ class SpecialistSpec:
     description: str
     tools: frozenset[str]
     prompt: str
+    friendly_action: str = ""  # human-friendly "what I'm doing" label for the UI trail
 
 
-COMMON_RULES = """Rules:
+COMMON_RULES = f"""Rules:
 - Use tools and skills only; never invent facts.
+- If a `skill_*` tool's description matches the task, load it FIRST and follow its steps — it is the vetted workflow for exactly this question.
+- Prefer the specific parameterised tool (get_case_summary, trace_money_flow, person_history, find_links_between_cases, detect_community, find_similar_cases, legal_checklist) over ad-hoc run_sql_select / run_cypher_read. Reach for the raw query tools only when no parameterised tool fits.
+- Be decisive: once you have enough to answer, STOP and write the finding. Do NOT run many variations of the same query — 2-3 well-chosen tool calls is normal; looping past that means you should answer with what you have.
 - Return concise findings with the exact identifiers, dates, amounts and case refs the tools returned.
 - Say when evidence is only an investigative lead, not proof of guilt.
-- If a tool returns nothing, say what is missing instead of guessing.
+- If a tool returns nothing or errors, state plainly what is missing and suggest what the officer can try next instead of guessing.
+- {NO_INTERNALS}
 """
 
 
@@ -70,6 +80,7 @@ SPECS: tuple[SpecialistSpec, ...] = (
         ),
         tools=frozenset({"get_case_summary", "run_sql_select"}),
         prompt=COMMON_RULES + "\nFocus: build a clear one-case dossier from SQL facts.",
+        friendly_action="Reviewing the case file",
     ),
     SpecialistSpec(
         key="financial",
@@ -80,12 +91,20 @@ SPECS: tuple[SpecialistSpec, ...] = (
             "accounts and crypto cash-out. Use for where the money went, how fast it moved, "
             "what can be frozen, layering, dormancy or PMLA money-trail questions."
         ),
-        tools=frozenset({"trace_money_flow", "expand_entity"}),
+        tools=frozenset({"trace_money_flow", "expand_entity", "run_sql_select", "run_cypher_read"}),
         prompt=COMMON_RULES + (
-            "\nFocus: lead with freezable funds, then total moved, speed, hops and cash-out. "
-            "If a case is in context and no account number is supplied, call trace_money_flow(case_ref=\"\") immediately; "
-            "do not ask the officer for a case reference you already have."
+            "\nFocus: money movement. Pick the tool, call it, then STOP and write the finding:\n"
+            "- 'where did the money go / trace / how fast / what is freezable / cash-out / layering / velocity' -> "
+            "trace_money_flow(case_ref=\"\" for the case in context, or account_number=... for one account). It returns "
+            "the WHOLE trail in ONE call: the money-flow graph, time-ordered transfers, freezable funds and any crypto "
+            "cash-out. Lead with the freezable amount, then total moved, speed, hops, cash-out.\n"
+            "- what one account/identifier connects to -> expand_entity(value).\n"
+            "After trace_money_flow returns you ALREADY have the answer -- do NOT run confirming run_sql_select / "
+            "run_cypher_read queries to re-verify the same trail. Reach for run_sql_select ONLY for a specific filter or "
+            "aggregation trace_money_flow genuinely cannot produce (e.g. 'transfers above 5 lakh on 14 April'), then STOP.\n"
+            "If a case is in context and no account number is supplied, call trace_money_flow(case_ref=\"\") immediately."
         ),
+        friendly_action="Checking the money trail",
     ),
     SpecialistSpec(
         key="network",
@@ -97,11 +116,20 @@ SPECS: tuple[SpecialistSpec, ...] = (
             "person, repeat offender, find links, ring, gang, cluster or shared infrastructure."
         ),
         tools=frozenset({"person_history", "find_links_between_cases", "detect_community", "expand_entity", "run_cypher_read"}),
-        prompt=COMMON_RULES + "\nFocus: explain the linking evidence and confidence; never call a link guilt.",
+        prompt=COMMON_RULES + (
+            "\nFocus: pick the RIGHT tool for the question, call it, then explain the linking evidence:\n"
+            "- 'do we know this accused / other names / aliases / same person / repeat offender / his history / escalation' -> person_history(name). If you only have a case (not a name), FIRST get the name with one query: MATCH (c:CaseMaster {case_id:<id>})<-[:INVOLVES]-(a:Accused) RETURN a.display_name; then call person_history(that name). person_history collapses aliases via shared device/UPI/phone -- do NOT hand-write Cypher to resolve aliases yourself.\n"
+            "- 'find links / are these cases connected / do they share an account-device-UPI' -> find_links_between_cases(case_refs).\n"
+            "- 'organised ring / gang / community / cluster / is this surge organised' -> detect_community.\n"
+            "- 'operator org chart / role map / who does what' -> load the operator-org-chart skill.\n"
+            "- what one identifier connects to -> expand_entity(value).\n"
+            "Use run_cypher_read ONLY for a graph question none of the above tools cover. Never call a link proof of guilt."
+        ),
+        friendly_action="Looking for links and shared identities",
     ),
     SpecialistSpec(
         key="mo",
-        display="MO & Trends",
+        display="Patterns & Trends",
         agent="vector",
         description=(
             "Find cases with the same modus operandi by narrative meaning and analyse trend or "
@@ -109,7 +137,17 @@ SPECS: tuple[SpecialistSpec, ...] = (
             "weekly/monthly trend, hotspot or cross-district spread questions."
         ),
         tools=frozenset({"find_similar_cases", "query_case_stats", "run_sql_select"}),
-        prompt=COMMON_RULES + "\nFocus: report similarity scores, districts, dates and whether a pattern is cross-jurisdictional.",
+        prompt=COMMON_RULES + (
+            "\nFocus: pick the tool, call it, then STOP and report:\n"
+            "- 'same MO / same script / similar cases / has this appeared elsewhere' -> find_similar_cases(case_ref=\"\" for the case in context). "
+            "It returns the ranked matches with scores + districts in ONE call. Report the scores, districts and whether it is cross-jurisdictional; "
+            "offer the Find-Links follow-up. Do NOT re-query the matches with run_sql_select afterwards.\n"
+            "- 'trend / surge / how many / which district / spike / hotspot / rising' -> query_case_stats "
+            "(group_by district|crime_type|month, with a crime_type and/or date filter). One call gives the counts.\n"
+            "Reach for run_sql_select ONLY for a specific count/filter query_case_stats cannot express, then STOP. "
+            "State a 0.71 similarity as 'possible', 0.9+ as a strong match."
+        ),
+        friendly_action="Finding similar cases",
     ),
     SpecialistSpec(
         key="legal",
@@ -122,6 +160,7 @@ SPECS: tuple[SpecialistSpec, ...] = (
         ),
         tools=frozenset({"legal_checklist", "find_precedents", "run_sql_select"}),
         prompt=COMMON_RULES + "\nFocus: checklist first; cite only precedents returned by tools.",
+        friendly_action="Checking the legal position",
     ),
 )
 
@@ -138,6 +177,39 @@ def _text_of(content: Any) -> str:
             if isinstance(block, (str, dict))
         )
     return ""
+
+
+def _split_reasoning_and_answer(content: Any) -> tuple[str, str]:
+    """Split an AIMessage's content into (reasoning_text, answer_text).
+
+    Handles: Bedrock list-of-blocks (reasoning_content vs text), plain strings with
+    inline <thinking>...</thinking> tags, and plain strings with no reasoning.
+    """
+    if isinstance(content, list):
+        reasoning_parts: list[str] = []
+        answer_parts: list[str] = []
+        for block in content:
+            if isinstance(block, dict):
+                if block.get("type") == "reasoning_content":
+                    reasoning_parts.append(block.get("text", "") or block.get("content", ""))
+                elif block.get("type") == "text":
+                    answer_parts.append(block.get("text", ""))
+                elif block.get("type") == "tool_use":
+                    pass
+                else:
+                    answer_parts.append(str(block.get("text", "")))
+            elif isinstance(block, str):
+                answer_parts.append(block)
+        return "".join(reasoning_parts), "".join(answer_parts)
+
+    text = str(content or "")
+    import re as _re
+    thinking_match = _re.findall(r"<thinking>(.*?)</thinking>", text, flags=_re.IGNORECASE | _re.DOTALL)
+    if thinking_match:
+        reasoning = " ".join(thinking_match)
+        answer = _re.sub(r"<thinking>.*?</thinking>", "", text, flags=_re.IGNORECASE | _re.DOTALL).strip()
+        return reasoning, answer
+    return "", text
 
 
 def _strip_thinking_tags(text: str) -> str:
@@ -177,7 +249,34 @@ def _system_prompt(
     if memory:
         memory = "\nOfficer memory (never override tool output):\n" + memory
     lang = "English" if language == "en" else ("Kannada" if language == "kn" else "Hindi")
-    return f"{spec.prompt}{case}{memory}\nWrite the final specialist finding in {lang}."
+    # A specialist needs the schema card for every store it can actually query, not just
+    # its "home" store: the SQL escape hatch (run_sql_select) is useless without the SQL
+    # card, and that is exactly what a stats/chart request leans on.
+    cards: list[str] = []
+    if "run_sql_select" in spec.tools or spec.agent in ("sql", "legal"):
+        cards.append(SQL_SCHEMA_CARD)
+    if "run_cypher_read" in spec.tools or spec.agent == "graph":
+        cards.append(GRAPH_SCHEMA_CARD)
+    if spec.agent == "vector" or "find_similar_cases" in spec.tools:
+        cards.append(VECTOR_SCHEMA_CARD)
+    if not cards:
+        fallback = SCHEMA_BY_AGENT.get(spec.agent, "")
+        if fallback:
+            cards.append(fallback)
+    schema_block = ("\n\n" + "\n\n".join(cards)) if cards else ""
+    # Fixed demo anchor: the synthetic data is dated relative to this, so any 'recent'/
+    # 'last N days'/'this month' window must be computed against it, not the real clock.
+    today = f"\nToday's date is {settings.demo_reference_date}; compute recency windows from it."
+    inventory = ""
+    emitter = CURRENT_EMITTER.get()
+    if emitter is not None:
+        block = bus.context_inventory(emitter.run_id)
+        if block:
+            inventory = (
+                f"\n\n{block}\nUse list_files / read_file / read_artifact to reopen any of these; "
+                "reference them by id/title when composing a report or follow-up."
+            )
+    return f"{spec.prompt}{case}{memory}{schema_block}{today}{inventory}\nWrite the final specialist finding in {lang}."
 
 
 def build_specialist_subgraph(
@@ -222,35 +321,153 @@ async def run_specialist(
 ) -> str:
     """Run one specialist subgraph to its final finding.
 
-    `history` is the recent conversation of this session; prepending it before the subtask
-    makes the specialist context-aware, so a follow-up ("expand on that account") still
-    resolves even if the planner's subtask is terse. Streams the subgraph so the model's
-    between-tool reasoning becomes labelled "thinking" steps in the trail; the tool calls
-    themselves emit their own steps from inside the tool bodies (they read
-    CURRENT_SPECIALIST, set by the caller in graph.py).
+    Streams the subgraph with stream_mode=["messages","updates"]:
+    - "messages" chunks from the reason node feed a live thinking step (tokens visible
+      as they generate).
+    - "updates" captures the final finding and tool-call reasoning.
     """
+    import time as _time
+
     emitter: RunEmitter | None = CURRENT_EMITTER.get()
     subgraph = build_specialist_subgraph(
         spec, language=language, case_context=case_context, memories=memories, extra_tools=extra_tools,
     )
     messages = [*_bounded_history(history), HumanMessage(content=subtask)]
     final = ""
-    async for update in subgraph.astream(
+    thinking_buf = ""
+    thinking_step_id: str | None = None
+    last_emit_t: float = 0.0
+    THROTTLE_S = 0.12
+    # Accumulated partial tool-call args keyed by tool_call index -- used to stream the
+    # run_python `code` argument as the model writes it (typing effect in the UI).
+    code_bufs: dict[int, str] = {}
+    code_step_ids: dict[int, str] = {}
+    last_code_emit_t: float = 0.0
+
+    async for event in subgraph.astream(
         {"messages": messages},
         {"recursion_limit": recursion_limit},
-        stream_mode="updates",
+        stream_mode=["messages", "updates"],
     ):
-        for _node, payload in (update or {}).items():
-            for message in (payload or {}).get("messages", []) or []:
-                if not isinstance(message, AIMessage):
+        # event is a tuple (stream_type, payload) when multiple stream modes
+        if isinstance(event, tuple) and len(event) == 2:
+            stream_type, payload = event
+        else:
+            stream_type, payload = "updates", event
+
+        if stream_type == "messages":
+            chunk, _metadata = payload if isinstance(payload, tuple) else (payload, {})
+            if not isinstance(chunk, AIMessageChunk):
+                continue
+
+            # Stream partial tool-call arguments for run_python into code frames.
+            for tc in getattr(chunk, "tool_call_chunks", None) or []:
+                if not isinstance(tc, dict):
+                    # LangChain may yield objects with .get-like attrs
+                    name = getattr(tc, "name", None) or ""
+                    args_delta = getattr(tc, "args", None) or ""
+                    idx = getattr(tc, "index", 0) or 0
+                else:
+                    name = tc.get("name") or ""
+                    args_delta = tc.get("args") or ""
+                    idx = tc.get("index", 0) or 0
+                if name and name != "run_python":
                     continue
-                text = _strip_thinking_tags(_text_of(message.content))
-                if getattr(message, "tool_calls", None):
-                    if text and emitter:
-                        emitter.step_once(
-                            spec.agent, "thinking", f"{spec.display} planning",  # type: ignore[arg-type]
-                            specialist=spec.display, detail=text[:600],
-                        )
-                elif text:
-                    final = text
+                if not args_delta:
+                    continue
+                # Once we know the name is run_python (or name is empty mid-stream after
+                # a prior run_python chunk for this index), accumulate.
+                if name == "run_python" or idx in code_bufs:
+                    code_bufs[idx] = code_bufs.get(idx, "") + str(args_delta)
+                    # Best-effort extract of the "code" field from the growing JSON args.
+                    snippet = _extract_code_arg(code_bufs[idx])
+                    if snippet and emitter:
+                        now = _time.monotonic()
+                        if now - last_code_emit_t >= THROTTLE_S:
+                            last_code_emit_t = now
+                            step_id = code_step_ids.setdefault(
+                                idx, f"code_{spec.key}_{idx}_{id(subgraph)}"
+                            )
+                            emitter.code(CodePayload(
+                                step_id=step_id, phase="template",
+                                language="python", code=snippet[-200000:],
+                            ))
+
+            reasoning, answer_text = _split_reasoning_and_answer(chunk.content)
+            token_text = reasoning or answer_text
+            if token_text and emitter and not getattr(chunk, "tool_calls", None):
+                thinking_buf += token_text
+                now = _time.monotonic()
+                if now - last_emit_t >= THROTTLE_S:
+                    last_emit_t = now
+                    if thinking_step_id is None:
+                        thinking_step_id = f"think_{spec.key}_{id(subgraph)}"
+                    emitter._emit_step(
+                        thinking_step_id, spec.agent, "thinking",
+                        spec.friendly_action or f"{spec.display} thinking",
+                        "running", specialist=spec.display,
+                        detail=_strip_thinking_tags(thinking_buf[-800:]),
+                    )
+
+        elif stream_type == "updates":
+            for _node, node_payload in (payload or {}).items():
+                for message in (node_payload or {}).get("messages", []) or []:
+                    if not isinstance(message, AIMessage):
+                        continue
+                    text = _strip_thinking_tags(_text_of(message.content))
+                    if getattr(message, "tool_calls", None):
+                        # Close any "Writing Python" code frames once the tool call is final.
+                        if emitter:
+                            for idx, step_id in list(code_step_ids.items()):
+                                snippet = _extract_code_arg(code_bufs.get(idx, ""))
+                                emitter.code(CodePayload(
+                                    step_id=step_id, phase="template",
+                                    language="python", code=snippet[-200000:] or None,
+                                ))
+                                emitter._emit_step(
+                                    step_id, spec.agent, "tool_call", "Writing Python",
+                                    "done", specialist=spec.display, tool_name="run_python",
+                                )
+                            code_step_ids.clear()
+                            code_bufs.clear()
+                        if text and emitter and not thinking_step_id:
+                            emitter.step_once(
+                                spec.agent, "thinking", spec.friendly_action or f"{spec.display} thinking",
+                                specialist=spec.display, detail=text[:600],
+                            )
+                    elif text:
+                        final = text
+
+    if thinking_step_id and emitter:
+        emitter._emit_step(
+            thinking_step_id, spec.agent, "thinking",
+            spec.friendly_action or f"{spec.display} thinking",
+            "done", specialist=spec.display,
+            detail=_strip_thinking_tags(thinking_buf[-800:]),
+        )
+
     return final or f"{spec.display} found no answer for that subtask."
+
+
+def _extract_code_arg(partial_json: str) -> str:
+    """Best-effort pull of the `code` string from a growing tool-call args JSON fragment."""
+    if not partial_json or '"code"' not in partial_json:
+        return ""
+    match = re.search(r'"code"\s*:\s*"(.*)', partial_json, flags=re.DOTALL)
+    if not match:
+        return ""
+    raw = match.group(1)
+    out: list[str] = []
+    i = 0
+    while i < len(raw):
+        ch = raw[i]
+        if ch == "\\" and i + 1 < len(raw):
+            out.append(raw[i : i + 2])
+            i += 2
+            continue
+        if ch == '"':
+            break
+        out.append(ch)
+        i += 1
+    text = "".join(out)
+    return text.replace("\\n", "\n").replace('\\"', '"').replace("\\\\", "\\")

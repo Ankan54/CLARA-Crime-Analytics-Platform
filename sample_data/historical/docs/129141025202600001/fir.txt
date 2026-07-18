@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN1_DECOY
+On 2026-03-10, I, Nagaraj Swamy, resident of Hassan, wish to lodge a complaint regarding a sophisticated cyber fraud wherein I was deceitfully induced to transfer INR 9,80,000 under the guise of a formal regulatory investigation. The incident began when I received an automated voice call on my mobile phone, alleging that my mobile number was involved in "international call routing fraud" and would be disconnected within two hours by the orders of TRAI.
+
+Shortly after, I was connected to a person claiming to be a Senior TRAI Officer. He stated that my number was being used for illegal international call routing without a license, constituting a serious offense under the Indian Telegraph Act. He claimed that a case had been registered against me at the "TRAI Cyber Bureau" and transferred the call to a "CBI Officer" for further verification. This individual, posing as a CBI officer, alleged that I was part of a nationwide racket and that I would be arrested immediately unless I underwent a "digital verification" process to prove my financial innocence.
+
+I was forced to join a Google Meet session where I was visually monitored and instructed not to disconnect or contact anyone else, effectively placing me under "digital arrest." The fraudsters claimed that my regular bank accounts were compromised and needed to be audited. They coerced me to transfer my savings to a "RBI compliance account" for verification purposes. Under extreme mental duress and fear of arrest, I transferred INR 9,80,000 to the account number DECOY00000000001, as instructed by the accused. After the transfer, they continued to demand more funds, upon which I realized the fraud and disconnected. I request that a case be registered and the culprits be apprehended.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : DECOY00000000001

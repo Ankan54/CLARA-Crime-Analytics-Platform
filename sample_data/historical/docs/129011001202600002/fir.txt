@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_307
+On 03.04.2026, the complainant, Siddappa Iyer, age 21, a resident of Chamarajanagara and a job seeker, appeared before this station to report a case of cyber fraud. In his statement, the complainant alleged that while searching for employment opportunities online, he came across a task-based offer. Lured by the promise of high returns for completing simple tasks, he initiated contact with the fraudsters.
+
+The fraudsters induced the complainant to deposit money for various tasks, assuring him that the funds would be returned with significant commissions. Trusting their assurances, the complainant transferred a total amount of Rs. 283,059 through multiple transactions. The funds were transferred via UPI using the handle siddappa52@okicici. The fraudulent communications were established through WhatsApp and phone calls originating from the mobile number 9482479207.
+
+When the complainant attempted to withdraw his accumulated earnings, the perpetrators demanded further payments, citing system errors and task completion requirements. Realizing he was being deceived when the funds were not released, the complainant approached the police. A verification of the transaction details revealed the beneficiary account number to be BG41943151749. The complainant stated that he lost his savings to this elaborate task scam. The incident constitutes offenses of cheating and fraud under the relevant sections of the Bharatiya Nyaya Sanhita and the Information Technology Act. A case is therefore registered for further investigation to trace the culprits and recover the defrauded amount.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG41943151749

@@ -26,7 +26,13 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_314
+On 2025-08-06, I, Shiva Bhat, aged 28, an IT professional residing in Chitradurga, wish to report a serious investment scam involving a fraudulent stock trading application. The ordeal began when I was added to a WhatsApp group named "Elite Stock Tips VIP" without my consent. The group administrators, operating under the guise of seasoned financial advisors, aggressively promoted a mobile application called "ProTrade Invest," claiming it guaranteed high returns on intraday trading.
+
+Enticed by their professional demeanor and the discussions within the group, I downloaded the app and registered using my email. To gain my trust, the fraudsters consistently shared fake profit screenshots in the group, displaying substantial returns ranging from 15% to 30% on minor investments. They also showcased fabricated testimonials from other "members" who claimed to have successfully withdrawn large sums. Convinced of the platform’s legitimacy, I proceeded to transfer a total of ₹76,039 to the bank details provided within the app interface.
+
+For the initial few days, the app dashboard reflected a profit of nearly ₹2 lakh, which further bolstered my confidence in the scheme. However, when I attempted to withdraw a portion of these funds to my linked bank account, the app displayed a "Processing Error." When I contacted the support team via the app and the WhatsApp group admin, I was met with silence. Shortly thereafter, I discovered I had been removed from the WhatsApp group and blocked by the admin.
+
+The transaction identifiers recorded during the fund transfers include the UPI ID **shivabha25@okicici**, the beneficiary bank account number **BG81215044848**, and the contact number **9451025437** provided by the scammers. I realized I had been defrauded of my hard-earned savings through this sophisticated digital trap and request immediate legal action against the unidentified perpetrators.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG81215044848

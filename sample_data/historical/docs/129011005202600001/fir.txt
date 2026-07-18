@@ -26,7 +26,9 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_11
+The complainant Nagaraj Gowda, aged 20, a Unemployed Graduate from Bengaluru Urban, states that on 2026-06-05 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 38,116 across 4 transactions to UPI IDs earnfast001@paytm, taskpro002@airtel and account 4440988776655001. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable.
+
+During the course of the investigation, technical analysis of the digital footprint revealed further identifiers associated with the fraudulent operation. The server hosting the fake application was traced to the IP address 103.74.19.143. Further financial scrutiny indicated that a portion of the defrauded funds was routed through an additional bank account bearing the number 4440988776655002. Additionally, call record analysis identified another mobile number, 353816081234504, which was frequently used by the accused for coordination purposes during the scam. All these digital and financial trails are being examined to identify and apprehend the culprits.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655001, 4440988776655002

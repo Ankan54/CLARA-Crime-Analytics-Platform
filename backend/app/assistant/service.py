@@ -23,6 +23,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 from . import bus
 from .agent import MAX_ITERATIONS, build_agent, build_history
 from .emitter import RunEmitter
+from .errors import classify_error, error_message
 from .tools import CURRENT_CASE_ID, CURRENT_EMITTER
 from ..config import settings
 
@@ -234,8 +235,9 @@ async def run_assistant(
 
     except Exception as exc:
         logger.exception("assistant: run failed run_id=%s", run_id)
-        # error carries a message the UI renders; without a terminal frame it would hang.
-        emitter.error(f"{type(exc).__name__}: {exc}"[:300])
+        category, _retryable = classify_error(exc)
+        friendly = error_message(category, language)
+        emitter.error(friendly)
         if on_complete:
             await _safe_complete(on_complete, run_id, answer or "", failed=True)
         return answer
@@ -264,6 +266,13 @@ def start_run(**kwargs: Any) -> str:
             await run_assistant(run_id=run_id, **kwargs)
         finally:
             RUNS.pop(run_id, None)
+            # Drop the per-run Python workspace once the turn is terminal. Best-effort;
+            # a leftover dir is harmless and cleaned by the OS temp sweeper eventually.
+            try:
+                from .skills.analysis import cleanup_run_workspace
+                cleanup_run_workspace(run_id)
+            except Exception:
+                logger.debug("assistant: workspace cleanup skipped run_id=%s", run_id, exc_info=True)
 
     # copy_context so CURRENT_EMITTER set inside the task can't leak into the request
     # handler's context (or another concurrent run's).

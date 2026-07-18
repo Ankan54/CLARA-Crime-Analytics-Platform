@@ -1,0 +1,39 @@
+# Local Linux backend for WeasyPrint PDF polish (Pango/Cairo + Indic fonts).
+# On Windows, run the PDF/report path through this image; native Windows falls
+# back to xhtml2pdf automatically when WeasyPrint's system libs are missing.
+#
+# Build (from repo root):
+#   docker build -f backend/Dockerfile.dev -t ksp-assistant-dev .
+# Run:
+#   docker run --rm -p 9000:9000 --env-file .env ksp-assistant-dev
+#
+# Or via compose:
+#   docker compose -f backend/docker-compose.dev.yml up --build
+
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpango-1.0-0 libpangocairo-1.0-0 libcairo2 \
+    libgdk-pixbuf-2.0-0 libffi-dev shared-mime-info \
+    fonts-dejavu-core fontconfig \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+COPY backend/requirements.txt ./requirements.txt
+RUN uv pip install --system --no-cache -r requirements.txt
+
+COPY backend/app ./app
+COPY backend/migrations ./migrations
+
+COPY backend/app/assistant/skills/fonts/NotoSansKSP-Regular.ttf /usr/share/fonts/truetype/ksp/NotoSansKSP-Regular.ttf
+RUN fc-cache -f
+
+EXPOSE 9000
+
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9000"]

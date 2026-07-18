@@ -26,7 +26,9 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_14
+The complainant Siddappa Nair, aged 27, a Student from Chikkaballapur, states that on 2026-06-09 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 23,398 across 8 transactions to UPI IDs worker006@icici, earnfast001@paytm, dailywork003@fino, simpletask005@okhdfcbank and account 4440988776655006. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable.
+
+During the course of the investigation, a forensic analysis of the mobile device and transaction logs was conducted. The analysis revealed that the fraudulent application was hosted on the IP address 103.74.19.143, which was active during the incident. Further tracing of the financial trail identified several other bank accounts utilized by the fraudsters for layering the proceeds of crime, specifically accounts 4440988776655001, 4440988776655003, and 4440988776655005. Additionally, a secondary mobile number, 353816081234505, was linked to the registration of the fraudulent UPI handles. Efforts are underway to identify the real beneficiaries behind these accounts and the IP address.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655006, 4440988776655001, 4440988776655003, 4440988776655005

@@ -31,8 +31,13 @@ langchain-aws>=0.2.0,<1.0.0
 # image with a normal `uv pip install`, so the botocore data tree is complete here.
 boto3>=1.34.0
 
-# PDF export. xhtml2pdf, not WeasyPrint: pure Python with no GTK/Pango system
-# libraries, so it behaves identically in this image and on a Windows dev box.
+# PDF export. WeasyPrint is primary on Linux (AppSail image installs Pango/Cairo);
+# xhtml2pdf is the fallback if WeasyPrint's system libs are missing.
 xhtml2pdf>=0.2.16
+weasyprint>=62.0
 jinja2>=3.1.0
 markdown>=3.6
+# Agent code-execution artifacts (interactive Plotly HTML + matplotlib for PDF embeds).
+matplotlib>=3.8.0
+pandas>=2.2.0
+plotly>=5.24.0

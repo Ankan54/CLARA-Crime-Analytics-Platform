@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_332
+On 29th January 2026, at approximately 11:15 AM, I, Meena Murthy, aged 53 years, a retired engineer residing in Kalaburagi, received an automated voice call on my mobile phone. The caller claimed to be an official representative from the "Narcotics Control Bureau" (NCB). The caller alleged that a parcel interception had been successfully executed by the Customs Department at the Delhi logistics hub. They claimed this parcel, booked in my name, contained prohibited narcotic substances and illegal contraband intended for international trafficking.
+
+The caller stated that my Aadhaar details were linked to the seized parcel and threatened immediate arrest by the NCB for violating the NDPS Act. To escalate the matter, the call was transferred to a fake "NCB Officer" who identified himself as Senior Superintendent Rajesh Verma and contacted me via WhatsApp from the mobile number **9374041470**. This impersonator insisted on a "secure" WhatsApp video call to verify my identity, instructing me to keep the video active continuously—a tactic they termed "digital surveillance"—to prevent my physical arrest.
+
+During the video call, the fake officer displayed a forged seizure memo and a non-bailable warrant bearing my name. He claimed that my financial assets needed to be verified to differentiate legitimate funds from the alleged drug money. Under extreme fear of public humiliation and arrest, I was coerced into transferring a sum of Rs. 471,273 to a specified beneficiary account, account number **BG92919506323**, under the pretext of obtaining an urgent "clearance certificate" to close the case. The fraudster claimed this fee was mandatory for the "NCB verification process" and promised a refund once my innocence was established. I realized the fraud only after the caller became unreachable following the transaction. I request a thorough investigation into this narcotics-based digital scam.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG92919506323

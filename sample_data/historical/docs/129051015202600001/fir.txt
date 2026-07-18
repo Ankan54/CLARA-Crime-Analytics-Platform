@@ -26,7 +26,9 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_05
+A written report is being filed regarding a cyber fraud incident. The complainant Meena Nair, aged 19, a Student from Hubballi-Dharwad, states that on 2026-06-14 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 58,134 across 6 transactions to UPI IDs dailywork003@fino, worker006@icici, simpletask005@okhdfcbank and account 4440988776655003. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable.
+
+During the course of the investigation, forensic analysis of the digital evidence revealed further identifiers associated with the fraudulent operation. Tracing the financial trail uncovered two additional beneficiary bank accounts used for layering the proceeds of crime: account number 4440988776655006 and account number 4440988776655005. Furthermore, technical surveillance identified a secondary operational number linked to the syndicate as 353816081234501. The IP address 103.74.19.143 was also flagged as the source of the phishing messages. The complainant requests legal action against the unidentified fraudsters for cheating and criminal breach of trust.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655003, 4440988776655006, 4440988776655005

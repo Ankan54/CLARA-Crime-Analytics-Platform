@@ -26,7 +26,13 @@ Section 66C ITACT, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_311
+On 20 September 2025, I, Basavaraj Subramaniam, aged 34 years, working as a Government Employee and currently residing in Bengaluru Rural, wish to lodge a complaint regarding a serious instance of OTP fraud and cybercrime.
+
+The incident occurred earlier in the day when I received an unsolicited call on my registered mobile number. The caller, identifying themselves as a representative from my bank, claimed that my savings account was being compromised or was in the process of being blocked due to suspicious activity. To avert this, the caller insisted that I verify my identity by sharing a confidential One-Time Password (OTP) that would be sent to my phone. Trusting the caller’s apparent authority and fearing the loss of access to my funds, I relayed the OTP I received via SMS.
+
+Immediately following this interaction, my phone began receiving multiple transaction alerts. To my shock, I discovered that unauthorized transactions totaling Rs. 341,484 had been debited from my account without my consent. Upon reviewing the transaction details and the call logs, I identified the fraudster's contact number as 9677403584. Further investigation into the transaction messages revealed that the funds were illicitly transferred to a beneficiary account holding the ID basavara59@okicici, linked to the account number BG90359220980.
+
+It is evident that the unknown accused impersonated a bank official to extract sensitive credentials, thereby cheating me and causing wrongful loss. I request the police to register this FIR and take necessary legal action against the perpetrators to recover my lost amount.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG90359220980

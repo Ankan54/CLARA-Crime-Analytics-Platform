@@ -26,7 +26,9 @@ Section 66C ITACT, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN2_H02
+On 2025-03-22, I, Harish Patil, age 28, a bank employee residing in Tumakuru, wish to report a severe incident of OTP fraud resulting in a significant financial loss. At approximately 11:30 AM, I received a call on my mobile phone from the number 9611234567. The caller, claiming to be a representative from my bank's head office, stated that my savings account, bearing number 8810987654321002, had been flagged for a suspicious transaction and required immediate verification to prevent a freeze.
+
+Believing the caller due to his professional demeanor and accurate knowledge of my banking details, I followed his instructions. He convinced me that I needed to share a confidential One-Time Password (OTP) sent to my registered mobile number to authenticate a reversal request for the alleged fraudulent transaction. Under this false pretense of securing my funds, I shared the OTP I received via SMS. Immediately afterward, I received a debit notification alerting me that a sum of Rs. 400,000 had been transferred out of my account. Upon checking my banking app, I discovered the funds had been remitted to a beneficiary ID identified as imran.transactions@axl. Realizing I had been deceived by a fraudster impersonating bank officials, I immediately disconnected the call and proceeded to the police station to file this report. I request that an FIR be registered against the unknown accused and that immediate action be taken to trace the mobile number and freeze the beneficiary account to facilitate the recovery of my lost savings.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 8810987654321002

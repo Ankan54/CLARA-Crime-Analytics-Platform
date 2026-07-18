@@ -26,7 +26,9 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BURST_13
+The complainant Renuka Hegde, aged 22, a Engineering Student from Hubballi-Dharwad, states that on 2026-06-05 they received a message on Telegram from a user named @tasks_support offering a 'simple online task job' with daily earnings of Rs. 2000-5000. The complainant was added to a Telegram group named Daily Earning Tasks and asked to complete simple tasks (liking videos, rating products) on an app called TaskMaster Pro. Initial small payments of Rs. 200-500 were received successfully, building trust. The complainant was then asked to 'upgrade to VIP membership' by depositing Rs. 5,000. After this, they were shown fake profits and asked to deposit increasingly larger sums to 'unlock withdrawals.' The complainant deposited a total of Rs. 10,228 across 8 transactions to UPI IDs simpletask005@okhdfcbank, quickjob004@oksbi, dailywork003@fino, worker006@icici and account 4440988776655005. When the complainant attempted to withdraw, the app showed an error and the group admins stopped responding. Phone numbers 3538160812 used by the operators are now unreachable.
+
+During the technical analysis of the complaint, the IP address 103.74.19.143 was identified as the hosting source for the fraudulent application. Further investigation into the financial trail revealed fund diversions to several other beneficiary accounts, specifically account numbers 4440988776655004, 4440988776655003, and 4440988776655006. Additionally, a secondary mobile number, 353816081234503, was linked to the registration of the fraudulent website domain. The cybercriminals operated a sophisticated network using these digital footprints to siphon off the complainant's funds. Efforts are underway to trace the real-time location of the suspects based on the technical data procured.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 4440988776655005, 4440988776655004, 4440988776655003, 4440988776655006

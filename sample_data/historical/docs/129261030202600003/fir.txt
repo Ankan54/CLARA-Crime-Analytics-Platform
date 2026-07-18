@@ -26,7 +26,13 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BASE_01
+On 14th May 2026, a cyber fraud incident was reported at the local police station by the complainant, Mohan Venkataraman. The victim, a 23-year-old part-time worker residing in Chikkaballapur, stated that he was targeted by an elaborate task scam operating through digital communication platforms.
+
+According to the complainant, he received an unsolicited message on his mobile device offering an opportunity to earn significant income by completing simple online tasks. Seeking to supplement his wages, Venkataraman engaged with the fraudsters, who directed him to perform specific digital activities, initially offering small returns to gain his trust. Believing the offer to be legitimate, the victim proceeded with the assigned tasks. The perpetrators then coerced him into transferring funds to unlock higher commissions and complete the "final" set of tasks.
+
+Trusting the instructions provided, Venkataraman transferred a total sum of Rs. 7,988 through multiple transactions. However, upon demanding the return of his principal amount and the promised earnings, the fraudsters ceased all communication and blocked his access to the online portal. During the investigation, the victim provided crucial transaction details, specifically identifying the beneficiary account identifier as **INDP_ACC_BASE_01_63262**. Furthermore, the digital payment was processed using the Unified Payments Interface (UPI) handle **baseline.task01@okicici**.
+
+The incident constitutes cheating and criminal breach of trust under the relevant sections of the Bharatiya Nyaya Sanhita and the Information Technology Act. A case is hereby registered to investigate the fraudulent appropriation of funds and to identify the cyber criminals operating the task scam network.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : INDP_ACC_BASE_01_63262

@@ -3,13 +3,26 @@
   "CrimeNo": "129011002202690004",
   "newly_revealed_identifiers": {
     "imeis": [
-      "353816081234501"
+      "353816081234501",
+      "353816081234502",
+      "353816081234503",
+      "353816081234504",
+      "353816081234505"
     ],
     "ips": [
-      "103.74.19.141"
+      "103.74.19.141",
+      "103.74.19.142",
+      "103.74.19.143",
+      "103.74.19.144"
+    ],
+    "upis": [
+      "ring.ctrl04@ybl"
+    ],
+    "accounts": [
+      "4440988776655099"
     ]
   },
-  "money_trail_summary": "IMEI 353816081234501 links this case to the SCN4 burst ring. Platform spike-detection should show weekly count rising sharply.",
+  "money_trail_summary": "Seized handler device dump links this case to the SCN4 burst ring via shared IMEIs 353816081234501, 353816081234502, 353816081234503, 353816081234504, 353816081234505 and operator IPs 103.74.19.141, 103.74.19.142, 103.74.19.143, 103.74.19.144 (co-located, Electronic City Bengaluru). All commission payouts route to controller UPI ring.ctrl04@ybl and account 4440988776655099. Platform spike-detection should show weekly count rising sharply.",
   "connects_to": [
     {
       "historical_case_crime_no": "129011008202600001",

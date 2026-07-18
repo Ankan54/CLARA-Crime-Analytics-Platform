@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_302
+On 14.05.2026, at approximately 11:30 AM, complainant Ajay Acharya, aged 34 years, a resident of Hassan and owner of a registered MSME, appeared before the station to report a cyber fraud incident. The complainant stated that he had listed a piece of industrial machinery for sale on an online marketplace. On the morning of the incident, he was contacted by an unknown individual posing as a prospective buyer. The caller, operating from mobile number 9753754077, expressed a keen interest in purchasing the machinery and agreed to the listed price.
+
+To facilitate the advance payment, the fraudster requested the complainant’s UPI ID. Shortly thereafter, the complainant received a "collect" request on his UPI application. The fraudster, using social engineering tactics, manipulated the complainant into believing that the request was a verification step necessary to credit the funds to his account. He was instructed to simply enter his UPI PIN to "authorize" the incoming transaction. Misguided by the urgency of the sale and the fraudster's persuasive demeanor, the complainant entered his PIN, inadvertently approving the collect request instead of receiving money.
+
+Consequently, a sum of Rs. 166,283 was instantly debited from the complainant’s bank account. The transaction was successfully traced to the beneficiary identifier BG33085184581 and the linked UPI handle ajayacha43@okicici. Upon realizing the deception, the complainant attempted to contact the accused, but the mobile number was found switched off. This act constitutes cheating and fraud, causing the complainant significant financial loss. A case may be registered and investigated to apprehend the accused and recover the misappropriated funds.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG33085184581

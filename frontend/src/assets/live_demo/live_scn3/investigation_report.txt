@@ -2,11 +2,14 @@ INVESTIGATION REPORT
 Case: 129191018202690003
 
 MONEY TRAIL SUMMARY
-BRIDGE_ACC_03 (5530123456789001) links this case to Belagavi digital arrest ring. ~Rs 6,20,000 still sitting in downstream accounts.
+BRIDGE_ACC_03 (5530123456789001) links this case to the Belagavi digital arrest ring. The highest-volume aggregation hub is account 5530123456789002 (KYC: Somashekar T). Approximately Rs 6,20,000 still sits in downstream accounts 5530123456789013, 5530123456789014 with no outbound movement.
 
 NEWLY IDENTIFIED IDENTIFIERS
   accounts: 5530123456789001
+  accounts: 5530123456789002
+  accounts: 5530123456789013
+  accounts: 5530123456789014
 
 LINK ASSERTIONS (for validation)
   -> Historical case 129061017202600001 via account_no: 5530123456789001
-  -> Historical case 129191018202600002 via account_no: 5530123456789001
+  -> Historical case 129191018202600001 via account_no: 5530123456789001

@@ -75,8 +75,15 @@ class Settings:
 
     # LLM provider selection.
     data_ingestion_llm: str = _env("DATA_INGESTION_LLM", "zoho").lower()
+
+    # Fixed "today" for all demo temporal analysis. The synthetic data is anchored to this
+    # date (data_generation/config.DEMO_DATE_STR), and the demo runs long after generation,
+    # so comparing surge/recency windows against the real wall clock (NOW()) silently ages
+    # the "last 21 days" cluster out of range. Every date-relative demo query and the agent's
+    # sense of "now" must use THIS anchor instead. Keep it in sync with data_generation.
+    demo_reference_date: str = _env("DEMO_REFERENCE_DATE", "2026-06-26")
     # The assistant's model. CHAT_LLM_PROVIDER picks the provider
-    # (zoho|openai|anthropic|bedrock); CHAT_LLM_ID overrides that provider's default
+    # (zoho|openai|anthropic|bedrock|bedrock_mantle); CHAT_LLM_ID overrides that provider's default
     # model id, so switching model doesn't need a code change. Falls back to the older
     # CONV_AI_LLM name when unset. Whatever the primary is, the fallback chain lands on
     # OpenAI (see llm.py::_FALLBACK_PROVIDER) -- one provider being down or rate-limited
@@ -90,6 +97,17 @@ class Settings:
     anthropic_model: str = _env("ANTHROPIC_MODEL", "claude-sonnet-5")
     bedrock_model_id: str = _env("BEDROCK_MODEL_ID", "anthropic.claude-sonnet-4-6")
     aws_region: str = _env("AWS_REGION") or _env("AWS_DEFAULT_REGION", "us-east-1")
+    # Bedrock **Mantle** (provider "bedrock_mantle"): the OpenAI-compatible endpoint that
+    # serves models Converse can't (e.g. xai.grok-*, zai.glm-*). Base URL is region-scoped;
+    # auth is a short-term bearer minted from the same AWS creds (see llm.py). Default is
+    # derived from the region so it tracks AWS_REGION without a second env var.
+    bedrock_mantle_base_url: str = _env(
+        "BEDROCK_MANTLE_BASE_URL",
+        f"https://bedrock-mantle.{_env('AWS_REGION') or _env('AWS_DEFAULT_REGION', 'us-east-1')}.api.aws/v1",
+    )
+    # Long-term Bedrock API key (from the console). When set, it's used as-is; otherwise
+    # llm.py mints a short-term bearer from the AWS IAM creds. Either authenticates Mantle.
+    bedrock_mantle_api_key: str = _env("MANTLE_API_KEY")
     zoho_quickml_endpoint_url: str = _env("ZOHO_QUICKML_ENDPOINT_URL")
     zoho_quickml_catalyst_org: str = _env("ZOHO_QUICKML_CATALYST_ORG")
     zoho_quickml_model_name: str = _env("ZOHO_QUICKML_MODEL_NAME", "crm-di-glm47b_30b_it")
@@ -98,6 +116,14 @@ class Settings:
     llm_requests_per_second: float = float(_env("LLM_REQUESTS_PER_SECOND", "0.8"))
     assistant_multi_agent: bool = _env("ASSISTANT_MULTI_AGENT", "true").lower() in ("1", "true", "yes")
     assistant_code_timeout_seconds: int = _env_int("ASSISTANT_CODE_TIMEOUT_SECONDS", 20)
+
+    # Chat LLM parameters
+    chat_max_tokens: int = _env_int("CHAT_MAX_TOKENS", 4096)
+    chat_reasoning_effort: str = os.environ.get("CHAT_REASONING_EFFORT", "high")
+
+    # Sarvam STT (streaming speech-to-text for the assistant mic). Key stays server-side;
+    # the browser talks to our /ws/assistant/transcribe relay, which attaches this header.
+    sarvam_api_key: str = _env("SARVAM_API_KEY")
 
     # Splink endpoint and auth.
     splink_shared_secret: str = _env("SPLINK_SHARED_SECRET", "change-me")

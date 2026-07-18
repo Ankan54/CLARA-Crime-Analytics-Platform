@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 import logging
 import os
@@ -246,12 +247,42 @@ class ChatZohoGLM(BaseChatModel):
         return self.bind(tools=openai_tools, **kwargs)
 
 
+def _mint_bedrock_bearer_token(region: str, duration: int = 43200) -> str:
+    """Short-term (<=12h) Bedrock API key from the default AWS credential chain.
+
+    Fallback for when MANTLE_API_KEY (a long-term console key) isn't set.
+    Bedrock **Mantle** is OpenAI-compatible, so we drive it with ChatOpenAI -- but the
+    OpenAI SDK can only send a bearer, not SigV4. This mints one by SigV4-presigning a
+    CallWithBearerToken request and base64-encoding it (the stable wire format from
+    aws/aws-bedrock-token-generator; inlined so we don't add a dependency -- botocore is
+    already required by boto3). Signing is local (static env creds), so minting per model
+    build is cheap and always fresh -- no cache/expiry bookkeeping needed.
+    """
+    import boto3
+    from botocore.auth import SigV4QueryAuth
+    from botocore.awsrequest import AWSRequest
+
+    creds = boto3.Session().get_credentials()
+    if creds is None:
+        raise RuntimeError("No AWS credentials found for Bedrock Mantle bearer token.")
+    request = AWSRequest(
+        method="POST",
+        url="https://bedrock.amazonaws.com/",
+        headers={"host": "bedrock.amazonaws.com"},
+        params={"Action": "CallWithBearerToken"},
+    )
+    SigV4QueryAuth(creds.get_frozen_credentials(), "bedrock", region, expires=duration).add_auth(request)
+    presigned = request.url.replace("https://", "") + "&Version=1"
+    return "bedrock-api-key-" + base64.b64encode(presigned.encode("utf-8")).decode("utf-8")
+
+
 # Whatever the primary provider is, fall back to OpenAI -- it's the one provider with
 # no self-hosted/rate-limited dependency. OpenAI itself falls back to Anthropic.
 _FALLBACK_PROVIDER = {
     "zoho": "openai",
     "anthropic": "openai",
     "bedrock": "openai",
+    "bedrock_mantle": "openai",
     "openai": "anthropic",
 }
 
@@ -272,10 +303,10 @@ def _provider_for_purpose(purpose: str) -> tuple[str, str]:
     raise ValueError(f"Unknown purpose: {purpose}")
 
 
-def _build_single_model(provider: str, model_id: str = "") -> BaseChatModel:
+def _build_single_model(provider: str, model_id: str = "", purpose: str = "") -> BaseChatModel:
     """model_id overrides the provider's configured default model (CHAT_LLM_ID)."""
     provider = provider.lower()
-    logger.debug("build_single_model provider=%s model_id=%s", provider, model_id or "(default)")
+    logger.debug("build_single_model provider=%s model_id=%s purpose=%s", provider, model_id or "(default)", purpose)
     rate_limiter = None
     if InMemoryRateLimiter is not None:
         rate_limiter = InMemoryRateLimiter(
@@ -315,6 +346,38 @@ def _build_single_model(provider: str, model_id: str = "") -> BaseChatModel:
             rate_limiter=rate_limiter,
         )
 
+    if provider in ("bedrock_mantle", "mantle"):
+        # Bedrock Mantle = OpenAI-compatible endpoint that serves models Converse can't
+        # (xai.grok-*, zai.glm-*, deepseek.*, ...). Driven via ChatOpenAI with a Mantle
+        # base URL + a minted bearer. Claude models are NOT reachable here -- they speak
+        # the Anthropic Messages API on Mantle, not chat-completions; use provider
+        # "anthropic" or "bedrock" (Converse) for those.
+        if ChatOpenAI is None:
+            logger.error("build_single_model provider=bedrock_mantle requested but langchain-openai not installed")
+            raise RuntimeError("langchain-openai is not installed.")
+        model = model_id or settings.bedrock_model_id
+        # Prefer a configured long-term Bedrock API key; else mint a short-term bearer from
+        # the AWS IAM creds. Both authenticate the Mantle endpoint identically.
+        token = settings.bedrock_mantle_api_key or _mint_bedrock_bearer_token(settings.aws_region)
+        logger.debug(
+            "build_single_model using Bedrock Mantle model=%s base=%s auth=%s",
+            model, settings.bedrock_mantle_base_url,
+            "api_key" if settings.bedrock_mantle_api_key else "minted_bearer",
+        )
+        # ponytail: no reasoning_effort passthrough here -- glm-5 works plain and not all
+        # Mantle models accept it (fails only at invoke, where the fallback chain catches
+        # it). Upgrade path: add extra_body={"reasoning_effort": ...} once per-model support
+        # is confirmed.
+        return ChatOpenAI(
+            model=model,
+            base_url=settings.bedrock_mantle_base_url,
+            api_key=token,
+            temperature=0.2,
+            max_tokens=settings.chat_max_tokens if purpose == "conv_ai" else 1024,
+            max_retries=3,
+            rate_limiter=rate_limiter,
+        )
+
     if provider == "bedrock":
         if ChatBedrockConverse is None:
             logger.error("build_single_model provider=bedrock requested but langchain-aws not installed")
@@ -326,15 +389,31 @@ def _build_single_model(provider: str, model_id: str = "") -> BaseChatModel:
         # uv pip install, so boto3's data tree is intact.
         model = model_id or settings.bedrock_model_id
         logger.debug("build_single_model using Bedrock model=%s region=%s", model, settings.aws_region)
-        return ChatBedrockConverse(
-            model=model,
-            region_name=settings.aws_region,
-            temperature=0.2,
-            max_tokens=1024,
-            rate_limiter=rate_limiter,
-        )
+        extra_fields: dict[str, Any] = {}
+        if purpose == "conv_ai" and settings.chat_reasoning_effort:
+            extra_fields["reasoning_effort"] = settings.chat_reasoning_effort
+        try:
+            return ChatBedrockConverse(
+                model=model,
+                region_name=settings.aws_region,
+                temperature=0.2,
+                max_tokens=settings.chat_max_tokens if purpose == "conv_ai" else 1024,
+                rate_limiter=rate_limiter,
+                **({"additional_model_request_fields": extra_fields} if extra_fields else {}),
+            )
+        except Exception:
+            logger.warning("Bedrock model build with reasoning_effort failed, retrying without")
+            return ChatBedrockConverse(
+                model=model,
+                region_name=settings.aws_region,
+                temperature=0.2,
+                max_tokens=settings.chat_max_tokens if purpose == "conv_ai" else 1024,
+                rate_limiter=rate_limiter,
+            )
 
-    raise ValueError(f"Unsupported provider '{provider}'. Expected one of zoho|openai|anthropic|bedrock.")
+    raise ValueError(
+        f"Unsupported provider '{provider}'. Expected one of zoho|openai|anthropic|bedrock|bedrock_mantle."
+    )
 
 
 def build_llm_pair(purpose: str) -> tuple[BaseChatModel, BaseChatModel]:
@@ -352,8 +431,8 @@ def build_llm_pair(purpose: str) -> tuple[BaseChatModel, BaseChatModel]:
     )
     # The model_id override applies to the primary only -- the fallback is a different
     # provider, where that id would be meaningless.
-    primary = _build_single_model(primary_provider, model_id)
-    fallback = _build_single_model(fallback_provider)
+    primary = _build_single_model(primary_provider, model_id, purpose=purpose)
+    fallback = _build_single_model(fallback_provider, purpose=purpose)
     return primary, fallback
 
 

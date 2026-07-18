@@ -26,7 +26,11 @@ Section 66C ITACT, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_328
+On 09 August 2025, I, Arun Murthy, aged 44 years, working as a Bank Employee and residing in Yadgir, wish to report a serious incident of cyber financial fraud. At approximately 11:30 AM, I received an unsolicited call on my registered mobile number from the suspect using the number 9102020382. The caller, impersonating an official representative from my bank, claimed that my savings account was under imminent threat of suspension due to a failed KYC update.
+
+Believing the call to be genuine due to the professional conduct of the caller, I followed the instructions provided. The caller stated that a One-Time Password (OTP) was required to secure my account and reverse the alleged suspension error. Subsequently, I received an OTP on my mobile, which I inadvertently shared with the caller. Immediately after sharing the OTP, my mobile banking application logged out, and I received multiple transaction alerts.
+
+Upon checking my account, I discovered that an unauthorized transaction had taken place. A total sum of Rs. 219,723 had been debited from my account and transferred to a beneficiary account identified by the transaction reference BG73118731555. Further investigation into the transaction details revealed that the funds were fraudulently routed to the Unified Payments Interface (UPI) ID arunmurt20@okicici. I immediately contacted the bank’s official helpline to block my account and reported the incident to the local police. I request that a case be registered against the unknown fraudster under the relevant sections of the Information Technology Act and the Indian Penal Code to facilitate the recovery of my lost funds and the apprehension of the culprit.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG73118731555

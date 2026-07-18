@@ -26,7 +26,13 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN3_H01
+On 05.02.2026, I, Siddaraju Hiremath, aged 58 years, a retired Professor residing in Belagavi, received a phone call from an unknown number. The caller, posing as a representative of the "Narcotics Control Bureau," stated that a parcel addressed to me had been seized by customs in Delhi. He alleged that this **parcel interception** had revealed the presence of **narcotic substances**, specifically illegal drugs, and that my Aadhaar card had been recovered alongside the contraband.
+
+The caller claimed that a criminal case for drug trafficking was being filed against me. When I protested my innocence, the call was immediately transferred to a self-proclaimed "NCB Superintendent," who claimed to be handling the investigation. This impersonator alleged that my bank accounts were under suspicion of being used for drug money laundering. He demanded that I submit to a "digital verification" process to prove my innocence and avoid immediate physical arrest.
+
+I was instructed to remain on a continuous WhatsApp video call, effectively placing me under "digital arrest," and forbidden from disconnecting or contacting anyone else. Under the guise of verifying my financial assets to generate a "no objection" report, the fraudster coerced me into transferring my life savings to a specified government account. I was assured that this payment was a mandatory processing fee for a **clearance certificate**, which would exonerate me from the false charges.
+
+Acting under extreme fear and duress during the video call, I transferred a total sum of Rs. 1,200,000 to the beneficiary account number **5530123456789001**. The fraudster promised that the funds would be refunded once the verification was complete. However, once the transaction was confirmed, the callers disconnected the video call and ceased all communication. Realizing that I had been defrauded through a sophisticated impersonation of the NCB, I am filing this report to initiate legal action against the unknown accused.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 5530123456789001
@@ -43,14 +49,16 @@ FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
   2026-02-05  |  From: VICTIM_ACC_SCN3_H01  ->  To: 5530123456789001  |  Rs. 1,200,000  |  Channel: NEFT
   2026-02-05  |  From: 5530123456789001  ->  To: 5530123456789002  |  Rs. 1,200,000  |  Channel: IMPS
-  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789011  |  Rs. 90,000  |  Channel: IMPS
-  2026-02-05  |  From: 5530123456789011  ->  To: TR7NHqjeKQxGTCi8q8ZY4pL17cMd3wqv9N  |  Rs. 90,000  |  Channel: crypto
-  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789012  |  Rs. 90,000  |  Channel: IMPS
-  2026-02-05  |  From: 5530123456789012  ->  To: TR7NHqjeKQxGTCi8q8ZY4pL17cMd3wqv9N  |  Rs. 90,000  |  Channel: crypto
-  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789013  |  Rs. 90,000  |  Channel: IMPS
-  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789014  |  Rs. 90,000  |  Channel: IMPS
-  2026-02-05  |  From: 5530123456789002  ->  To: 5530123456789015  |  Rs. 90,000  |  Channel: IMPS
-  2026-02-05  |  From: 5530123456789015  ->  To: TR7NHqjeKQxGTCi8q8ZY4pL17cMd3wqv9N  |  Rs. 90,000  |  Channel: crypto
+  2026-02-05  |  From: VICTIM_ACC_SCN3_LIVE  ->  To: 5530123456789031  |  Rs. 280,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789031  ->  To: 5530123456789002  |  Rs. 280,000  |  Channel: IMPS
+  2026-02-05  |  From: VICTIM_ACC_SCN3_LIVE  ->  To: 5530123456789032  |  Rs. 260,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789032  ->  To: 5530123456789002  |  Rs. 260,000  |  Channel: IMPS
+  2026-02-05  |  From: VICTIM_ACC_SCN3_LIVE  ->  To: 5530123456789033  |  Rs. 250,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789033  ->  To: 5530123456789002  |  Rs. 250,000  |  Channel: IMPS
+  2026-02-05  |  From: VICTIM_ACC_SCN3_LIVE  ->  To: 5530123456789034  |  Rs. 240,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789034  ->  To: 5530123456789002  |  Rs. 240,000  |  Channel: IMPS
+  2026-02-05  |  From: VICTIM_ACC_SCN3_LIVE  ->  To: 5530123456789035  |  Rs. 230,000  |  Channel: IMPS
+  2026-02-05  |  From: 5530123456789035  ->  To: 5530123456789002  |  Rs. 230,000  |  Channel: IMPS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CaseMasterID     : 1000008

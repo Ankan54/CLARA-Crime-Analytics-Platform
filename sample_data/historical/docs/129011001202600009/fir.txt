@@ -26,7 +26,13 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_329
+This FIR is being registered based on a complaint filed by Lakshmi Lamani, age 28, a resident of Mandya and an Engineering Student. The incident pertains to a cyber fraud task scam wherein the victim was deceived into transferring funds under the guise of earning commissions.
+
+On 31st January 2026, the complainant received a message on her mobile phone offering a part-time job involving the completion of simple online tasks. Trusting the offer, Lakshmi Lamani was added to a group where she was instructed to perform tasks such as subscribing to links and rating videos. Initially, the fraudsters paid her small returns to gain her confidence. Subsequently, she was asked to invest money to complete "merchant tasks" promising higher returns. Believing the communications to be genuine, the victim transferred a total amount of 386,331 to the bank accounts provided by the accused.
+
+The fraudster maintained communication through the mobile number 9764231018 and provided the transaction ID BG84455438916 for the transfers. The victim was instructed to use the UPI ID lakshmil68@okicici for a portion of the transactions. However, when the complainant attempted to withdraw her accumulated earnings, she found her account frozen and was threatened with losing all funds unless she deposited more money. Realizing she had been duped, she approached the police.
+
+A case is registered under Section 66D of the IT Act and relevant sections of IPC for cheating. Investigation has been initiated to trace the beneficiaries of the transferred amount and identify the culprits operating the fraudulent scheme.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG84455438916

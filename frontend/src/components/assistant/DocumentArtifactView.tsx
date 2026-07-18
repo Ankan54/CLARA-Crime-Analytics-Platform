@@ -137,7 +137,7 @@ export function DocumentArtifactView({ artifact }: { artifact: DocumentArtifact 
   if (artifact.format === "html" || artifact.format === "svg") {
     return (
       <div className="document-artifact document-html">
-        <iframe srcDoc={bodyText} title={artifact.title} sandbox="" />
+        <iframe srcDoc={bodyText} title={artifact.title} sandbox="allow-scripts" />
       </div>
     );
   }

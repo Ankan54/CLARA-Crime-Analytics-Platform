@@ -473,7 +473,47 @@ def load(pg_db: str = None) -> None:
                     if obj_uid and row["holder_entity_uid"]:
                         owns_edges.append({"from_uid": str(row["holder_entity_uid"]), "to_uid": obj_uid})
         n = _merge_edges(session, "OWNS", owns_edges)
-        print(f"[neo4j-load] OK  OWNS edges: {n}")
+        print(f"[neo4j-load] OK  OWNS edges (holder column): {n}")
+
+        # OWNS from EXT_Uses directly (many-to-many). holder_entity_uid is a SINGLE
+        # column, so migrate's COALESCE lets only the FIRST person to claim a shared
+        # object own it -- which silently drops scenario 2's whole point: 3 alias
+        # accused all USE one shared IMEI/UPI/phone. Rebuild those edges from EXT_Uses,
+        # where every alias->object row survives, so person_history can collapse the
+        # aliases. source_caseid is the CaseMasterID; each scn2 alias case has exactly
+        # one Accused, so case -> that accused's uid is unambiguous.
+        accused_uid_by_case: dict[int, str] = {}
+        with pg.cursor() as cur:
+            cur.execute("SELECT AccusedMasterID, CaseMasterID FROM Accused")
+            for row in cur.fetchall():
+                uid = entity_map.get(("Accused", str(row["accusedmasterid"])))
+                if uid:
+                    accused_uid_by_case[row["casemasterid"]] = uid
+        _uses_prefix = {"upi": "UPI_", "phone": "PHONE_", "device": "DEV_"}
+        _uses_type_to_norm = {"account": "accounts", "upi": "upis", "phone": "phones", "device": "imeis"}
+        uses_owns_edges = []
+        with pg.cursor() as cur:
+            cur.execute("SELECT source_caseid, to_object_id, object_type FROM EXT_Uses")
+            uses_rows = cur.fetchall()
+        for row in uses_rows:
+            try:
+                holder_uid = accused_uid_by_case.get(int(row["source_caseid"]))
+            except (TypeError, ValueError):
+                holder_uid = None
+            ot = (row["object_type"] or "").lower()
+            norm_key = _uses_type_to_norm.get(ot)
+            if not (holder_uid and norm_key):
+                continue
+            norm_fn, table, _, pk_col = norm_by_type[norm_key]
+            raw = str(row["to_object_id"] or "")
+            pfx = _uses_prefix.get(ot, "")
+            raw = raw[len(pfx):] if pfx and raw.startswith(pfx) else raw
+            pk = normalized_lookup.get(table, {}).get(norm_fn(raw))
+            obj_uid = object_entity_uid_by_pk.get(table, {}).get(pk) if pk is not None else None
+            if obj_uid:
+                uses_owns_edges.append({"from_uid": holder_uid, "to_uid": obj_uid})
+        n = _merge_edges(session, "OWNS", uses_owns_edges)
+        print(f"[neo4j-load] OK  OWNS edges (EXT_Uses many-to-many): {n}")
 
     pg.close()
     driver.close()

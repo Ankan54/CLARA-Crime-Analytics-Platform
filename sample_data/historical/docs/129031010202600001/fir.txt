@@ -26,10 +26,14 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN1_H01
+This First Information Report is registered based on the written complaint received regarding a cyber fraud incident involving impersonation of government officials.
+
+The complainant Suresh Venkataraman, aged 61, residing at 48, MG Road Layout, Mysuru, Mysuru, states that on 2026-04-14 at approximately 10:15, they received a phone call from an unknown number. The caller identified themselves as an officer from TRAI (Telecom Regulatory Authority of India) and claimed that a SIM card registered in the complainant's name was being used for illegal activities and would be disconnected within 2 hours. The call was then transferred to a person claiming to be a CBI officer, who informed the complainant that their Aadhaar was linked to money laundering activities and that they were under 'digital arrest.' The complainant was instructed to remain on a Skype video call for continuous monitoring. Over the next 24 hours, under threats of immediate physical arrest, the complainant was directed to transfer funds to a 'Supreme Court escrow account' for 'RBI verification.' The complainant transferred a total of Rs. 2,100,000 in 2 transactions via UPI to account number 7701234567890011. The complainant realised the fraud when the callers blocked all communication and approached Chamundipuram Police Station to file this complaint.
+
+The investigation further reveals that the fraudsters utilized a secondary beneficiary account, identified by account number 9842017633250001, to facilitate the instant diversion of funds. The accused persons have wrongfully induced the complainant to part with their savings by creating a false narrative of legal jeopardy. The acts constitute offenses under Sections 419, 420 of the Indian Penal Code, and relevant sections of the Information Technology Act, 2000. Investigation is hereby initiated to trace the digital footprints and freeze the involved accounts.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : 7701234567890011
+  Bank Accounts  : 7701234567890011, 9842017633250001
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------

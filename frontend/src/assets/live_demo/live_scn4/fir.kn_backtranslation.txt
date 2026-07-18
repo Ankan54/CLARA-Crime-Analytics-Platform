@@ -2,8 +2,8 @@
 
 **Police Station:** CEN Police Station - West Division  
 **District:** Bengaluru Urban  
-**Crime No:** 129011002202690004  
-**Case No:** 202690004  
+**Crime No:** 129011002202600001  
+**Case No:** 202600001  
 **Date of Registration:** 2026-06-26  
 **Date/Time of Offence:** 2026-06-25T09:00:00 to 2026-06-25T18:00:00
 

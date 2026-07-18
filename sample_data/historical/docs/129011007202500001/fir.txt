@@ -26,7 +26,13 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_319
+On the afternoon of August 15, 2025, I, Shanthi Naidu, aged 31, a businessman residing in Bengaluru Urban, fell victim to a sophisticated UPI fraud. I had listed a piece of furniture for sale on an online marketplace and received a call from an individual posing as a prospective buyer. The caller expressed immediate interest and insisted on making an advance payment to secure the item.
+
+To facilitate the transaction, the fraudster asked me to share my UPI ID. I provided him with my identifier, **shanthin93@okicici**. The caller claimed he was facing technical difficulties sending the money directly and requested that I accept a "collect" request or scan a QR code he sent via WhatsApp to verify my account. Trusting his explanation, I opened my UPI application.
+
+Instead of receiving funds, the interface prompted me to enter my UPI PIN for what I believed was a verification process. The moment I entered the PIN, I received a shockingly high debit alert. I realized I had been tricked into authorizing a payment of ₹1,36,308. Upon reviewing the transaction history, I observed that the funds had been instantly transferred to the fraudster’s linked account.
+
+The transaction details on my bank statement clearly reference the beneficiary VPA and mobile number used in the scam: **9856064317** and the transaction reference ID **BG77291767160**. The fraudster subsequently blocked my number and disconnected all communication. I am filing this complaint to report the cybercrime and request an immediate investigation into the beneficiaries of this transaction to recover my lost funds.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG77291767160

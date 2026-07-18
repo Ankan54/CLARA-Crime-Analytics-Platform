@@ -26,7 +26,13 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_306
+On 24.11.2025, at approximately 11:15 AM, I, Vinod Naidu, aged 59, a businessman residing in Vijayanagara, received an automated voice call on my mobile. The caller claimed to be an official representative from the "Narcotics Control Bureau" (NCB). The caller stated that a parcel addressed to my name had been flagged during a routine **parcel interception** by the Customs Department at the International Courier Terminal.
+
+The caller alleged that this parcel contained 480 grams of **narcotic substances**, specifically MDMA, and that my Aadhaar card was recovered from the package as proof of identity. The caller threatened that I was liable for immediate arrest under the NDPS Act and transferred the call to a senior officer for further verification.
+
+A person claiming to be "NCB Officer Sharma" came on the line. He displayed an official-looking ID card during a WhatsApp video call and insisted I remain on video throughout the "interrogation" to ensure I was not fleeing. He stated that my number was linked to international drug trafficking and that my accounts would be frozen immediately. To verify my financial standing and prove my innocence, he demanded I transfer my savings to a specified government account for verification.
+
+Terrified by the prospect of imprisonment and social humiliation, I complied under duress. The scammer instructed me to transfer funds to obtain a "No Objection Certificate" and a **clearance certificate**. Following his commands, I transferred a total sum of Rs. 2,658,148 in multiple transactions to the beneficiary account number **BG59026049626**. The fraudster was in constant contact from the mobile number **9304967461**. After the transaction, the video call was disconnected, and the number became unreachable. I realized I had been defrauded of my life savings. I request a thorough investigation into this digital arrest fraud and legal action against the accused.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG59026049626

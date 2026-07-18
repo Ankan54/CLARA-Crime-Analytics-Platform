@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_300
+On 2025-12-10, I, Rajesh Gaonkar, age 29, a small business owner residing in Bengaluru Rural, wish to report a serious incident of sextortion and cyber fraud. A few days prior, I received a friend request on social media from an account impersonating an attractive woman. Accepting the request led to a conversation where the user invited me to a private video call. During this call, under the pretense of intimacy, the user induced me to perform explicit acts while secretly recording the session without my knowledge or consent.
+
+Immediately following the call, the accused disconnected and began blackmailing me, stating they possessed the compromising video recording. The accused threatened to circulate the video to my family, friends, and business contacts unless I paid a substantial sum. Terrified of the social repercussions and damage to my reputation, I was coerced into complying with their financial demands.
+
+Over the course of the harassment, I was forced to transfer a total of 332,835 INR. The accused directed me to send funds to the UPI ID rajeshga88@okicici. Additionally, the fraudsters contacted me via the mobile number 9697361173 to coordinate the extortion and issue further threats. I was also provided with a transaction reference identifier BG85604479315 as proof of the illicit transfer. Having realized the perpetrators would continue to demand money indefinitely, I have approached the police. I request that a case be registered against the unknown accused for the offenses of extortion, criminal intimidation, and relevant violations under the Information Technology Act.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG85604479315

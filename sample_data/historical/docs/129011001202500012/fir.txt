@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_331
+On 01.09.2025, the complainant, Basavaraj Acharya, aged 33 years, an IT Professional residing in Bagalkot, appeared before the Cyber Crime Police Station to report a phishing incident resulting in financial fraud. The victim stated that at approximately 10:45 AM, he received an SMS on his mobile phone which appeared to originate from his bank. The message falsely alerted him that his internet banking services would be suspended unless he updated his Know Your Customer (KYC) details immediately.
+
+Trusting the authenticity of the communication, the victim clicked on the malicious hyperlink embedded in the SMS. This action redirected his mobile browser to a fraudulent website meticulously designed to replicate the official bank portal. Unaware of the deception, Basavaraj Acharya entered his confidential internet banking credentials, including his User ID and Password, into the fake interface. Shortly after submitting this sensitive information, he received an unauthorized transaction notification.
+
+Upon checking his account, he was shocked to discover that a sum of Rs. 15,123 had been debited without his consent. The transaction was traced to a beneficiary identified by the UPI handle `basavara25@okicici`. Immediate verification with the bank confirmed the unauthorized transfer to the account number `BG68587929977`. The complainant further noted that all fraudulent communications and transaction alerts were received from the mobile number `9803183269`. The incident constitutes an offense of cheating by personation using computer resources, causing wrongful loss to the victim. A case is hereby registered for further investigation into the cyber fraud.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG68587929977

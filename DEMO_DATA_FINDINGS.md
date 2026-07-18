@@ -33,6 +33,127 @@ absent until the live upload; not a bug. Their questions can only be judged afte
 
 
 
+## ITERATION 1 — Regenerate + reload (DONE, verified)
+
+Full deterministic regen (`generate --restart`, seed 42, Bedrock `zai.glm-5`) → wipe all DBs →
+migrate PG → load Neo4j → load Pinecone → re-ingest 4 live scenarios. Code fixes made:
+
+| Fix | Where | Result (verified on reloaded data) |
+|---|---|---|
+| **SYS-1** narratives → `BriefFacts` | root cause: `narrative_map` empty (all 62 FIRs were placeholders); regenerated | `BriefFacts` 62/62; summaries show full MO prose + district + timeline |
+| **S1-1** MO match | `export.py::write_vector_jsonl` embeds **narrative prose**, not full doc; live scn1 FIR → tier-A template | live scn1 → 3 historical scn1 at **0.89/0.88/0.88** cross-jurisdiction ✅ |
+| **S1-3** convergence | `scenario_1.py` — 3 historical cases now MENTION `AGG_ACC_01` | `find_links` shows AGG shared by 3 (+live) ✅ |
+| **S2-1** alias collapse | `load_neo4j_from_pg.py` — OWNS from `EXT_Uses` (many-to-many), not single `holder_entity_uid` (migrate's COALESCE dropped aliases 2&3) | `person_history("Imraan")` → 3 aliases via shared device/UPI/phone ✅ |
+| **SYS-3** IR vector metadata | `write_vector_jsonl` — IR inherits case crime_type/district | populated |
+| **SYS-4** temporal | `settings.demo_reference_date` (2026-06-26) in `detect_community` + specialist/agent prompts, not `NOW()` | `detect_community(days=21)` → 13-case surge cluster (was 0) ✅ |
+| **legal** | ingest evidence files as `Evidence` rows | live scn1 legal = 3 green / 6 amber (§63 gap) / 4 red ✅ |
+| Live IR reveals | scn3 IR → hub + freezable; scn4 IR → full device/IP pool + controller | in docs |
+
+### All 4 scenarios verified end-to-end (live + historical, after reload + re-ingest)
+
+| Scn | Marquee moments verified |
+|---|---|
+| **1 Digital Arrest** | live FIR → 3 historical by MO **0.89/0.88/0.88** cross-district · find_links → shared `AGG` across 3+live · money trail + crypto · legal 3🟢/6🟠(§63)/4🔴 · summary prose+district+timeline |
+| **2 Many Names** | `person_history` → **4 aliases** incl LIVE "Imran S." via shared device/UPI/phone · escalation 2024→2026 · legal BNS 318 |
+| **3 Follow Money** | bridge shared by **2 scam types** (Belagavi + live Dharwad) · hub now mentioned by live case · trace → crypto cash-out + freezable · PMLA 5🟢 (proceeds+layering) |
+| **4 The Surge** | community 22 cases → **live joins 15-case ring** · surge `days=21` → 13-case cluster (reference date) · legal 5🟢 · device pool |
+
+### Iteration 2 progress
+- **SYS-2 geo + victim — DONE.** `processor.py::_enrich_case_geo_victim` now writes `EXT_CaseGeo`
+  (district from the case's PoliceStation; lat/long/pincode from the district centroid of existing
+  cases) and mirrors the complainant to a `Victim` row, on every live FIR ingest. Verified: all 4
+  live cases show their district (scn1/2/4 Bengaluru Urban, scn3 Dharwad) + a victim; summaries no
+  longer say "district unknown / victims none". Wow moments intact after re-ingest.
+  - Also fixed `reset_demo_data.py` to delete `EXT_CaseGeo`/`EXT_SubEvent` before `CaseMaster`
+    (they now hold demo rows → FK violation otherwise).
+- **Scn4 org chart — DONE.** The live scn4 IR now carries a deterministic `OPERATOR ROSTER` block
+  (`name | role | IMEI`), and `processor.py::_enrich_operator_roster` parses it into **role-typed
+  Accused nodes** (caller/mule_handler/recruiter/controller), each `OWNS→` its device/UPI + `INVOLVES`
+  the case. The Network specialist's graph schema card now teaches the `role` property + the
+  org-chart query. Verified: `run_cypher_read` returns all 6 operators with roles + devices —
+  Ravi V/Deepak N (caller), Suresh M/Harish K (mule_handler), Venkat R (recruiter), Ring Controller.
+  (Robust: no LLM extraction of the roster; parsed from the doc. Docs synced to `frontend/src/assets/live_demo`.)
+
+- **Scn3 money tuning — DONE.** Rewrote the `scenario_3.py` ring: 6 collector accounts now pour
+  into `HUB_ACC_03` (7 inbound / ₹28L → it ranks **#1 busiest aggregation account** in the ring,
+  Q3), and the two freezable mules (…013/…014) accumulate several sub-₹1L tranches to **exactly
+  ₹6.2L** with no outbound (Q1). Verified after reload: `trace_money_flow` reports "FREEZABLE Rs 6.20
+  lakh" + crypto cash-out; a ring-scoped centrality query puts the hub top.
+
+### Still deferred (polish — core wow moments work)
+- **SYS-2 `EXT_SubEvent` (live timeline):** not derivable yet — the extractor leaves `IncidentFromDate`/
+  `ToDate` NULL and the live FIR prose has no structured sub-events. Needs a header regex to pull the
+  offence window + a minimal timeline. Historical cases have full timelines; only live is sparse.
+- **scn4 device_pool.csv mislabel:** the CSV gets classified `EVIDENCE_BANK_STATEMENT` by the
+  regex-fallback classifier, so each IMEI also gets a stray `:BankStatement` node with a *different*
+  entity_uid (duplicate of the `:Device` node). Community/org-chart work via the `:Device` nodes;
+  the duplicate is cosmetic clutter. Fix = a device-dump doc_type/classifier hint.
+- **scn2 phone-label glitch:** shared PhoneNumber node displays "Investment Manager (Imran S.)" not
+  the number; linkage works, label is wrong.
+- **extraction robustness:** bedrock structured-output falls back to regex on CSV-heavy docs;
+  `LIVE_SCN4_FIR` uses the deterministic fallback (content filter). Both work; not pretty.
+- **scn2 label glitch:** the shared PhoneNumber node's `display_name` is "Investment Manager (Imran S.)"
+  instead of the number `9611234567` (extraction mislabelled holder as display). Linkage works; label is wrong.
+- **scn4 org chart:** operator roster is now in the IR text but extraction doesn't turn "Ravi V — caller"
+  prose into role-typed Person nodes yet.
+- **scn3 amounts:** hub is mentioned (enters graph) but ranking it #1 by centrality + exact ₹6.2L
+  freezable need historical transaction-volume tuning in `scenario_3.py`.
+- **extraction robustness:** bedrock structured-output fell back to regex on scn3/scn4 CSV-heavy docs
+  (worked, but flaky); `LIVE_SCN4_FIR` hit a Bedrock content filter → deterministic fallback (identifiers
+  preserved; fine for scn4 whose wow is graph, not MO).
+- **`local_invoke` STALE_TIMEOUT:** the backend Ingest-screen path; I ingest via direct `IngestProcessor`.
+
+## ITERATION 3 — Assistant analysis + end-to-end testing
+
+Analysed the overhauled assistant and executed all 4 scenarios' marquee questions through the
+**actual supervisor graph** (capturing plan + reasoning trail + artifacts + answer).
+
+**Architecture (matches the intended design, scalable claim holds):** supervisor LLM planner →
+parallel `Send` fan-out to 5 specialist ReAct subgraphs → synthesize; specialists carry **generic
+DB tools** + **skill-as-tool playbooks** (`skills/playbooks/*/SKILL.md`, description triggers, body
+is the workflow, assigned per-agent via frontmatter). Adding a `SKILL.md` + `agents:` line = a new
+analysis path with the same architecture. Reference `cogentiq-assistant-byod-backend` uses the same
+pattern at heavier production scale (sandbox/Celery/MCP) — not needed here.
+
+**Marquee questions — all pass after fixes:** scn1 summary+timeline ✅ · scn1 MO-match (0.90
+cross-district + Find-Links action) ✅ · scn2 alias-collapse (4 aliases) ✅ · scn3 money-trail
+(graph + ₹6.2L freezable + crypto) ✅ · scn4 org-chart (6 role-typed operators) ✅ · scn4
+organised-ring (verdict + 15-case cluster) ✅. Artifact **formats** are correct (graph nodes carry
+`type`+`properties`, tables `columns`+`rows`, documents text; camelCase nested / snake_case frames).
+
+**Assistant bugs found + fixed:**
+1. **Run crash on recursion limit** — one specialist exhausting its step budget raised
+   `GraphRecursionError` that propagated and killed the *entire* run. Now caught in
+   `_run_specialist_node` → degrades to a partial finding; the other specialists + answer survive.
+2. **scn4 org chart didn't converge / crashed** — no guiding skill, so the network specialist
+   over-explored to the limit. Added `operator-org-chart` SKILL.md (one deterministic Cypher →
+   the role map). Converges in ~1 call.
+3. **scn2 alias collapse didn't use `person_history`** — the model defaulted to raw Cypher and
+   confused `case_id` with `entity_uid`. Fixed: prescriptive Network prompt (explicit if-then tool
+   mapping), schema card now documents `case_id` + how to match a case node, `offender-profile`
+   skill finds the accused name first.
+4. **Over-exploration exhausted the budget** — the conv LLM (zai.glm-5) runs the right tool AND
+   many confirming queries before answering. Bumped `MAX_SPECIALIST_ITERATIONS` 10 → 16 so it can
+   explore *and* compose; runaways caught by fix #1.
+5. **Shared-account `:Account` node destroyed across demo resets** — `_load_graph` overwrote
+   `n.case_id = $case_id` on shared historical nodes, so the case_id-based `demo_scenario_reset`
+   deleted them; the live re-ingest then re-made them as `:MentionedAccount` (no `:Account`), and
+   `trace_money_flow` (matches `:Account`) returned "no accounts". Fixed with
+   `n.case_id = coalesce(n.case_id, $case_id)` (same guard `origin` already had); repaired the live
+   data by re-running `load_neo4j_from_pg`.
+
+**Observations (not blocking; per your "keep all artifacts" choice):** the model over-queries
+(Financial ran ~13 SQL after `trace_money_flow`; Network ~37 Cypher for the ring) — works but noisy
+and slow; the Financial/MO specialists could get the same prescriptive prompt Network now has.
+Narrative-quality nits: some historical FIRs cite IPC §419/420 (not BNS) and one frames the AGG
+account as an "RBI circular reference number".
+
+**Also fixed this iteration — scn4 `device_pool.csv` mislabel:** added an `EVIDENCE_DEVICE_DUMP`
+doc_type + `DeviceRecord` schema (IMEI→Device), so the device pool no longer mis-extracts IMEIs as
+`:BankStatement` account nodes; the IMEI is now one merged `:Device:MentionedDevice:DeviceRecord`
+node. (Demonstrates the "add a schema for a new evidence type" scalability.) Also fixed
+`reset_demo_data.py` to delete `EXT_CaseGeo`/`EXT_SubEvent` before `CaseMaster` (FK order).
+
 ## Ingestion fixes applied (were blocking Scn3/Scn4 ingestion)
 
 Two blockers stopped the live pipeline from ingesting Scn3/Scn4. Both fixed so ingestion completes:

@@ -7,7 +7,8 @@ VALUES
     ('IR', 1, true, 'Investigation report narrative and newly observed identifiers.', 'txt,html,pdf,docx,png,jpg,jpeg,webp', 15, 'seed'),
     ('EVIDENCE_BANK_STATEMENT', 1, true, 'Bank statement containing account profile and transaction rows.', 'txt,pdf,docx,png,jpg,jpeg,webp', 15, 'seed'),
     ('EVIDENCE_UPI_SCREENSHOT', 1, true, 'UPI screenshot or export containing payer/payee VPA and amount.', 'html,txt,pdf,png,jpg,jpeg,webp', 15, 'seed'),
-    ('EVIDENCE_CHAT_SCREENSHOT', 1, true, 'Chat transcript screenshot/html containing participant numbers and mentioned identifiers.', 'html,txt,pdf,png,jpg,jpeg,webp', 15, 'seed')
+    ('EVIDENCE_CHAT_SCREENSHOT', 1, true, 'Chat transcript screenshot/html containing participant numbers and mentioned identifiers.', 'html,txt,pdf,png,jpg,jpeg,webp', 15, 'seed'),
+    ('EVIDENCE_DEVICE_DUMP', 1, true, 'Seized-device forensic dump / device pool: a list of device IMEI numbers (and their IP addresses) recovered from a handler device. Choose this for any file whose columns/rows are IMEIs and device identifiers, NOT bank accounts.', 'txt,csv,pdf,docx', 15, 'seed')
 ON CONFLICT (doc_type, version) DO NOTHING;
 
 -- Backfill allowed_file_extensions on a DB where this seed already ran under the old,
@@ -217,6 +218,27 @@ LATERAL (
 ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
 
 -- -------------------------------------------------------------------------
+-- EVIDENCE_DEVICE_DUMP fields (seized device pool -> Device nodes, not accounts)
+-- -------------------------------------------------------------------------
+WITH devdump AS (
+    SELECT schema_id FROM SchemaDefinition WHERE doc_type = 'EVIDENCE_DEVICE_DUMP' AND is_active = true LIMIT 1
+)
+INSERT INTO SchemaField
+    (schema_id, group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
+     target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order)
+SELECT devdump.schema_id, v.group_name, v.is_repeating_group, v.pole_entity_type, v.field_name, v.data_type, v.is_required,
+       v.target_table, v.target_column, v.is_identifier, v.identifier_type, v.extraction_hint, v.display_order
+FROM devdump,
+LATERAL (
+    VALUES
+      ('DeviceRecord', true, 'Object', 'imei',  'string', true,  'Device', 'imei_raw', true, 'imei', 'A device IMEI recovered from the seized-device dump (a 15-digit number, NOT a bank account).', 1)
+) AS v(
+    group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
+    target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order
+)
+ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
+
+-- -------------------------------------------------------------------------
 -- Seed relationships
 -- -------------------------------------------------------------------------
 WITH defs AS (
@@ -262,7 +284,11 @@ JOIN (
       ('EVIDENCE_CHAT_SCREENSHOT', 'CaseMaster',  'Evidence',        'HAS_EVIDENCE',  'from_to', '{}', NULL),
       ('EVIDENCE_CHAT_SCREENSHOT', 'Evidence',    'ChatParticipant', 'MENTIONS',      'from_to', '{}', NULL),
       ('EVIDENCE_CHAT_SCREENSHOT', 'ChatParticipant', 'MentionedAccount', 'MENTIONS', 'from_to', '{}', NULL),
-      ('EVIDENCE_CHAT_SCREENSHOT', 'ChatParticipant', 'MentionedUPI', 'MENTIONS', 'from_to', '{}', NULL)
+      ('EVIDENCE_CHAT_SCREENSHOT', 'ChatParticipant', 'MentionedUPI', 'MENTIONS', 'from_to', '{}', NULL),
+
+      ('EVIDENCE_DEVICE_DUMP', 'CaseMaster', 'Evidence',     'HAS_EVIDENCE', 'from_to', '{}', NULL),
+      ('EVIDENCE_DEVICE_DUMP', 'Evidence',   'DeviceRecord', 'MENTIONS',     'from_to', '{}', NULL),
+      ('EVIDENCE_DEVICE_DUMP', 'CaseMaster', 'DeviceRecord', 'MENTIONS',     'from_to', '{}', NULL)
 ) AS r(doc_type, from_group, to_group, relationship_type, direction, fixed_edge_properties, edge_fields)
   ON d.doc_type = r.doc_type
 ON CONFLICT (schema_id, from_group, to_group, relationship_type) DO NOTHING;

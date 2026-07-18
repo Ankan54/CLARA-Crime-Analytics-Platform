@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_312
+On 14th January 2026, at approximately 11:30 AM, the complainant, Sunitha Sharma, aged 34 years, residing in Ballari and working as an IT Professional, reported a cyber fraud incident involving the loss of Rs. 487,982. The victim stated that she received a deceptive Short Message Service (SMS) on her mobile device appearing to originate from her bank. The message falsely alerted her that her internet banking services would be suspended unless she updated her Know Your Customer (KYC) information immediately.
+
+To lend urgency to the request, the SMS contained a malicious hyperlink. Unaware of the fraudulent nature of the communication, Ms. Sharma clicked the link, which redirected her to a sophisticated replica of the official bank portal. Trusting the interface, she proceeded to enter her confidential internet banking credentials, including her User ID, sunithas25@okicici, and password. Shortly after submitting the information, she received an OTP notification regarding a high-value debit transaction. Before she could intervene or verify the legitimacy of the request, an amount of Rs. 487,982 was illicitly transferred from her savings account.
+
+Upon reviewing the transaction details, the victim identified the beneficiary account number as BG25973052265. Further investigation into the communication trail revealed that the fraudulent SMS was sent from the number 9523342545. The complainant realized she had been tricked into surrendering her financial data to a phishing website designed to harvest credentials. This report is being filed for the offenses of cheating, impersonation, and theft under the relevant sections of the Bharatiya Nyaya Sanhita and the Information Technology Act, with a request to trace the funds and apprehend the perpetrators.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG25973052265

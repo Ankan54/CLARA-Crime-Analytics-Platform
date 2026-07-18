@@ -1,8 +1,12 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import aegisLogo from "../../assets/aegis-logo.png";
 import type { AssistantAction, AssistantArtifact, AssistantMessage } from "../../lib/assistantTypes";
 import { ReasoningTrail } from "./ReasoningTrail";
 import { ArtifactChip } from "./ArtifactChip";
 import { AssistantIcon, type AssistantIconName } from "./icons";
+import { CodeBlock } from "./CodeBlock";
 
 function actionIcon(action: AssistantAction): AssistantIconName {
   if (action.icon === "link") return "link";
@@ -15,11 +19,12 @@ interface AssistantTurnProps {
   message: AssistantMessage;
   onOpenArtifact: (artifact: AssistantArtifact) => void;
   onAction: (action: AssistantAction) => void;
+  onRetry?: () => void;
   activeArtifactId?: string | null;
   busy: boolean;
 }
 
-export function AssistantTurn({ message, onOpenArtifact, onAction, activeArtifactId, busy }: AssistantTurnProps) {
+export function AssistantTurn({ message, onOpenArtifact, onAction, onRetry, activeArtifactId, busy }: AssistantTurnProps) {
   if (message.role === "user") {
     return (
       <article className="assistant-turn user">
@@ -35,7 +40,9 @@ export function AssistantTurn({ message, onOpenArtifact, onAction, activeArtifac
 
   return (
     <article className="assistant-turn assistant">
-      <div className="assistant-turn-avatar">A</div>
+      <div className="assistant-turn-avatar" aria-hidden="true">
+        <img src={aegisLogo} alt="" />
+      </div>
       <div className="assistant-turn-body">
         {message.steps && message.steps.length > 0 && (
           <ReasoningTrail steps={message.steps} plan={message.plan} streaming={streaming} />
@@ -43,17 +50,47 @@ export function AssistantTurn({ message, onOpenArtifact, onAction, activeArtifac
 
         {message.content && message.status !== "error" && (
           <div className={`assistant-answer${streaming ? " is-streaming" : ""}`}>
-            <ReactMarkdown>{message.content}</ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+              components={{
+                code({ className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || "");
+                  const text = String(children).replace(/\n$/, "");
+                  const isBlock = Boolean(match) || text.includes("\n");
+                  if (isBlock) {
+                    return <CodeBlock code={text} language={match?.[1] || "text"} />;
+                  }
+                  return (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
             {streaming && <span className="assistant-caret" aria-hidden="true" />}
           </div>
         )}
 
         {!message.content && streaming && (!message.steps || message.steps.length === 0) && (
-          <p className="assistant-answer thinking-line">Routing your question to the right agent…</p>
+          <div className="thinking-loader" role="status" aria-label="Thinking">
+            <span className="thinking-dot" />
+            <span className="thinking-dot" />
+            <span className="thinking-dot" />
+            <span className="thinking-loader-label">Thinking…</span>
+          </div>
         )}
 
         {message.status === "error" && (
-          <p className="alert alert-danger">{message.content || "Something went wrong."}</p>
+          <div className="alert alert-danger">
+            <p>{message.error || "Something went wrong."}</p>
+            {onRetry && !busy && (
+              <button className="btn-retry" onClick={onRetry}>Try again</button>
+            )}
+          </div>
         )}
 
         {message.artifacts && message.artifacts.length > 0 && (

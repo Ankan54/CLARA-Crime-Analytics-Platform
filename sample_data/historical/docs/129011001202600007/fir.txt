@@ -26,7 +26,13 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_325
+On 2026-03-08, I, Virupaksha Kamath, aged 36, residing in Bengaluru Rural and working as a Software Engineer, wish to report a serious investment fraud. In mid-February 2026, I was contacted by an individual claiming to be a financial advisor who invited me to an exclusive WhatsApp investment group named "Elite Stock Gainers." The group showcased fake testimonials and promised high returns through algorithmic trading.
+
+Convinced by the communication, I downloaded a fake stock trading application provided by the fraudsters. To establish trust, the fraudsters displayed manipulated profit screenshots within the app interface, showing my investment portfolio generating significant daily profits. Believing the profits to be genuine, I proceeded to transfer funds in multiple transactions, aggregating to a total amount of 480,660.
+
+The transfers were made to the bank account details provided by the accused. Specifically, I was instructed to credit the amounts to the beneficiary with the UPI ID **virupaks79@okicici**. The fraudsters also communicated with me via the mobile number **9466881217**, guiding me through the deposit process and providing the transaction reference **BG64567105083** for one of the major transfers.
+
+When I attempted to withdraw a portion of my accumulated profits on March 7, the application displayed a "Server Error" and subsequently froze my account. The fraudster demanded further "clearance fees" to unfreeze the funds. Upon my refusal and demand for a refund, the fraudster blocked my number and removed me from the WhatsApp group. I realized I had been deceived when the app stopped working entirely. I request that a case be registered against the unknown accused under the relevant sections of the BNS and IT Act for cheating and cyber fraud.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG64567105083

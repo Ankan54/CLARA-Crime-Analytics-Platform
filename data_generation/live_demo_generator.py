@@ -31,7 +31,7 @@ from .identifier_pool import (
     DEV_IMEI_02, UPI_02, PHONE_02,
     BRIDGE_ACC_03, HUB_ACC_03, SCN3_FREEZABLE_ACCS,
     DEV_POOL_04, IP_POOL_04, MULE_SET_04,
-    SCN4_CONTROLLER_UPI, SCN4_CONTROLLER_ACC,
+    SCN4_CONTROLLER_UPI, SCN4_CONTROLLER_ACC, SCN4_OPERATORS,
 )
 from .legal_layer import sections_label_list, sections_for_crime_type
 from .narrative_generator import NarrativeGenerator, build_tier_a_digital_arrest_prompt
@@ -466,8 +466,15 @@ def generate_scn4_live(gen: NarrativeGenerator, base: Path,
     # shared infrastructure and the controller becomes reachable. (Operator role-typed
     # Person nodes still require the extractor to parse a roster — tracked separately.)
     all_pool_ips = [ip["ip"] for ip in IP_POOL_04]
+    # Role-typed operator roster (name | role | IMEI) + controller, parsed deterministically
+    # at ingest into the org-chart nodes. Each operator uses one IMEI from the pool.
+    operator_roster = [
+        f"{op['name']} | {op['role']} | IMEI {DEV_POOL_04[op['imei_index']]}"
+        for op in SCN4_OPERATORS
+    ] + [f"Ring Controller | controller | UPI {SCN4_CONTROLLER_UPI}"]
     _write_live_files(base, fir_txt, narrative_en, gen, "LIVE_SCN4",
         crime_no, case_no, crime_type, complainant, accused, revealed, connects_to,
+        ir_roster=operator_roster,
         ir_newly_revealed={
             "imeis": list(DEV_POOL_04),
             "ips": all_pool_ips,
@@ -506,6 +513,7 @@ def _write_live_files(
     ir_connects_to: List[Dict],
     fir_extension_rows: Optional[Dict] = None,
     ir_extension_rows: Optional[Dict] = None,
+    ir_roster: Optional[List[str]] = None,
 ) -> None:
     out = base / scenario_key.lower().replace("_", "_")
     out.mkdir(parents=True, exist_ok=True)
@@ -538,7 +546,7 @@ def _write_live_files(
 
     # Investigation report
     ir_text = _build_ir_text(scenario_key, crime_no, ir_money_trail,
-                             ir_newly_revealed, connects_to)
+                             ir_newly_revealed, connects_to, ir_roster)
     (out / "investigation_report.txt").write_text(ir_text, encoding="utf-8")
 
     # fir.expected.json
@@ -573,7 +581,8 @@ def _write_live_files(
 def _build_ir_text(scenario_key: str, crime_no: str,
                    money_trail: str,
                    newly_revealed: Dict,
-                   connects_to: List[Dict]) -> str:
+                   connects_to: List[Dict],
+                   roster: Optional[List[str]] = None) -> str:
     lines = [
         "INVESTIGATION REPORT",
         f"Case: {crime_no}",
@@ -586,6 +595,12 @@ def _build_ir_text(scenario_key: str, crime_no: str,
     for id_type, ids in newly_revealed.items():
         for id_val in ids:
             lines.append(f"  {id_type}: {id_val}")
+    if roster:
+        # Deterministic block the ingest parser turns into role-typed operator nodes.
+        lines.append("")
+        lines.append("OPERATOR ROSTER (recovered from seized handler device)")
+        for entry in roster:
+            lines.append(f"  {entry}")
     lines.append("")
     lines.append("LINK ASSERTIONS (for validation)")
     for c in connects_to:

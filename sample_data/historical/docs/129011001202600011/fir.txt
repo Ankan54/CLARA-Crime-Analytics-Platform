@@ -26,7 +26,11 @@ Section 3 PMLA, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_333
+On 04.01.2026, the complainant, Sunitha Mallaiah, aged 20 years, a student residing in Bengaluru Rural, reported that she was deceived into acting as a money mule. Sunitha stated that she came across an advertisement on a social media platform offering an opportunity to earn easy income. When she expressed interest, she was contacted by an unknown individual who offered her a commission for receiving funds into her bank account and forwarding them to other accounts as instructed.
+
+Believing the offer to be a legitimate part-time job, Sunitha shared her banking credentials. Subsequently, an amount of ₹352,514 was credited to her account. Following the fraudster's instructions, she transferred the funds to various other bank accounts, believing she was performing a genuine task. However, she was later informed by her bank that her account had been frozen due to suspicious activity linked to cyber fraud. Upon realizing that she had been used as a conduit for laundering illicit money, she approached the police.
+
+The communications leading to her recruitment were conducted via mobile number 9834217678. The fraudulent funds were routed using the transaction reference ID BG72908629670. Additionally, the financial transactions were processed through the UPI ID sunitham31@okicici. The accused exploited her financial hardship to lure her into the illegal scheme, resulting in her unwitting participation in a money laundering network. The incident has caused her severe mental distress and placed her under suspicion of involvement in organized cyber crime. A case is hereby registered for further investigation into the fraud and the identification of the masterminds behind the syndicate.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG72908629670

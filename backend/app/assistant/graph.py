@@ -41,6 +41,7 @@ import logging
 from typing import Any, Literal
 
 from langchain_core.messages import AIMessage, HumanMessage
+from langgraph.errors import GraphRecursionError
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Send
 from pydantic import BaseModel, Field
@@ -49,15 +50,21 @@ from ..llm import build_llm_pair
 from .emitter import RunEmitter
 from .events import PlanPayload, PlanTask
 from .graph_state import AssistantState, SpecialistResult
+from .persona import CLARA_CAPABILITIES, CLARA_IDENTITY, IN_SCOPE, NO_INTERNALS, OUT_OF_SCOPE
 from .skills.playbooks import build_playbook_tools
 from .specialists import SPEC_BY_KEY, SPECS, run_specialist
-from .tools import CURRENT_EMITTER, CURRENT_SPECIALIST
+from .tools import CURRENT_EMITTER, CURRENT_SPECIALIST, RAW_QUERY_COUNT
+from . import bus
 
 logger = logging.getLogger(__name__)
 
 # The specialist ReAct subgraphs get their own recursion budget. LangGraph counts every
 # node visit, so an N-iteration cap is ~2N+1 supersteps (reason + tools per iteration).
-MAX_SPECIALIST_ITERATIONS = 10
+# Set generously: the conv LLM tends to over-explore (run person_history AND several
+# confirming queries) before it writes the finding, so a tight cap cut it off mid-analysis
+# with no answer. 16 leaves room to explore and still compose; a true runaway is caught by
+# the GraphRecursionError handler in _run_specialist_node (degrades to a partial finding).
+MAX_SPECIALIST_ITERATIONS = 16
 SPECIALIST_RECURSION_LIMIT = 2 * MAX_SPECIALIST_ITERATIONS + 1
 
 _LANG_NAME = {"en": "English", "hi": "Hindi", "kn": "Kannada"}
@@ -81,15 +88,35 @@ class _Assignment(BaseModel):
 
 
 class _RoutingPlan(BaseModel):
+    mode: Literal["answer", "identity", "refuse"] = Field(
+        default="answer",
+        description="'answer' = route to specialists; 'identity' = CLARA self-description; 'refuse' = off-topic refusal.",
+    )
+    direct_answer: str | None = Field(
+        default=None,
+        description="For identity/refuse: the full response in the officer's language. Empty for answer mode.",
+    )
     assignments: list[_Assignment] = Field(
+        default_factory=list,
         description="Smallest set of specialists that fully answers the question. One for a "
-        "simple question; several (run in parallel) for a composite one."
+        "simple question; several (run in parallel) for a composite one. Empty for identity/refuse.",
     )
 
 
-_PLANNER_INSTRUCTIONS = """You are the supervisor of a Karnataka State Police crime-intelligence team. Route the Investigating Officer's question to the specialist(s) who can answer it.
+_PLANNER_INSTRUCTIONS = """You are CLARA, the AI crime Analytics Assistant for a Karnataka State Police crime-intelligence team. Route the Investigating Officer's question to the specialist(s) who can answer it, OR handle it directly.
 
-Specialists:
+{clara_identity}
+
+{clara_capabilities}
+
+## Mode selection
+
+Decide the mode FIRST:
+- "identity": greetings, "who are you?", "what can you do?", "help" -> write `direct_answer` introducing yourself and your capabilities in {lang_name}. {no_internals}
+- "refuse": the question is about {out_of_scope} or anything unrelated to crime investigation -> write a polite `direct_answer` in {lang_name} declining and stating what you CAN help with.
+- "answer": the question is about {in_scope} -> fill `assignments` to route to specialists.
+
+## Specialists (only used in "answer" mode)
 - case: {case}
 - financial: {financial}
 - network: {network}
@@ -204,6 +231,12 @@ def build_assistant_graph(
             f"case_ref uses it."
         )
     planner_system = _PLANNER_INSTRUCTIONS.format(
+        clara_identity=CLARA_IDENTITY,
+        clara_capabilities=CLARA_CAPABILITIES,
+        no_internals=NO_INTERNALS,
+        in_scope=IN_SCOPE,
+        out_of_scope=OUT_OF_SCOPE,
+        lang_name=lang_name,
         case={s.key: s.description for s in SPECS}["case"],
         financial={s.key: s.description for s in SPECS}["financial"],
         network={s.key: s.description for s in SPECS}["network"],
@@ -216,7 +249,8 @@ def build_assistant_graph(
         question = state.get("question") or ""
         emitter: RunEmitter | None = CURRENT_EMITTER.get()
 
-        async def _plan() -> list[dict[str, Any]]:
+        async def _route() -> tuple[str, str | None, list[dict[str, Any]]]:
+            """Returns (mode, direct_answer, plan)."""
             messages = [{"role": "system", "content": planner_system}]
             for msg in _history[-6:]:
                 role = "user" if isinstance(msg, HumanMessage) else "assistant"
@@ -226,7 +260,12 @@ def build_assistant_graph(
                 result: _RoutingPlan = await planner.ainvoke(messages)
             except Exception:
                 logger.exception("assistant: planner failed, using heuristic routing")
-                return _heuristic_plan(question, case_context)
+                return "answer", None, _heuristic_plan(question, case_context)
+
+            mode = result.mode or "answer"
+            if mode in ("identity", "refuse"):
+                return mode, result.direct_answer or "", []
+
             plan: list[dict[str, Any]] = []
             seen: set[str] = set()
             for a in result.assignments:
@@ -237,27 +276,36 @@ def build_assistant_graph(
                         "key": spec.key, "display": spec.display, "agent": spec.agent,
                         "subtask": a.subtask.strip() or question,
                     })
-            return plan or _heuristic_plan(question, case_context)
+            return "answer", None, plan or _heuristic_plan(question, case_context)
 
         if emitter:
             detail = (f"Case {case_context.get('crime_no')} in context."
                       if case_context else "No case in context - answering across the corpus.")
-            with emitter.step("supervisor", "route", "Routing to specialists",
+            with emitter.step("supervisor", "route", "Understanding your question",
                               tool_name="route", detail=detail) as handle:
-                plan = await _plan()
-                handle.output = "Selected: " + ", ".join(t["display"] for t in plan)
+                mode, direct_answer, plan = await _route()
+                if mode == "answer":
+                    handle.output = "Deciding what to check: " + ", ".join(t["display"] for t in plan)
+                else:
+                    handle.output = f"Responding directly ({mode})"
         else:
-            plan = await _plan()
+            mode, direct_answer, plan = await _route()
 
-        if emitter:
+        if mode == "answer" and emitter:
             emitter.plan(PlanPayload(tasks=[
-                PlanTask(id=t["key"], title=t["display"], specialist=t["display"], status="running")
+                PlanTask(id=t["key"], title=SPEC_BY_KEY[t["key"]].friendly_action or t["display"],
+                         specialist=t["display"], status="running")
                 for t in plan
             ]))
-        logger.info("assistant: plan=%s", [t["key"] for t in plan])
-        return {"plan": plan}
+        logger.info("assistant: mode=%s plan=%s", mode, [t["key"] for t in plan])
+        return {"plan": plan, "direct_answer": direct_answer}
 
     def route_to_specialists(state: AssistantState) -> list[Send]:
+        if state.get("direct_answer") is not None:
+            # Send's payload REPLACES the node's input state (it does not merge with the
+            # parent), so direct_answer must be threaded through explicitly or respond
+            # sees an empty state and streams nothing.
+            return [Send("respond", {"direct_answer": state.get("direct_answer")})]
         plan = state.get("plan") or []
         if not plan:
             plan = _heuristic_plan(state.get("question") or "", case_context)
@@ -265,6 +313,16 @@ def build_assistant_graph(
             Send(t["key"], {"specialist_key": t["key"], "subtask": t["subtask"]})
             for t in plan
         ]
+
+    async def respond(state: AssistantState) -> dict[str, Any]:
+        """Direct response for identity/refuse -- no specialists needed."""
+        answer = state.get("direct_answer") or ""
+        emitter: RunEmitter | None = CURRENT_EMITTER.get()
+        for piece in _word_chunks(answer):
+            if emitter:
+                emitter.answer_delta(piece)
+            await asyncio.sleep(0)
+        return {"final_answer": answer}
 
     async def _run_specialist_node(state: AssistantState, *, key: str) -> dict[str, Any]:
         spec = SPEC_BY_KEY[key]
@@ -275,10 +333,14 @@ def build_assistant_graph(
         # specialist. A ContextVar set inside this coroutine is isolated to this parallel
         # branch's task, so concurrent specialists never cross-label each other.
         token = CURRENT_SPECIALIST.set(spec.display)
+        # Fresh raw-query budget per branch (ContextVar copies into each parallel Send task
+        # and into tool worker threads), so the soft cap is per-specialist, not global.
+        RAW_QUERY_COUNT.set([0])
+        text = ""
         try:
             if emitter:
                 with emitter.step(
-                    spec.agent, "tool_call", f"{spec.display} working",  # type: ignore[arg-type]
+                    spec.agent, "tool_call", spec.friendly_action or f"{spec.display} working",  # type: ignore[arg-type]
                     specialist=spec.display, tool_name=f"ask_{spec.key}_agent",
                     tool_input={"subtask": subtask},
                 ) as handle:
@@ -294,6 +356,18 @@ def build_assistant_graph(
                     memories=memories, extra_tools=specialist_extras, history=_history,
                     recursion_limit=SPECIALIST_RECURSION_LIMIT,
                 )
+        except GraphRecursionError:
+            # One branch exhausting its step budget must NOT crash the whole run -- the other
+            # specialists' findings and a partial answer are far better than a dead turn.
+            logger.warning("assistant: specialist %s hit its step budget; returning partial", spec.key)
+            text = text or (
+                "I investigated this in depth but could not fully converge within the analysis "
+                "budget for this run. The steps I ran are in the reasoning trail; narrowing the "
+                "question (e.g. naming the specific case or identifier) would let me finish."
+            )
+        except Exception:
+            logger.exception("assistant: specialist %s failed", spec.key)
+            text = text or "I could not complete this part of the analysis. Please try rephrasing the question."
         finally:
             CURRENT_SPECIALIST.reset(token)
         result: SpecialistResult = {
@@ -310,17 +384,18 @@ def build_assistant_graph(
         if not results:
             answer = ("I could not produce an answer for that. Try naming the case by its "
                       "CrimeNo, or ask for something more specific.")
+            if emitter:
+                emitter.answer_delta(answer)
         elif len(results) == 1:
-            # One specialist already wrote a finding-first answer in the target language;
-            # a second compose pass would only add latency and provider-block risk.
             answer = results[0]["text"].strip()
+            for piece in _word_chunks(answer):
+                if emitter:
+                    emitter.answer_delta(piece)
+                await asyncio.sleep(0)
         else:
+            # _compose handles streaming internally via composer.astream
             answer = await _compose(results, question)
 
-        for piece in _word_chunks(answer):
-            if emitter:
-                emitter.answer_delta(piece)
-            await asyncio.sleep(0)  # let frames leave the socket as produced
         return {"final_answer": answer}
 
     async def _compose(results: list[SpecialistResult], question: str) -> str:
@@ -334,34 +409,68 @@ def build_assistant_graph(
             )
             if recent:
                 convo = f"\n\nConversation so far (for continuity -- the question may be a follow-up):\n{recent}"
+        inventory = ""
+        if emitter_for_inventory := CURRENT_EMITTER.get():
+            block = bus.context_inventory(emitter_for_inventory.run_id)
+            if block:
+                inventory = f"\n\n{block}"
         prompt = (
+            f"You are CLARA. {NO_INTERNALS} "
             f"Combine these specialist findings into ONE grounded answer for the Investigating "
             f"Officer, written entirely in {lang_name}. Lead with the single most actionable "
             f"finding, then the support. Keep every identifier, amount, date and legal citation "
-            f"exactly as given. Invent nothing beyond the findings. Do not mention specialists "
-            f"or that a team was involved.{convo}\n\nOfficer's question: {question}\n\nFindings:\n{findings}"
+            f"exactly as given. Invent nothing beyond the findings. Do not mention specialists, "
+            f"tools, or that a team was involved.{convo}{inventory}\n\n"
+            f"Officer's question: {question}\n\nFindings:\n{findings}"
         )
+        emitter: RunEmitter | None = CURRENT_EMITTER.get()
         try:
-            message = await composer.ainvoke([HumanMessage(content=prompt)])
-            text = _text_of(getattr(message, "content", "")).strip()
+            full_text = ""
+            buf = ""
+            async for chunk in composer.astream([HumanMessage(content=prompt)]):
+                token = _text_of(getattr(chunk, "content", ""))
+                if not token:
+                    continue
+                full_text += token
+                buf += token
+                if len(buf) >= 30:
+                    if emitter and len(full_text) > 40:
+                        emitter.answer_delta(buf)
+                    buf = ""
+            if buf and emitter and len(full_text) > 40:
+                emitter.answer_delta(buf)
+            text = full_text.strip()
         except Exception:
-            logger.exception("assistant: compose failed, concatenating findings")
-            text = ""
+            logger.exception("assistant: compose streaming failed, trying ainvoke fallback")
+            try:
+                message = await composer.ainvoke([HumanMessage(content=prompt)])
+                text = _text_of(getattr(message, "content", "")).strip()
+                if emitter and text:
+                    for piece in _word_chunks(text):
+                        emitter.answer_delta(piece)
+            except Exception:
+                logger.exception("assistant: compose ainvoke also failed")
+                text = ""
         if not text or _looks_like_provider_block(text):
-            # Fall back to the raw specialist findings rather than losing the answer.
-            return "\n\n".join(f"{r['display']}: {r['text']}" for r in results)
+            fallback = "\n\n".join(f"{r['display']}: {r['text']}" for r in results)
+            if emitter:
+                for piece in _word_chunks(fallback):
+                    emitter.answer_delta(piece)
+            return fallback
         return text
 
     graph = StateGraph(AssistantState)
     graph.add_node("supervisor", supervisor)
+    graph.add_node("respond", respond)
     for spec in SPECS:
         graph.add_node(spec.key, functools.partial(_run_specialist_node, key=spec.key))
     graph.add_node("synthesize", synthesize)
 
     graph.add_edge(START, "supervisor")
-    graph.add_conditional_edges("supervisor", route_to_specialists, list(_SPECIALIST_KEYS))
+    graph.add_conditional_edges("supervisor", route_to_specialists, [*list(_SPECIALIST_KEYS), "respond"])
     for spec in SPECS:
         graph.add_edge(spec.key, "synthesize")
+    graph.add_edge("respond", END)
     graph.add_edge("synthesize", END)
 
     compiled = graph.compile(name="assistant_supervisor")

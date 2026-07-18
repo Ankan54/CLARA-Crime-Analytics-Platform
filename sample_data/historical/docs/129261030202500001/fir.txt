@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_315
+The complainant, Mangala Veeranna, aged 37 years, an IT Professional residing in Chikkaballapur, reports being the victim of a sophisticated investment fraud. On 12th October 2025, she was added to a WhatsApp group named "Elite Stock Trading Tips," which posed as a legitimate forum for financial guidance. The group administrators, acting as market experts, aggressively promoted a mobile application named "ProTrade Plus" for high-yield stock trading.
+
+Trusting the professional demeanor of the fraudsters, the complainant downloaded the app and registered her details. To establish credibility, the accused shared numerous fake profit screenshots and testimonies from other group members, displaying substantial returns on minor investments. Confident in the scheme's legitimacy, Mangala proceeded to transfer funds in multiple tranches, totaling Rs. 317,042, to the banking details provided within the app. The funds were transferred via UPI to the identifier **mangalav86@okicici** and linked to the account **BG30726384310**.
+
+For a brief period, the trading dashboard reflected significant profits, further enticing the victim to invest more. However, when the complainant attempted to withdraw the accumulated funds, the application displayed a "Server Error." Upon contacting the support team via the number **9362155909**, she was asked to pay a clearance fee. Realizing the inconsistencies, she confronted the operators, who subsequently blocked her number and removed her from the WhatsApp group. The fake app has since been rendered inaccessible. This report is filed for the registration of an FIR and further investigation into the cyber fraud.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG30726384310

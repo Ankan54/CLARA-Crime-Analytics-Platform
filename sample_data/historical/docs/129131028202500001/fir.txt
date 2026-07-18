@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_313
+On 09/08/2025, at approximately 14:30 hours, I, Sandeep Gaonkar (39 years), a trader residing in Vijayapura, appeared before this station to report a cyber fraud incident. The incident occurred earlier that day when I attempted to sell goods to an individual posing as a customer. The individual expressed interest in making a payment via UPI and requested my contact details to initiate the transaction.
+
+Instead of transferring the funds, the accused deliberately sent a "collect" request to my mobile number. Simultaneously, the accused confused me by claiming there was a technical issue requiring me to scan a specific QR code to verify the incoming payment. Misled by the urgency and the fraudulent instructions, I inadvertently authorized the transaction, assuming I was receiving funds. Consequently, a sum of Rs. 24,706 was debited from my bank account instead of being credited.
+
+Upon checking my transaction history, I realized the fraud. The payment was processed through the VPA `sandeepg91@okicici`. The transaction reference ID recorded for this fraudulent debit is `BG82261993550`. Further investigation into the transaction details revealed the fraud was linked to the mobile number `9669996947`. I have not received the goods' payment, nor has the debited amount been reversed. I request the registration of an FIR and necessary legal action against the unknown accused for cheating and committing cyber fraud under the relevant sections of the law.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG82261993550

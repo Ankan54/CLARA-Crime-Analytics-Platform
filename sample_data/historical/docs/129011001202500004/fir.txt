@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_308
+On 03.09.2025, the complainant, Venkatesh Veeranna, aged 31 years, a Government employee residing in Kodagu, appeared before this station and reported a case of cyber fraud involving phishing. The victim stated that on the same day, he received a fraudulent SMS on his mobile number 9961196548, which appeared to be a genuine alert from his bank. The message falsely claimed that his internet banking services would be suspended unless he updated his Know Your Customer (KYC) details immediately.
+
+To avoid service disruption, the complainant clicked the malicious link provided in the SMS. The link redirected him to a sophisticated replica of the official bank website, where he was prompted to enter his confidential internet banking credentials, including his User ID and Password. Believing the portal to be authentic, Venkatesh entered the requested information. Shortly thereafter, he received an unauthorized transaction notification and discovered that a sum of Rs. 70,714 had been debited from his account without his consent.
+
+Upon checking his transaction history, the victim identified that the funds had been transferred using the reference ID BG27792504963. Further investigation into the beneficiary details revealed that the fraudsters had routed the amount to a VPA identified as venkates74@okicici. The complainant realized he had been tricked into harvesting his sensitive financial data through a fake URL. Consequently, this report is being filed for the offenses of cheating, impersonation, and criminal breach of trust under the relevant sections of the Bharatiya Nyaya Sanhita and the Information Technology Act, 2000.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG27792504963

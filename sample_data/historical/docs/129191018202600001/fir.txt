@@ -26,7 +26,11 @@ Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN3_H02
+On 2026-01-18, I, Kavitha Desai, age 38, an IT Professional residing in Dharwad, wish to report a serious incident of investment fraud. Approximately three weeks prior to this date, I was added to a WhatsApp group named "Stock Market Elite Alpha." The group was administered by individuals posing as certified financial advisors who shared daily stock tips and economic news to build trust. Convinced by their professional demeanor, I followed their instructions to download a specific application called "TradePro Invest" via a third-party link, which was not available on official app stores.
+
+The administrators guided me through the registration process and asked for an initial deposit to start trading. Between 2026-01-05 and 2026-01-15, I transferred a total of 500,000 INR in multiple transactions to the bank details provided within the app. For the first few days, the app displayed impressive returns on my portfolio. The fraudsters frequently shared fake profit screenshots in the WhatsApp group, showing other members earning massive profits, which encouraged me to invest more funds.
+
+When I attempted to withdraw a portion of my accumulated profits on 2026-01-17, the application displayed a "Server Maintenance" error. Shortly after, the WhatsApp group was deleted, and I was unable to access the app's interface. My account was blocked, and the customer support contacts became unreachable. I realized I had been scammed when I could not recover my principal amount. I have preserved the transaction receipts and the application link. The unique identifier associated with my user profile on the fraudulent portal is 5530123456789002. I request the police to register this FIR and investigate the matter to recover my lost funds.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : 5530123456789002

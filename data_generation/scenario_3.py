@@ -242,66 +242,95 @@ def _build_hub_anchor_case() -> tuple[FIR, Person, Account, list[Transaction]]:
     return fir, victim, hub_acc, txns
 
 
+# Collector (aggregation-feeder) accounts: many accounts pour into HUB_ACC_03, making it
+# the highest in-degree / highest-volume node so "rank the busiest aggregation account"
+# (PageRank/degree, Scn3 Q3) surfaces the hub. Amounts ~₹16L; with the ₹12L bridge inflow
+# the hub aggregates ~₹28L (the victim's loss).
+_SCN3_COLLECTORS = [
+    {"account_no": "5530123456789031", "bank": "Canara Bank",         "ifsc": "CNRB0009031", "branch_district": "Dharwad",          "amount": 280000},
+    {"account_no": "5530123456789032", "bank": "State Bank of India", "ifsc": "SBIN0009032", "branch_district": "Hubballi-Dharwad", "amount": 260000},
+    {"account_no": "5530123456789033", "bank": "Bank of Baroda",      "ifsc": "BARB0DHARW3", "branch_district": "Dharwad",          "amount": 250000},
+    {"account_no": "5530123456789034", "bank": "Union Bank of India", "ifsc": "UBIN0553434", "branch_district": "Belagavi",         "amount": 240000},
+    {"account_no": "5530123456789035", "bank": "Karnataka Bank",      "ifsc": "KTKM0009035", "branch_district": "Vijayapura",       "amount": 230000},
+    {"account_no": "5530123456789036", "bank": "ICICI Bank",          "ifsc": "ICIC0009036", "branch_district": "Bengaluru Urban",  "amount": 340000},
+]
+
+# HUB → mule sub-₹1L tranches. The two freezable mules (…013, …014) receive several tranches
+# and never move them on, accumulating ≈₹6.2L still recoverable; the rest cash out to crypto.
+# Index aligns with SCN3_MULE_ACCS; …013/…014 are indexes 2/3 (== SCN3_FREEZABLE_ACCS).
+_SCN3_MULE_PLAN = [
+    {"tranches": [90000, 90000, 90000, 90000], "cash_out": True},   # …011 -> crypto  ₹3.6L
+    {"tranches": [90000, 90000, 90000, 90000], "cash_out": True},   # …012 -> crypto  ₹3.6L
+    {"tranches": [90000, 85000, 80000, 65000], "cash_out": False},  # …013 FROZEN     ₹3.2L
+    {"tranches": [85000, 80000, 75000, 60000], "cash_out": False},  # …014 FROZEN     ₹3.0L
+    {"tranches": [90000, 90000, 90000, 90000], "cash_out": True},   # …015 -> crypto  ₹3.6L
+]
+
+
 def _build_mule_accounts() -> tuple[list[Account], list[Transaction]]:
     """
-    Mule accounts and layering transactions in the ring.
-    Funds flow from HUB_ACC_03 → mules (sub-₹1L tranches within 15 min) → WALLET_03.
+    Aggregation feeders + layering ring around HUB_ACC_03.
+      collectors → HUB (aggregation, high in-degree)  →  mules (sub-₹1L tranches)  →  crypto,
+      with two freezable mules holding ≈₹6.2L that never moved on.
     """
     mule_accs: list[Account] = []
     txns: list[Transaction] = []
+    hub = HUB_ACC_03["account_no"]
 
-    base_time = datetime(2026, 2, 5, 15, 15, 0)
-    tranche_amount = 90000   # sub-₹1L
-    num_tranches = 5
-
-    for i, mule_raw in enumerate(SCN3_MULE_ACCS):
-        is_freezable = mule_raw["account_no"] in SCN3_FREEZABLE_ACCS
-        mule_acc = Account(
-            account_no=mule_raw["account_no"],
-            bank=mule_raw["bank"],
-            ifsc=mule_raw["ifsc"],
-            branch_district=mule_raw["branch_district"],
+    # --- Aggregation layer: victim → collector → HUB (drives hub centrality) ---
+    agg_base = datetime(2026, 2, 5, 15, 2, 0)
+    for i, col in enumerate(_SCN3_COLLECTORS):
+        t_in = agg_base + timedelta(minutes=i * 2)
+        t_out = t_in + timedelta(minutes=1)
+        mule_accs.append(Account(
+            account_no=col["account_no"], bank=col["bank"], ifsc=col["ifsc"],
+            branch_district=col["branch_district"],
             open_date=(datetime(2024, 1, 1) + timedelta(days=rng.randint(0, 365))).strftime("%Y-%m-%d"),
-            kyc_name=f"Mule {i+1}",
-            is_flagged_mule=True,
+            kyc_name=f"Collector {i+1}", is_flagged_mule=True,
             activity_history=[
-                {"timestamp": (base_time + timedelta(minutes=i*3)).strftime("%Y-%m-%dT%H:%M"),
-                 "direction": "in", "amount": tranche_amount},
-            ] + (
-                [] if is_freezable else [
-                    {"timestamp": (base_time + timedelta(minutes=i*3 + 8)).strftime("%Y-%m-%dT%H:%M"),
-                     "direction": "out", "amount": tranche_amount},
-                ]
-            ),
-        )
-        mule_accs.append(mule_acc)
-
-        # HUB → mule (layering)
+                {"timestamp": t_in.strftime("%Y-%m-%dT%H:%M"),  "direction": "in",  "amount": col["amount"]},
+                {"timestamp": t_out.strftime("%Y-%m-%dT%H:%M"), "direction": "out", "amount": col["amount"]},
+            ],
+        ))
         txns.append(Transaction(
-            txn_id=f"TXN_SCN3_LAYER_H2M_{i+1}",
-            from_account=HUB_ACC_03["account_no"],
-            to_account=mule_raw["account_no"],
-            amount=tranche_amount,
-            timestamp=(base_time + timedelta(minutes=i*3)).strftime("%Y-%m-%dT%H:%M"),
-            channel="IMPS",
-            linked_fir_id="FIR_SCN3_LIVE",
-            hop_role="mule",
-            source_fir_id="FIR_SCN3_H01",
+            txn_id=f"TXN_SCN3_AGG_V2C_{i+1}", from_account="VICTIM_ACC_SCN3_LIVE",
+            to_account=col["account_no"], amount=col["amount"], timestamp=t_in.strftime("%Y-%m-%dT%H:%M"),
+            channel="IMPS", linked_fir_id="FIR_SCN3_LIVE", hop_role="collection", source_fir_id="FIR_SCN3_H01",
+        ))
+        txns.append(Transaction(
+            txn_id=f"TXN_SCN3_AGG_C2H_{i+1}", from_account=col["account_no"],
+            to_account=hub, amount=col["amount"], timestamp=t_out.strftime("%Y-%m-%dT%H:%M"),
+            channel="IMPS", linked_fir_id="FIR_SCN3_LIVE", hop_role="aggregation", source_fir_id="FIR_SCN3_H01",
         ))
 
-        # Non-freezable mules cash out to crypto wallet
-        if not is_freezable:
+    # --- Layering: HUB → mules in sub-₹1L tranches; freezable mules retain funds ---
+    layer_base = datetime(2026, 2, 5, 15, 15, 0)
+    t = layer_base
+    for idx, mule_raw in enumerate(SCN3_MULE_ACCS):
+        plan = _SCN3_MULE_PLAN[idx]
+        history: list[dict] = []
+        for j, amt in enumerate(plan["tranches"]):
+            history.append({"timestamp": t.strftime("%Y-%m-%dT%H:%M"), "direction": "in", "amount": amt})
             txns.append(Transaction(
-                txn_id=f"TXN_SCN3_LAYER_M2W_{i+1}",
-                from_account=mule_raw["account_no"],
-                to_account=WALLET_03["address"],
-                amount=tranche_amount,
-                timestamp=(base_time + timedelta(minutes=i*3 + 8)).strftime("%Y-%m-%dT%H:%M"),
-                channel="crypto",
-                linked_fir_id="FIR_SCN3_LIVE",
-                hop_role="cash_out",
-                source_fir_id="FIR_SCN3_H01",
+                txn_id=f"TXN_SCN3_LAYER_H2M_{idx+1}_{j+1}", from_account=hub,
+                to_account=mule_raw["account_no"], amount=amt, timestamp=t.strftime("%Y-%m-%dT%H:%M"),
+                channel="IMPS", linked_fir_id="FIR_SCN3_LIVE", hop_role="mule", source_fir_id="FIR_SCN3_H01",
             ))
+            t += timedelta(minutes=1)
+            if plan["cash_out"]:
+                history.append({"timestamp": t.strftime("%Y-%m-%dT%H:%M"), "direction": "out", "amount": amt})
+                txns.append(Transaction(
+                    txn_id=f"TXN_SCN3_LAYER_M2W_{idx+1}_{j+1}", from_account=mule_raw["account_no"],
+                    to_account=WALLET_03["address"], amount=amt, timestamp=t.strftime("%Y-%m-%dT%H:%M"),
+                    channel="crypto", linked_fir_id="FIR_SCN3_LIVE", hop_role="cash_out", source_fir_id="FIR_SCN3_H01",
+                ))
+                t += timedelta(minutes=1)
+        mule_accs.append(Account(
+            account_no=mule_raw["account_no"], bank=mule_raw["bank"], ifsc=mule_raw["ifsc"],
+            branch_district=mule_raw["branch_district"],
+            open_date=(datetime(2024, 1, 1) + timedelta(days=rng.randint(0, 365))).strftime("%Y-%m-%d"),
+            kyc_name=f"Mule {idx+1}", is_flagged_mule=True, activity_history=history,
+        ))
 
     return mule_accs, txns
 
@@ -354,6 +383,6 @@ def generate_scenario_3() -> dict:
             "hub_operator": HUB_ACC_03["kyc_name"],
             "wallet": WALLET_03["address"],
             "freezable_accs": SCN3_FREEZABLE_ACCS,
-            "freezable_amount": 180000,   # 2 × ₹90K
+            "freezable_amount": 620000,   # …013 ₹3.2L + …014 ₹3.0L
         },
     }

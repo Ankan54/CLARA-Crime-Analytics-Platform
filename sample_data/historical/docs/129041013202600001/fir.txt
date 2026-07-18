@@ -26,10 +26,14 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN1_H02
+This First Information Report is registered at Bunder Police Station, Mangaluru, under Section 66(D of the Information Technology Act, 2000, and Sections 419, 420, 384, 506, and 34 of the Indian Penal Code.
+
+The complainant Priya Kamath, aged 54, residing at 23, MG Road Layout, Mangaluru, Mangaluru, states that on 2026-04-14 at approximately 10:45, they received a phone call from an unknown number. The caller identified themselves as an officer from TRAI (Telecom Regulatory Authority of India) and claimed that a SIM card registered in the complainant's name was being used for illegal activities and would be disconnected within 2 hours. The call was then transferred to a person claiming to be a CBI officer, who informed the complainant that their Aadhaar was linked to money laundering activities and that they were under 'digital arrest.' The complainant was instructed to remain on a Skype video call for continuous monitoring. Over the next 24 hours, under threats of immediate physical arrest, the complainant was directed to transfer funds to a 'Supreme Court escrow account' for 'RBI verification.' The complainant transferred a total of Rs. 1,800,000 in 2 transactions via UPI to account number 7701234567890022. The complainant realised the fraud when the callers blocked all communication and approached Bunder Police Station to file this complaint.
+
+During the course of the intimidation, the fraudsters also cited a fabricated RBI circular reference number 9842017633250001 to lend false legitimacy to their demands. The accused persons, acting in concert, have wrongfully restrained the complainant and cheated them of their hard-earned savings by posing as public servants. The investigation is hereby initiated to trace the IP addresses used for the Skype call and the beneficiaries of the transferred funds.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : 7701234567890022
+  Bank Accounts  : 7701234567890022, 9842017633250001
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------

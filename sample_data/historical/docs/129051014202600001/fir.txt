@@ -26,10 +26,12 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN1_H03
+This First Information Report is registered based on the written complaint received at Hubballi CEN Police Station regarding a sophisticated cyber fraud. The complainant Manjunath Hegde, aged 67, residing at 74, Brigade Road Layout, Hubballi-Dharwad, Hubballi-Dharwad, states that on 2026-04-14 at approximately 11:30, they received a phone call from an unknown number. The caller identified themselves as an officer from TRAI (Telecom Regulatory Authority of India) and claimed that a SIM card registered in the complainant's name was being used for illegal activities and would be disconnected within 2 hours. The call was then transferred to a person claiming to be a CBI officer, who informed the complainant that their Aadhaar was linked to money laundering activities and that they were under 'digital arrest.' The complainant was instructed to remain on a Skype video call for continuous monitoring. Over the next 24 hours, under threats of immediate physical arrest, the complainant was directed to transfer funds to a 'Supreme Court escrow account' for 'RBI verification.' The complainant transferred a total of Rs. 1,500,000 in 2 transactions via UPI to account number 7701234567890033. The complainant realised the fraud when the callers blocked all communication and approached Hubballi CEN Police Station to file this complaint.
+
+During the preliminary inquiry, the investigating officer noted that the fraudsters utilized complex digital trails to facilitate the crime. The Skype ID used by the impersonators has been traced and preserved for technical analysis. Furthermore, the beneficiary details provided by the bank show that the funds were credited to the account bearing number 9842017633250001. The accused persons remain unidentified and at large. The incident constitutes cognizable offenses under the Information Technology Act and the Indian Penal Code. This FIR is registered for further investigation into the conspiracy, tracing of the funds, and apprehension of the accused.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : 7701234567890033
+  Bank Accounts  : 7701234567890033, 9842017633250001
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------

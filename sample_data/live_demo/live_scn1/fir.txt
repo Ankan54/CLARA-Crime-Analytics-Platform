@@ -6,29 +6,8 @@ Complainant: Dr. Anand Rao, Age 58, Occupation: Retired Professor
 Accused: Ravi Kumar G
 Sections: IT Act S.66C, IT Act S.66D, BNS S.318, BNS S.319
 ---
-**First Information Report (FIR)**
+This First Information Report is registered based on the written complaint submitted by the informant regarding a cyber fraud incident.
 
-**Complainant:** Dr. Anand Rao, 58, Retired Professor, Resident of 123, Malleswaram, Bengaluru.
+The complainant Dr. Anand Rao, aged 58, residing at Malleswaram, Bengaluru, Bengaluru Urban, states that on 2026-06-26 at approximately 10:15, they received a phone call from an unknown number. The caller identified themselves as an officer from TRAI (Telecom Regulatory Authority of India) and claimed that a SIM card registered in the complainant's name was being used for illegal activities and would be disconnected within 2 hours. The call was then transferred to a person claiming to be a CBI officer, who informed the complainant that their Aadhaar was linked to money laundering activities and that they were under 'digital arrest.' The complainant was instructed to remain on a Skype video call for continuous monitoring. Over the next 24 hours, under threats of immediate physical arrest, the complainant was directed to transfer funds to a 'Supreme Court escrow account' for 'RBI verification.' The complainant transferred a total of Rs. 42,00,000 in 3 transactions via UPI to account number 9842017633250001. The complainant realised the fraud when the callers blocked all communication and approached CEN Police Station - East Division to file this complaint.
 
-**Date of Incident:** 15th October 2023
-
-**Time of Incident:** Approximately 11:30 AM
-
-**Place of Incident:** 123, Malleswaram, Bengaluru
-
-**Narrative:**
-
-On 15th October 2023, around 11:30 AM, I, Dr. Anand Rao, received a video call on my mobile phone from an individual who identified himself as a CBI officer. The caller claimed that my Aadhaar number was linked to a money laundering case and that immediate action was required to resolve the issue. 
-
-The caller, using a professional demeanor and official jargon, coerced me into transferring Rs 42,00,000 to the account number 9842017633250001 (HDFC Bank, IFSC HDFC0004217). The transaction was made through UPI using the identifier raghu.ctrl@ybl. 
-
-The caller provided a device IMEI number 867537042195016, which he claimed was used to track the case. I was intimidated into believing that failure to comply would result in my arrest and further legal consequences. 
-
-Upon realizing the fraudulent nature of the call after hanging up, I checked my bank account and found the amount had been debited. I immediately contacted my bank and reported the scam. 
-
-I am lodging this complaint to bring this cybercrime to the attention of the authorities and seek appropriate action against the perpetrators. I request a thorough investigation into this matter and the recovery of the transferred amount.
-
-**Complainant Signature:**
-
-[Dr. Anand Rao]  
-Date: 16th October 2023
+The act constitutes an offense of cheating by personation and criminal breach of trust under the Indian Penal Code, along with relevant sections of the Information Technology Act. The unknown accused persons, posing as government officials, intentionally deceived the victim with false threats of legal action to wrongfully induce the transfer of funds. Investigation is taken up to trace the IP addresses, mobile numbers, and the beneficiary account details used in the commission of the crime.

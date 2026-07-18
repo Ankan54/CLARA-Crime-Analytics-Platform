@@ -26,7 +26,11 @@ Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_301
+On 20.05.2026, I, Ajay Venkataraman, aged 47 years, a retired Professor residing in Bengaluru Urban, wish to report a severe case of cyber fraud. At approximately 11:30 AM, I received an incoming call from the mobile number 9225535993. The caller, identifying himself as an official from the "Narcotics Control Bureau," stated that a parcel addressed to me had been seized by customs. He claimed this **parcel interception** revealed the presence of illegal **narcotic substances**, specifically MDMA, and that my Aadhaar card had been recovered from the package.
+
+The caller alleged that I was implicated in an international drug trafficking racket and threatened immediate arrest by the NCB. To avoid detention, the call was transferred to a purported "NCB Superintendent," who insisted that I undergo a digital verification process to prove my innocence. I was ordered to remain on a continuous WhatsApp video call to ensure I was not communicating with others. Under the pretext of verifying my financial background to rule out proceeds of crime, the impersonator demanded that I transfer my savings to a government-seized account.
+
+Terrified by the prospect of imprisonment and the aggressive tone of the officer, I complied. I was told that transferring the funds was mandatory to issue a **clearance certificate** and that the amount would be refunded after verification. Consequently, I transferred a total sum of Rs. 2,175,185 in multiple transactions to the Beneficiary Account number **BG47854412967**. After the transactions, the callers disconnected the video call and ceased communication. I realized I had been defrauded when I received no confirmation. I request the police to register this FIR and investigate the fraudsters behind this "digital arrest" scheme.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
   Bank Accounts  : BG47854412967
