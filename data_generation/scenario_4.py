@@ -185,7 +185,18 @@ def _build_burst_fir(seq: int) -> tuple[FIR, Person, list[dict], list[dict]]:
     return fir, victim, mentions, txns
 
 
-def _build_baseline_fir(seq: int) -> tuple[FIR, Person]:
+# Baseline "noise" accounts get a plausible-but-not-pool bank, distinct from
+# the 7 payments-bank/major-bank names MULE_SET_04 uses so they don't read as
+# part of the ring by coincidence.
+_BASELINE_BANK_PREFIXES = [
+    ("Union Bank of India", "UBIN08"),
+    ("Bank of Baroda", "BARB0"),
+    ("Indian Bank", "IDIB000"),
+    ("Punjab National Bank", "PUNB0"),
+]
+
+
+def _build_baseline_fir(seq: int) -> tuple[FIR, Person, Account, UPI]:
     """
     Baseline task_scam FIR (Tier-B — 'Instagram reel liking' variant).
     INDEPENDENT identifiers — NOT from DEV_POOL_04/MULE_SET_04.
@@ -212,9 +223,28 @@ def _build_baseline_fir(seq: int) -> tuple[FIR, Person]:
         first_seen_date=registered_dt.strftime("%Y-%m-%d"),
     )
 
-    # Independent identifiers — NOT from pool
+    # Independent identifiers — NOT from pool. These used to be bare strings
+    # only referenced from identifiers_mentioned (never wrapped in a real
+    # Account/UPI object), so export.py's generic MENTIONS-from-
+    # identifiers_mentioned pass (every FIR, not just burst ones) produced a
+    # dangling relationship target with no backing row anywhere downstream --
+    # confirmed live as the origin of bare {node_id, stub} Neo4j nodes like
+    # INDP_ACC_BASE_01_63262. Now real, fully-detailed Account/UPI objects,
+    # matching the pool-account construction pattern, just not drawn from
+    # identifier_pool.py so they stay outside the shared ring.
     ind_acc = f"INDP_ACC_BASE_{seq:02d}_{rng.randint(10000,99999)}"
     ind_upi = f"baseline.task{seq:02d}@okicici"
+    bank_name, ifsc_prefix = rng.choice(_BASELINE_BANK_PREFIXES)
+    baseline_account = Account(
+        account_no=ind_acc,
+        bank=bank_name,
+        ifsc=f"{ifsc_prefix}{rng.randint(0, 10**(11 - len(ifsc_prefix)) - 1):0{11 - len(ifsc_prefix)}d}",
+        branch_district=district,
+        open_date=(offence_dt - timedelta(days=rng.randint(30, 400))).strftime("%Y-%m-%d"),
+        kyc_name=f"Task Baseline Mule {seq}",
+        is_flagged_mule=True,
+    )
+    baseline_upi = UPI(upi_id=f"UPI_{ind_upi}", vpa=ind_upi)
 
     sub_events = [
         SubEvent("Instagram message about reel liking job",  offence_dt.strftime("%Y-%m-%dT%H:%M")),
@@ -254,7 +284,7 @@ def _build_baseline_fir(seq: int) -> tuple[FIR, Person]:
         narrative_tier="B",  # different sub-script
         sub_events=sub_events,
     )
-    return fir, victim
+    return fir, victim, baseline_account, baseline_upi
 
 
 def _build_pool_objects() -> tuple[list[Device], list[IP], list[Account], list[UPI]]:
@@ -320,13 +350,19 @@ def generate_scenario_4() -> dict:
         raw_txns.extend(txns)
 
     # Baseline FIRs (Tier-B, independent identifiers)
+    baseline_accs: list[Account] = []
+    baseline_upis: list[UPI] = []
     for i in range(1, SCN4_BASELINE_FIRS + 1):
-        fir, victim = _build_baseline_fir(i)
+        fir, victim, baseline_acc, baseline_upi = _build_baseline_fir(i)
         firs.append(fir)
         persons.append(victim)
+        baseline_accs.append(baseline_acc)
+        baseline_upis.append(baseline_upi)
 
     # Pool objects
     devices, ips, mule_accs, mule_upis = _build_pool_objects()
+    mule_accs = mule_accs + baseline_accs
+    mule_upis = mule_upis + baseline_upis
 
     # Operator persons (revealed by live IR, but their person nodes exist in the historical graph
     # because they appear in the burst FIRs' narrative and USES edges)

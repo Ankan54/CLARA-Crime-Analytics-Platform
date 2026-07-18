@@ -1,6 +1,0 @@
-device_no,imei,ip_address,cases_linked
-1,353816081234501,"{'ip': '103.74.19.141', 'lat': 12.8384, 'long': 77.6814, 'city': 'Electronic City, Bengaluru'}",multiple
-2,353816081234502,"{'ip': '103.74.19.142', 'lat': 12.8391, 'long': 77.6821, 'city': 'Electronic City, Bengaluru'}",multiple
-3,353816081234503,"{'ip': '103.74.19.143', 'lat': 12.8376, 'long': 77.6808, 'city': 'Electronic City, Bengaluru'}",multiple
-4,353816081234504,"{'ip': '103.74.19.144', 'lat': 12.8379, 'long': 77.6815, 'city': 'Electronic City, Bengaluru'}",multiple
-5,353816081234505,103.21.58.99,multiple

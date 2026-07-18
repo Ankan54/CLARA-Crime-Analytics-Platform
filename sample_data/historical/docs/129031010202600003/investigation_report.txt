@@ -5,7 +5,7 @@ Crime No.        : 129031010202600003
 Case No.         : 202600003
 CaseMasterID     : 1000026
 Police Station   : Chamundipuram Police Station
-Report Date      : 2026-03-24
+Report Date      : 2026-04-24
 IO Officer       : Kavitha Reddy (EmployeeID: 5010)
 
 Status           : Case under investigation. Preliminary enquiry completed.

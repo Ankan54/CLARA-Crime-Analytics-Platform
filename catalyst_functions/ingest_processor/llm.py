@@ -15,8 +15,17 @@ from langchain_core.outputs import ChatGeneration, ChatResult
 from dotenv import load_dotenv
 
 
-ROOT = Path(__file__).resolve().parents[2]
-load_dotenv(ROOT / ".env")
+# Only relevant for local runs (self_check.py etc.) against the repo's .env -- the
+# deployed Catalyst runtime gets env vars injected by the platform directly, no .env
+# file present at all. parents[2] assumed the nested catalyst_functions/ingest_processor/
+# layout depth; the deployed zip is flat (llm.py at /catalyst/llm.py), where that
+# index doesn't exist (IndexError, confirmed live). Walk up looking for a .env
+# instead of hardcoding a depth, and no-op if the search comes up empty.
+for _candidate in Path(__file__).resolve().parents:
+    _dotenv = _candidate / ".env"
+    if _dotenv.exists():
+        load_dotenv(_dotenv)
+        break
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +46,12 @@ try:
 except Exception:  # pragma: no cover
     ChatAnthropic = None  # type: ignore[assignment]
     logger.debug("langchain_anthropic unavailable", exc_info=True)
+
+try:
+    from langchain_aws import ChatBedrockConverse
+except Exception:  # pragma: no cover
+    ChatBedrockConverse = None  # type: ignore[assignment]
+    logger.debug("langchain_aws unavailable", exc_info=True)
 
 
 _token_cache: dict[str, str | float | None] = {"token": None, "expires_at": 0.0}
@@ -292,6 +307,7 @@ class ChatZohoGLM(BaseChatModel):
         return self.bind(tools=openai_tools, **kwargs)
 
 
+
 def _build_single(provider: str) -> BaseChatModel:
     provider = provider.lower()
     logger.debug("build_llm: provider=%s", provider)
@@ -310,9 +326,9 @@ def _build_single(provider: str) -> BaseChatModel:
     if provider == "openai":
         if ChatOpenAI is None:
             raise RuntimeError("langchain-openai is not installed.")
-        logger.debug("build_llm: openai model=%s", _cfg("OPENAI_MODEL", "gpt-4o-mini"))
+        logger.debug("build_llm: openai model=%s", _cfg("OPENAI_MODEL", "gpt-5.4-nano"))
         return ChatOpenAI(
-            model=_cfg("OPENAI_MODEL", "gpt-4o-mini"),
+            model=_cfg("OPENAI_MODEL", "gpt-5.4-nano"),
             api_key=_cfg("OPENAI_API_KEY"),
             temperature=0.2,
             max_retries=3,
@@ -321,12 +337,28 @@ def _build_single(provider: str) -> BaseChatModel:
     if provider == "anthropic":
         if ChatAnthropic is None:
             raise RuntimeError("langchain-anthropic is not installed.")
-        logger.debug("build_llm: anthropic model=%s", _cfg("ANTHROPIC_MODEL", "claude-3-5-haiku-latest"))
+        logger.debug("build_llm: anthropic model=%s", _cfg("ANTHROPIC_MODEL", "claude-sonnet-5"))
         return ChatAnthropic(
-            model=_cfg("ANTHROPIC_MODEL", "claude-3-5-haiku-latest"),
+            model=_cfg("ANTHROPIC_MODEL", "claude-sonnet-5"),
             api_key=_cfg("ANTHROPIC_API_KEY"),
             temperature=0.2,
             max_retries=3,
+            rate_limiter=limiter,
+        )
+    if provider == "bedrock":
+        if ChatBedrockConverse is None:
+            raise RuntimeError("langchain-aws is not installed.")
+        # Same model/region config data_generation/llm_client.py already uses for
+        # narrative generation; credentials come from boto3's default chain
+        # (AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY env vars), not passed explicitly.
+        model_id = _cfg("BEDROCK_MODEL_ID")
+        region = _cfg("AWS_REGION") or _cfg("AWS_DEFAULT_REGION") or "us-east-1"
+        logger.debug("build_llm: bedrock model=%s region=%s", model_id, region)
+        return ChatBedrockConverse(
+            model=model_id,
+            region_name=region,
+            temperature=0.2,
+            max_tokens=1024,
             rate_limiter=limiter,
         )
     raise ValueError(f"Unsupported LLM provider: {provider}")
@@ -344,6 +376,8 @@ def build_llm_pair() -> tuple[BaseChatModel, BaseChatModel]:
         fallback_provider = "openai"
     elif primary_provider == "openai":
         fallback_provider = "anthropic"
+    elif primary_provider == "bedrock":
+        fallback_provider = "openai"
     else:
         raise ValueError(f"Unsupported DATA_INGESTION_LLM value: {primary_provider}")
     return _build_single(primary_provider), _build_single(fallback_provider)

@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import time
+import traceback
 from dataclasses import dataclass
 from typing import Any
 
@@ -22,6 +24,16 @@ logger = logging.getLogger(__name__)
 
 
 _token_cache: dict[str, str | float | None] = {"token": None, "expires_at": 0.0}
+
+
+def _job_name(run_id: str) -> str:
+    """Catalyst job_name: alphanumeric + underscore only, 1-20 chars. run_id
+    (case_id_timestamp_shortuuid) is far longer, so key off its short_uuid
+    suffix rather than truncating from the front (which would just chop off
+    mid-timestamp and lose the one part that's actually unique per run)."""
+    suffix = run_id.rsplit("_", 1)[-1]
+    name = re.sub(r"[^A-Za-z0-9_]", "_", f"ingest_{suffix}")
+    return name[:20] or "ingest_job"
 
 
 @dataclass
@@ -225,7 +237,7 @@ def _submit_job_via_sdk(params: dict[str, str], run_id: str) -> dict[str, Any]:
     logger.info("submit_job_via_sdk start run_id=%s params_keys=%s", run_id, sorted(params.keys()))
     app = _init_app()
     job_meta: dict[str, Any] = {
-        "job_name": f"ingest-{run_id}",
+        "job_name": _job_name(run_id),
         "jobpool_name": settings.catalyst_jobpool_name,
         "target_type": "Function",
         "target_name": settings.catalyst_function_name,
@@ -254,7 +266,7 @@ def _submit_job_via_rest(params: dict[str, str], run_id: str) -> dict[str, Any]:
         )
 
     payload: dict[str, Any] = {
-        "job_name": f"ingest-{run_id}",
+        "job_name": _job_name(run_id),
         "jobpool_name": settings.catalyst_jobpool_name,
         "target_type": "Function",
         "target_name": settings.catalyst_function_name,
@@ -286,8 +298,71 @@ def _submit_job_via_rest(params: dict[str, str], run_id: str) -> dict[str, Any]:
     return body.get("data", body)
 
 
+def _mark_local_invoke_failed(run_id: str, message: str) -> None:
+    """DB update for the local-invoke background thread. Never reuse the
+    request-scoped Session from the calling thread -- SQLAlchemy Sessions aren't
+    thread-safe -- and never assume catalyst_functions.ingest_processor.main
+    imported successfully, since that's exactly the failure mode this exists
+    to report."""
+    from ..db import db_session
+
+    try:
+        with db_session() as db:
+            db.execute(
+                text(
+                    """
+                    UPDATE PipelineRun
+                    SET status = 'FAILED', current_stage = 'LOCAL_INVOKE_FAILED',
+                        error_stage = 'LOCAL_INVOKE_FAILED', error_message = :msg, updated_at = NOW()
+                    WHERE run_id = :run_id
+                    """
+                ),
+                {"run_id": run_id, "msg": message[:3000]},
+            )
+    except Exception:
+        logger.exception("local_invoke: could not mark run FAILED run_id=%s", run_id)
+
+
+def _invoke_locally(session: Session, run_id: str, params: dict[str, str]) -> QueueSubmissionResult:
+    """Run the ingest_processor handler in a background thread (for local dev)."""
+    import threading
+    logger.info("local_invoke: starting background thread run_id=%s params=%s", run_id, params)
+
+    def _run():
+        try:
+            import sys, importlib
+            # Ensure the project root is on the path so `catalyst_functions` is importable.
+            project_root = str(__import__("pathlib").Path(__file__).resolve().parents[3])
+            if project_root not in sys.path:
+                sys.path.insert(0, project_root)
+            mod = importlib.import_module("catalyst_functions.ingest_processor.main")
+            result = mod.handler(event={"params": params})
+            logger.info("local_invoke done run_id=%s result=%s", run_id, result)
+        except Exception as exc:
+            # mod.handler() marks its own failures in PipelineRun, but only once it's
+            # actually running -- a broken/missing dependency anywhere under
+            # catalyst_functions.ingest_processor (or this import itself) raises here
+            # instead, before handler() exists to catch anything. Without this, the
+            # run sits at QUEUED forever and the frontend polls indefinitely for a
+            # status change that will never come.
+            logger.exception("local_invoke FAILED run_id=%s", run_id)
+            _mark_local_invoke_failed(run_id, f"{exc}\n{traceback.format_exc()}")
+
+    threading.Thread(target=_run, daemon=True, name=f"ingest-local-{run_id}").start()
+
+    session.execute(
+        text("UPDATE PipelineRun SET status = 'QUEUED', updated_at = NOW() WHERE run_id = :run_id"),
+        {"run_id": run_id},
+    )
+    return QueueSubmissionResult(job_id=f"local-{run_id}", queue_status="SUBMITTED_LOCAL", queue_response={"mode": "local_invoke"})
+
+
 def submit_ingestion_job(session: Session, run_id: str, params: dict[str, str]) -> QueueSubmissionResult:
     logger.info("submit_ingestion_job start run_id=%s phase=%s", run_id, params.get("phase"))
+
+    if settings.ingest_local_invoke:
+        return _invoke_locally(session, run_id, params)
+
     try:
         result = _submit_job_via_sdk(params=params, run_id=run_id)
         job_id = result.get("job_id") or result.get("id")

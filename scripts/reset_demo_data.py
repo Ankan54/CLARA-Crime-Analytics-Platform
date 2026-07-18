@@ -1,9 +1,10 @@
 """Delete demo data only, leaving historical bootstrap data intact.
 
 The live pipeline (raw/ -> processed/ -> archive/) only ever produces **demo** data.
-Historical data lives under Stratus `historical/`, numeric Neo4j `node_id`s, and
-numeric Pinecone vector ids, and was loaded once by migrate_sqlite_to_pg.py — never
-by this pipeline. Scoping rules per store:
+Historical data lives under Stratus `historical/`, Neo4j nodes tagged
+`origin:'historical'`, and Pinecone ids prefixed `historical::`; it is loaded by
+migrate_sqlite_to_pg.py + load_neo4j_from_pg.py + load_pinecone_from_historical.py --
+never by this pipeline. Scoping rules per store:
 
 - Postgres: `PipelineRun`/`ReviewQueueItem`/`BatchUpload` are 100% demo (the live
   pipeline is their only writer). `Account`/`UPIHandle`/`PhoneNumber`/`Device`/
@@ -11,9 +12,17 @@ by this pipeline. Scoping rules per store:
   `Victim`/`ComplainantDetails`/`ActSectionAssociation` are shared with historical
   data (migrate_sqlite_to_pg.py populates them too), so those are scoped to the
   demo case_id set = PipelineRun.case_id UNION BatchUpload.case_id.
-- Neo4j: nodes/edges tagged `origin:'demo'` (numeric historical node_ids untouched).
-- Pinecone: vector ids prefixed `demo::` (numeric historical ids untouched).
+- Neo4j: nodes AND edges tagged `origin:'demo'`, deleted separately (a demo edge can
+  join two historical nodes, which DETACH DELETE would never reach). Historical nodes
+  and edges are keyed by `entity_uid` + `origin:'historical'` and stay untouched.
+- Pinecone: vector ids prefixed `demo::` (`historical::` ids untouched).
 - Stratus: everything under `raw/`, `processed/`, `archive/` (`historical/` untouched).
+
+Shared objects are the subtle case and the reason this stays safe: the planted
+aggregation account is ONE row / ONE node referenced by both origins. It survives a
+wipe because the live pipeline never claims a pre-existing row (it leaves
+source_evidence_id NULL and origin 'historical' -- see processor.py
+_stamp_source_evidence and _load_graph), so neither scoping rule below matches it.
 
 Reads the same `.env` as the rest of the app; does not depend on the FastAPI backend.
 
@@ -172,19 +181,32 @@ def reset_postgres(dry_run: bool) -> dict[str, int]:
     return counts
 
 
-def reset_neo4j(dry_run: bool) -> int:
+def reset_neo4j(dry_run: bool) -> tuple[int, int]:
+    """Returns (demo nodes deleted, demo edges deleted).
+
+    Edges are deleted separately, not just via DETACH DELETE of demo nodes. A demo run
+    can create an edge whose BOTH endpoints are historical -- e.g. a TRANSACTED_WITH
+    between two pre-existing accounts read out of an uploaded bank statement. Those
+    endpoints survive the wipe (correctly), so DETACH DELETE never reaches the edge and
+    it would accumulate across demo runs, inflating the historical money trail with
+    leftovers from previous rehearsals.
+    """
     if not _env("NEO4J_URI") or not _env("NEO4J_PASSWORD"):
         print("[reset_demo_data] Neo4j: SKIP (NEO4J_URI/NEO4J_PASSWORD not set)")
-        return 0
+        return 0, 0
     from neo4j import GraphDatabase
 
     driver = GraphDatabase.driver(_env("NEO4J_URI"), auth=(_env("NEO4J_USERNAME"), _env("NEO4J_PASSWORD")))
     try:
         with driver.session() as session:
-            count = session.run("MATCH (n {origin: 'demo'}) RETURN count(n) AS c").single()["c"]
-            if not dry_run and count:
-                session.run("MATCH (n {origin: 'demo'}) DETACH DELETE n")
-        return int(count)
+            nodes = session.run("MATCH (n {origin: 'demo'}) RETURN count(n) AS c").single()["c"]
+            edges = session.run("MATCH ()-[r {origin: 'demo'}]->() RETURN count(r) AS c").single()["c"]
+            if not dry_run:
+                if edges:
+                    session.run("MATCH ()-[r {origin: 'demo'}]->() DELETE r")
+                if nodes:
+                    session.run("MATCH (n {origin: 'demo'}) DETACH DELETE n")
+        return int(nodes), int(edges)
     finally:
         driver.close()
 
@@ -233,7 +255,7 @@ def main() -> int:
     print(f"[reset_demo_data] mode={'DRY-RUN (no deletes)' if dry_run else 'DELETE'}")
 
     pg_counts = reset_postgres(dry_run)
-    neo4j_count = reset_neo4j(dry_run)
+    neo4j_nodes, neo4j_edges = reset_neo4j(dry_run)
     pinecone_count = reset_pinecone(dry_run)
     stratus_count = reset_stratus(dry_run)
 
@@ -242,7 +264,8 @@ def main() -> int:
     for label, count in pg_counts.items():
         if label != "demo_case_ids":
             print(f"Postgres {label:<24}: {count}")
-    print(f"Neo4j demo nodes         : {neo4j_count}")
+    print(f"Neo4j demo nodes         : {neo4j_nodes}")
+    print(f"Neo4j demo edges         : {neo4j_edges}")
     print(f"Pinecone demo vectors    : {pinecone_count}")
     print(f"Stratus raw/processed/archive objects: {stratus_count}")
 

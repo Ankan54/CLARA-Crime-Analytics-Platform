@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { FormEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Link,
   Navigate,
@@ -7,23 +6,19 @@ import {
   Outlet,
   Route,
   Routes,
+  useLocation,
   useNavigate,
-  useSearchParams,
 } from "react-router-dom";
 import { FIXED_DEMO_USER } from "./config/demoUser";
-import { DEMO_SCENARIOS, type DemoScenario, type ScenarioPrompt } from "./data/scenarios";
+import { DEMO_SCENARIOS, type DemoScenario } from "./data/scenarios";
 import aegisBrandImage from "./assets/aegis-brand.png";
-import {
-  assistantClient,
-  getScenarioResponse,
-  type AssistantGraph,
-  type AssistantResponse,
-  type ToolKind,
-} from "./lib/assistantClient";
+import aegisLogo from "./assets/aegis-logo.png";
+import { UserProfileMenu } from "./components/UserProfileMenu";
+import { AssistantPage } from "./components/assistant/AssistantPage";
+import { AssistantIcon } from "./components/assistant/icons";
 import {
   activateSchemaVersion,
   buildPipelineWebSocketUrl,
-  getCase,
   getFindings,
   getPipelineStatus,
   getReviewQueue,
@@ -40,7 +35,6 @@ import {
   updateThreshold,
   uploadDocuments,
   type ActiveSchemaSummary,
-  type CaseDetail,
   type CaseSummary,
   type FindingsResponse,
   type PipelineRun,
@@ -56,6 +50,9 @@ const TERMINAL_PIPELINE_STATUSES = new Set([
   "COMPLETED_WITH_REVIEW_PENDING",
   "FAILED",
 ]);
+// REST fallback poll for pipeline status -- the WebSocket carries most updates via
+// server push, so this only needs to catch a missed/dropped socket, not drive the UI.
+const STATUS_POLL_INTERVAL_MS = 12000;
 const CURRENT_RUN_STORAGE_KEY = "crime-analytics-assistant.current-run-id";
 
 type DraftFile = {
@@ -64,16 +61,11 @@ type DraftFile = {
   fileType: UploadFileType;
 };
 
-type ChatMessage = {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  response?: AssistantResponse;
-  at?: string;
-};
-
-function nowLabel(): string {
-  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
 function formatDate(value?: string): string {
@@ -108,6 +100,372 @@ function makeId(prefix: string): string {
     return `${prefix}-${crypto.randomUUID()}`;
   }
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+type LandingGraphNodeTone = "money" | "hub" | "alias" | "leader";
+type LandingGraphEdgeTone = "money" | "control" | "alias";
+
+type LandingGraphNode = {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+  tone: LandingGraphNodeTone;
+  pulseClass?: string;
+  halo?: boolean;
+  fill?: string;
+};
+
+type LandingGraphEdge = {
+  from: string;
+  to: string;
+  tone: LandingGraphEdgeTone;
+};
+
+type LandingGraphText = {
+  x: number;
+  y: number;
+  value: string;
+  className: string;
+  anchor?: "start" | "middle" | "end";
+};
+
+type LandingHeroSlide = {
+  id: string;
+  title: string;
+  ariaLabel: string;
+  caption: string;
+  nodes: LandingGraphNode[];
+  edges: LandingGraphEdge[];
+  texts: LandingGraphText[];
+};
+
+const LANDING_HERO_SLIDES: LandingHeroSlide[] = [
+  {
+    id: "digital-arrest",
+    title: "Digital Arrest",
+    ariaLabel:
+      "Digital arrest ring view where three district FIRs converge into one HDFC hub account and resolve to one ring leader with aliases.",
+    caption:
+      "FIRs from three districts resolve to one HDFC hub account holding Rs 54L, controlled by a single accused operating under 3 aliases.",
+    nodes: [
+      { id: "mysuru", x: 66, y: 64, r: 15, tone: "money" },
+      { id: "mangaluru", x: 50, y: 190, r: 15, tone: "money", pulseClass: "n2" },
+      { id: "hubballi", x: 66, y: 316, r: 15, tone: "money", pulseClass: "n3" },
+      { id: "hub", x: 196, y: 190, r: 22, tone: "hub", pulseClass: "n4" },
+      { id: "aliasA", x: 430, y: 92, r: 14, tone: "alias", pulseClass: "n5" },
+      { id: "aliasB", x: 430, y: 288, r: 14, tone: "alias", pulseClass: "n6" },
+      { id: "leader", x: 352, y: 190, r: 30, tone: "leader", halo: true },
+    ],
+    edges: [
+      { from: "mysuru", to: "hub", tone: "money" },
+      { from: "mangaluru", to: "hub", tone: "money" },
+      { from: "hubballi", to: "hub", tone: "money" },
+      { from: "hub", to: "leader", tone: "control" },
+      { from: "aliasA", to: "leader", tone: "alias" },
+      { from: "aliasB", to: "leader", tone: "alias" },
+    ],
+    texts: [
+      { x: 66, y: 36, value: "MYSURU", className: "node-label" },
+      { x: 66, y: 92, value: "Rs 21L", className: "node-label amount-sm" },
+      { x: 50, y: 162, value: "MANGALURU", className: "node-label" },
+      { x: 50, y: 220, value: "Rs 18L", className: "node-label amount-sm" },
+      { x: 66, y: 288, value: "HUBBALLI", className: "node-label" },
+      { x: 66, y: 344, value: "Rs 15L", className: "node-label amount-sm" },
+      { x: 196, y: 150, value: "Rs 54L", className: "amount" },
+      { x: 196, y: 226, value: "AGGREGATION HUB", className: "node-label hub" },
+      { x: 196, y: 239, value: "HDFC ..0001", className: "node-label" },
+      { x: 352, y: 140, value: "RING LEADER", className: "node-label lead" },
+      { x: 352, y: 230, value: "VICTOR HALE", className: "node-label name" },
+      { x: 352, y: 243, value: "3 aliases - 3 districts", className: "node-label" },
+      { x: 424, y: 70, value: "V. Hale", className: "node-label alias" },
+      { x: 424, y: 316, value: "Viktor Hall", className: "node-label alias" },
+    ],
+  },
+  {
+    id: "many-names",
+    title: "Many Names, One Man",
+    ariaLabel:
+      "Alias-resolution view where multiple identity variants collapse to one repeat offender linked by shared phone, UPI, and IMEI.",
+    caption:
+      "Alias variants and identifiers collapse into one repeat offender, showing escalation from smaller frauds to a Rs 15L investment scam.",
+    nodes: [
+      { id: "alias1", x: 86, y: 74, r: 14, tone: "money" },
+      { id: "alias2", x: 58, y: 166, r: 13, tone: "money", pulseClass: "n2" },
+      { id: "alias3", x: 82, y: 268, r: 13, tone: "money", pulseClass: "n3" },
+      { id: "alias4", x: 146, y: 330, r: 13, tone: "money", pulseClass: "n4" },
+      { id: "identity", x: 218, y: 202, r: 22, tone: "hub", pulseClass: "n5" },
+      { id: "offender", x: 348, y: 170, r: 30, tone: "leader", halo: true },
+      { id: "imei", x: 430, y: 96, r: 14, tone: "alias", pulseClass: "n6" },
+      { id: "upi", x: 430, y: 246, r: 14, tone: "alias" },
+      { id: "phone", x: 364, y: 304, r: 12, tone: "alias" },
+    ],
+    edges: [
+      { from: "alias1", to: "identity", tone: "money" },
+      { from: "alias2", to: "identity", tone: "money" },
+      { from: "alias3", to: "identity", tone: "money" },
+      { from: "alias4", to: "identity", tone: "money" },
+      { from: "identity", to: "offender", tone: "control" },
+      { from: "imei", to: "offender", tone: "alias" },
+      { from: "upi", to: "offender", tone: "alias" },
+      { from: "phone", to: "offender", tone: "alias" },
+    ],
+    texts: [
+      { x: 86, y: 50, value: "ALIAS 01", className: "node-label" },
+      { x: 86, y: 99, value: "Imran S.", className: "node-label amount-sm" },
+      { x: 58, y: 142, value: "ALIAS 02", className: "node-label" },
+      { x: 58, y: 191, value: "Imraan S.", className: "node-label amount-sm" },
+      { x: 82, y: 244, value: "ALIAS 03", className: "node-label" },
+      { x: 82, y: 293, value: "I. Shaikh", className: "node-label amount-sm" },
+      { x: 146, y: 306, value: "ALIAS 04", className: "node-label" },
+      { x: 146, y: 354, value: "I. Shek", className: "node-label amount-sm" },
+      { x: 218, y: 162, value: "4 to 1", className: "amount" },
+      { x: 218, y: 239, value: "IDENTITY RESOLVED", className: "node-label hub" },
+      { x: 218, y: 252, value: "IMEI + UPI + phone", className: "node-label" },
+      { x: 348, y: 121, value: "KNOWN OFFENDER", className: "node-label lead" },
+      { x: 348, y: 212, value: "IMRAN SHEIKH", className: "node-label name" },
+      { x: 348, y: 226, value: "2024 to 2026 escalation", className: "node-label" },
+      { x: 430, y: 74, value: "IMEI 3517..1234", className: "node-label alias" },
+      { x: 430, y: 270, value: "UPI imran@axl", className: "node-label alias" },
+      { x: 364, y: 329, value: "Phone 9611..", className: "node-label alias" },
+    ],
+  },
+  {
+    id: "follow-money",
+    title: "Follow The Money",
+    ariaLabel:
+      "Money-trail view where victim loss moves through a bridge account and mule pool, with freezable funds and a bridge network highlighted.",
+    caption:
+      "Time-ordered layering highlights one bridge account across scam types and isolates Rs 6.2L that can still be frozen.",
+    nodes: [
+      { id: "victim", x: 54, y: 190, r: 15, tone: "money" },
+      { id: "layer1", x: 132, y: 110, r: 13, tone: "money", pulseClass: "n2" },
+      { id: "layer2", x: 132, y: 270, r: 13, tone: "money", pulseClass: "n3" },
+      { id: "bridge", x: 216, y: 190, r: 22, tone: "hub", pulseClass: "n4" },
+      { id: "mule1", x: 302, y: 94, r: 12, tone: "money", pulseClass: "n5" },
+      { id: "mule2", x: 314, y: 190, r: 12, tone: "money", pulseClass: "n6" },
+      { id: "mule3", x: 302, y: 286, r: 12, tone: "money" },
+      { id: "operator", x: 390, y: 190, r: 30, tone: "leader", halo: true },
+      { id: "cashout", x: 452, y: 98, r: 13, tone: "alias" },
+      { id: "wallet", x: 452, y: 290, r: 13, tone: "alias" },
+    ],
+    edges: [
+      { from: "victim", to: "layer1", tone: "money" },
+      { from: "victim", to: "layer2", tone: "money" },
+      { from: "layer1", to: "bridge", tone: "money" },
+      { from: "layer2", to: "bridge", tone: "money" },
+      { from: "bridge", to: "mule1", tone: "control" },
+      { from: "bridge", to: "mule2", tone: "control" },
+      { from: "bridge", to: "mule3", tone: "control" },
+      { from: "mule2", to: "operator", tone: "control" },
+      { from: "mule1", to: "cashout", tone: "alias" },
+      { from: "mule3", to: "wallet", tone: "alias" },
+      { from: "operator", to: "wallet", tone: "alias" },
+    ],
+    texts: [
+      { x: 54, y: 164, value: "DHARWAD", className: "node-label" },
+      { x: 54, y: 214, value: "Rs 28L LOSS", className: "node-label amount-sm" },
+      { x: 216, y: 153, value: "BRIDGE", className: "amount" },
+      { x: 216, y: 230, value: "A/C ..9001", className: "node-label hub" },
+      { x: 216, y: 244, value: "cross-scam node", className: "node-label" },
+      { x: 304, y: 168, value: "Rs 6.2L", className: "amount" },
+      { x: 304, y: 183, value: "FREEZABLE NOW", className: "node-label lead" },
+      { x: 390, y: 138, value: "HUB OPERATOR", className: "node-label lead" },
+      { x: 390, y: 230, value: "MONEY RING", className: "node-label name" },
+      { x: 390, y: 243, value: "11 mule accounts", className: "node-label" },
+      { x: 452, y: 76, value: "Cash-out leg", className: "node-label alias" },
+      { x: 452, y: 315, value: "USDT wallet", className: "node-label alias" },
+    ],
+  },
+  {
+    id: "surge",
+    title: "The Surge",
+    ariaLabel:
+      "Surge-detection view where weekly FIR spikes converge into one organized task-scam ring with shared device and IP infrastructure.",
+    caption:
+      "A 21-day burst of FIRs collapses into one coordinated community, with shared device and IP infrastructure revealing the controller.",
+    nodes: [
+      { id: "wk1", x: 68, y: 86, r: 13, tone: "money" },
+      { id: "wk2", x: 52, y: 190, r: 13, tone: "money", pulseClass: "n2" },
+      { id: "wk3", x: 68, y: 294, r: 13, tone: "money", pulseClass: "n3" },
+      { id: "cluster", x: 184, y: 190, r: 22, tone: "hub", pulseClass: "n4" },
+      { id: "member1", x: 248, y: 118, r: 11, tone: "money", pulseClass: "n5" },
+      { id: "member2", x: 276, y: 170, r: 11, tone: "money", pulseClass: "n6" },
+      { id: "member3", x: 270, y: 236, r: 11, tone: "money" },
+      { id: "member4", x: 236, y: 278, r: 11, tone: "money" },
+      { id: "member5", x: 212, y: 124, r: 11, tone: "money" },
+      { id: "controller", x: 350, y: 190, r: 30, tone: "leader", halo: true },
+      { id: "device", x: 430, y: 108, r: 13, tone: "alias" },
+      { id: "ip", x: 430, y: 272, r: 13, tone: "alias" },
+    ],
+    edges: [
+      { from: "wk1", to: "cluster", tone: "money" },
+      { from: "wk2", to: "cluster", tone: "money" },
+      { from: "wk3", to: "cluster", tone: "money" },
+      { from: "cluster", to: "member1", tone: "money" },
+      { from: "cluster", to: "member2", tone: "money" },
+      { from: "cluster", to: "member3", tone: "money" },
+      { from: "cluster", to: "member4", tone: "money" },
+      { from: "cluster", to: "member5", tone: "money" },
+      { from: "member1", to: "controller", tone: "control" },
+      { from: "member2", to: "controller", tone: "control" },
+      { from: "member3", to: "controller", tone: "control" },
+      { from: "member4", to: "controller", tone: "control" },
+      { from: "member5", to: "controller", tone: "control" },
+      { from: "cluster", to: "controller", tone: "control" },
+      { from: "device", to: "controller", tone: "alias" },
+      { from: "ip", to: "controller", tone: "alias" },
+    ],
+    texts: [
+      { x: 68, y: 63, value: "WEEK 1", className: "node-label" },
+      { x: 68, y: 110, value: "3 FIRs", className: "node-label amount-sm" },
+      { x: 52, y: 167, value: "WEEK 2", className: "node-label" },
+      { x: 52, y: 214, value: "7 FIRs", className: "node-label amount-sm" },
+      { x: 68, y: 271, value: "WEEK 3", className: "node-label" },
+      { x: 68, y: 317, value: "9 FIRs", className: "node-label amount-sm" },
+      { x: 184, y: 152, value: "19 FIRs", className: "amount" },
+      { x: 184, y: 229, value: "SURGE CLUSTER", className: "node-label hub" },
+      { x: 184, y: 242, value: "last 21 days", className: "node-label" },
+      { x: 350, y: 140, value: "RING CONTROLLER", className: "node-label lead" },
+      { x: 350, y: 230, value: "TASK-SCAM CELL", className: "node-label name" },
+      { x: 350, y: 243, value: "~7 operators", className: "node-label" },
+      { x: 430, y: 84, value: "Device pool", className: "node-label alias" },
+      { x: 430, y: 297, value: "IP 103.74.*", className: "node-label alias" },
+      { x: 252, y: 307, value: "Community core", className: "node-label alias" },
+    ],
+  },
+];
+
+function nodeStrokeColor(tone: LandingGraphNodeTone): string {
+  if (tone === "hub" || tone === "leader") {
+    return "#f7c948";
+  }
+  if (tone === "alias") {
+    return "#8b7cff";
+  }
+  return "#35e0ff";
+}
+
+function nodeStrokeWidth(tone: LandingGraphNodeTone): number {
+  if (tone === "leader") {
+    return 3;
+  }
+  if (tone === "hub") {
+    return 2.4;
+  }
+  return 2;
+}
+
+function nodeFillColor(node: LandingGraphNode): string {
+  if (node.fill) {
+    return node.fill;
+  }
+  return node.tone === "leader" ? "#141003" : "#0b1020";
+}
+
+function LandingScenarioSlideshow() {
+  const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setActiveSlideIndex((currentIndex) => (currentIndex + 1) % LANDING_HERO_SLIDES.length);
+    }, 15000);
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const activeSlide = LANDING_HERO_SLIDES[activeSlideIndex];
+  const nodeLookup = useMemo(
+    () => new Map(activeSlide.nodes.map((node) => [node.id, node])),
+    [activeSlide],
+  );
+
+  return (
+    <div className="hero-visual">
+      <div className="hero-slide-head">
+        <span className="hero-slide-kicker">
+          Scenario {String(activeSlideIndex + 1).padStart(2, "0")} /{" "}
+          {String(LANDING_HERO_SLIDES.length).padStart(2, "0")}
+        </span>
+        <strong>{activeSlide.title}</strong>
+      </div>
+
+      <svg
+        key={activeSlide.id}
+        className="hero-slide-svg"
+        viewBox="0 0 480 380"
+        role="img"
+        aria-label={activeSlide.ariaLabel}
+      >
+        {activeSlide.edges.map((edge, index) => {
+          const from = nodeLookup.get(edge.from);
+          const to = nodeLookup.get(edge.to);
+          if (!from || !to) {
+            return null;
+          }
+          return (
+            <line
+              key={`${activeSlide.id}-edge-${edge.from}-${edge.to}-${index}`}
+              className={`edge ${edge.tone}`}
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+            />
+          );
+        })}
+
+        {activeSlide.nodes.map((node) => (
+          <g key={`${activeSlide.id}-node-${node.id}`}>
+            {node.halo && <circle className="leader-halo" cx={node.x} cy={node.y} r={node.r} />}
+            <circle
+              className={`dot${node.pulseClass ? ` ${node.pulseClass}` : ""}`}
+              cx={node.x}
+              cy={node.y}
+              r={node.r}
+              fill={nodeFillColor(node)}
+              stroke={nodeStrokeColor(node.tone)}
+              strokeWidth={nodeStrokeWidth(node.tone)}
+            />
+          </g>
+        ))}
+
+        {activeSlide.texts.map((text, index) => (
+          <text
+            key={`${activeSlide.id}-text-${index}`}
+            className={text.className}
+            x={text.x}
+            y={text.y}
+            textAnchor={text.anchor ?? "middle"}
+          >
+            {text.value}
+          </text>
+        ))}
+      </svg>
+
+      <p className="hero-caption">
+        <span className="hero-caption-tag">Scenario</span>
+        {activeSlide.caption}
+      </p>
+
+      <div className="hero-slide-dots" aria-label="Landing scenario slideshow">
+        {LANDING_HERO_SLIDES.map((slide, index) => (
+          <button
+            key={slide.id}
+            className={`hero-slide-dot${index === activeSlideIndex ? " active" : ""}`}
+            type="button"
+            onClick={() => setActiveSlideIndex(index)}
+            aria-label={`Show ${slide.title}`}
+            aria-pressed={index === activeSlideIndex}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function App() {
@@ -148,8 +506,20 @@ function LandingPage() {
             review, built on a multi-agent retrieval engine.
           </p>
           <div className="hero-actions">
-            <button className="btn btn-primary btn-lg" type="button" onClick={() => navigate("/dashboard")}>
-              Start analysis
+            <button
+              className="hero-cta"
+              type="button"
+              onClick={() => navigate("/dashboard")}
+            >
+              <span>Start analysis</span>
+              <AssistantIcon name="chevron-right" className="hero-cta-arrow" />
+            </button>
+            <button
+              className="btn btn-ghost btn-lg hero-cta-secondary"
+              type="button"
+              onClick={() => navigate("/ingest")}
+            >
+              Explore scenarios
             </button>
           </div>
           <div className="hero-stats">
@@ -168,62 +538,7 @@ function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-visual">
-          <svg
-            viewBox="0 0 480 380"
-            role="img"
-            aria-label="Network insight: three district FIRs from Mysuru, Mangaluru and Hubballi funnel 54 lakh rupees into one HDFC hub account operated by accused Victor Hale, who uses three aliases."
-          >
-            {/* money-flow edges: victim FIRs -> hub */}
-            <line className="edge money" x1="66" y1="64" x2="196" y2="190" />
-            <line className="edge money" x1="50" y1="190" x2="196" y2="190" />
-            <line className="edge money" x1="66" y1="316" x2="196" y2="190" />
-            {/* control edge: hub -> ring leader */}
-            <line className="edge control" x1="196" y1="190" x2="352" y2="190" />
-            {/* alias edges: aliases -> ring leader */}
-            <line className="edge alias" x1="430" y1="92" x2="352" y2="190" />
-            <line className="edge alias" x1="430" y1="288" x2="352" y2="190" />
-
-            {/* pulsing halo on the ring leader */}
-            <circle className="leader-halo" cx="352" cy="190" r="30" />
-
-            {/* nodes */}
-            <circle className="dot" cx="66" cy="64" r="15" fill="#0b1020" stroke="#35e0ff" strokeWidth="2" />
-            <circle className="dot n2" cx="50" cy="190" r="15" fill="#0b1020" stroke="#35e0ff" strokeWidth="2" />
-            <circle className="dot n3" cx="66" cy="316" r="15" fill="#0b1020" stroke="#35e0ff" strokeWidth="2" />
-            <circle className="dot n4" cx="196" cy="190" r="22" fill="#0b1020" stroke="#f7c948" strokeWidth="2.4" />
-            <circle className="dot n5" cx="430" cy="92" r="14" fill="#0b1020" stroke="#8b7cff" strokeWidth="2" />
-            <circle className="dot n6" cx="430" cy="288" r="14" fill="#0b1020" stroke="#8b7cff" strokeWidth="2" />
-            <circle className="dot" cx="352" cy="190" r="30" fill="#141003" stroke="#f7c948" strokeWidth="3" />
-
-            {/* FIR labels */}
-            <text className="node-label" x="66" y="36" textAnchor="middle">MYSURU</text>
-            <text className="node-label amount-sm" x="66" y="92" textAnchor="middle">₹21L</text>
-            <text className="node-label" x="50" y="162" textAnchor="middle">MANGALURU</text>
-            <text className="node-label amount-sm" x="50" y="220" textAnchor="middle">₹18L</text>
-            <text className="node-label" x="66" y="288" textAnchor="middle">HUBBALLI</text>
-            <text className="node-label amount-sm" x="66" y="344" textAnchor="middle">₹15L</text>
-
-            {/* hub labels */}
-            <text className="amount" x="196" y="150" textAnchor="middle">₹54L</text>
-            <text className="node-label hub" x="196" y="226" textAnchor="middle">AGGREGATION HUB</text>
-            <text className="node-label" x="196" y="239" textAnchor="middle">HDFC ••0001</text>
-
-            {/* ring leader labels */}
-            <text className="node-label lead" x="352" y="140" textAnchor="middle">RING LEADER</text>
-            <text className="node-label name" x="352" y="230" textAnchor="middle">VICTOR HALE</text>
-            <text className="node-label" x="352" y="243" textAnchor="middle">3 aliases · 3 districts</text>
-
-            {/* alias labels */}
-            <text className="node-label alias" x="424" y="70" textAnchor="middle">V. Hale</text>
-            <text className="node-label alias" x="424" y="316" textAnchor="middle">Viktor Hall</text>
-          </svg>
-          <p className="hero-caption">
-            <span className="hero-caption-tag">Example</span>
-            FIRs from Three different districts resolve to one HDFC hub account holding <strong>₹54L</strong>,
-            controlled by a single accused operating under <strong>3 aliases</strong>.
-          </p>
-        </div>
+        <LandingScenarioSlideshow />
       </div>
 
       <PoweredBy />
@@ -232,10 +547,10 @@ function LandingPage() {
 }
 
 const TECH_STACK: Array<{ name: string; note: string; logo: string }> = [
-  { name: "Zoho Catalyst", note: "Serverless · Stratus · QuickML", logo: "/logos/zoho.svg" },
-  { name: "Pinecone", note: "Vector search", logo: "/logos/pinecone.svg" },
+  { name: "Zoho Catalyst", note: "Serverless · Stratus · QuickML", logo: "/logos/catalyst-logo.svg" },
+  { name: "Pinecone", note: "Vector search", logo: "/logos/pinecone_new.svg" },
   { name: "Neo4j", note: "Entity graph", logo: "/logos/neo4j.svg" },
-  { name: "LangGraph", note: "Agent orchestration", logo: "/logos/langchain.svg" },
+  { name: "LangGraph", note: "Agent orchestration", logo: "/logos/langgraph-logo.svg" },
   { name: "FastAPI", note: "Backend API", logo: "/logos/fastapi.svg" },
   { name: "React", note: "Console UI", logo: "/logos/react.svg" },
 ];
@@ -253,61 +568,160 @@ function PoweredBy() {
         ))}
       </div>
       <p className="creator-tag">
-        Created by <strong>Team Radiant Rangers</strong> — Ankan Bera (
-        <a href="mailto:eklapothik54@gmail.com">eklapothik54@gmail.com</a>)
+        Created by <strong>Team Radiant Rangers</strong> — Ankan Bera
       </p>
     </div>
   );
 }
 
-function ConsoleLayout() {
+const SIDEBAR_COLLAPSED_KEY = "aegis.sidebar.collapsed";
+
+type NavIconName = "overview" | "ingest" | "assistant" | "admin";
+
+/** Small stroke-icon set for the sidebar nav links, shown always but especially load-bearing when collapsed. */
+function NavIcon({ name }: { name: NavIconName }) {
+  const common = {
+    width: 17,
+    height: 17,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  if (name === "overview") {
+    return (
+      <svg {...common}>
+        <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.2" />
+        <rect x="13" y="3.5" width="7.5" height="4.5" rx="1.2" />
+        <rect x="13" y="10.5" width="7.5" height="10" rx="1.2" />
+        <rect x="3.5" y="13.5" width="7.5" height="7" rx="1.2" />
+      </svg>
+    );
+  }
+  if (name === "ingest") {
+    return (
+      <svg {...common}>
+        <path d="M12 13V4" />
+        <polyline points="7.5 8.5 12 4 16.5 8.5" />
+        <path d="M4 14v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+      </svg>
+    );
+  }
+  if (name === "assistant") {
+    return (
+      <svg {...common}>
+        <path d="M4 5h16v11H9l-5 4z" />
+        <line x1="8" y1="9" x2="16" y2="9" />
+        <line x1="8" y1="12.5" x2="13" y2="12.5" />
+      </svg>
+    );
+  }
   return (
-    <div className="console-shell">
-      <aside className="sidebar contour">
-        <Link to="/" className="brand-block">
-          <img
-            className="brand-lockup-image"
-            src={aegisBrandImage}
-            alt="Aegis Crime Analytics Assistant"
-          />
+    <svg {...common}>
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function ConsoleLayout() {
+  const location = useLocation();
+  const isFlushRoute = location.pathname.startsWith("/assistant");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    try {
+      return JSON.parse(window.localStorage.getItem(SIDEBAR_COLLAPSED_KEY) ?? "false") === true;
+    } catch {
+      return false;
+    }
+  });
+  // Below this width the sidebar becomes a horizontal top bar (see index.css) where a
+  // narrow icon-only rail doesn't apply -- ignore the stored preference there rather than
+  // stripping nav labels out of a layout that still needs them.
+  const [isNarrowViewport, setIsNarrowViewport] = useState(
+    () => window.matchMedia("(max-width: 1080px)").matches,
+  );
+
+  useEffect(() => {
+    window.localStorage.setItem(SIDEBAR_COLLAPSED_KEY, JSON.stringify(sidebarCollapsed));
+  }, [sidebarCollapsed]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1080px)");
+    const handler = (event: MediaQueryListEvent) => setIsNarrowViewport(event.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const collapsed = sidebarCollapsed && !isNarrowViewport;
+
+  return (
+    <div className={`console-shell${collapsed ? " sidebar-collapsed" : ""}`}>
+      <aside className={`sidebar contour${collapsed ? " collapsed" : ""}`}>
+        <Link to="/" className="brand-block" title="Aegis Crime Analytics Assistant">
+          {collapsed ? (
+            <img className="brand-mark" src={aegisLogo} alt="Aegis" />
+          ) : (
+            <img
+              className="brand-lockup-image"
+              src={aegisBrandImage}
+              alt="Aegis Crime Analytics Assistant"
+            />
+          )}
         </Link>
         <nav className="sidebar-nav" aria-label="Main navigation">
           <NavLink
             to="/dashboard"
             className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+            title="Overview"
           >
-            Overview
+            <NavIcon name="overview" />
+            {!collapsed && <span>Overview</span>}
           </NavLink>
           <NavLink
             to="/ingest"
             className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+            title="Ingest"
           >
-            Ingest
+            <NavIcon name="ingest" />
+            {!collapsed && <span>Ingest</span>}
           </NavLink>
           <NavLink
             to="/assistant"
             className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+            title="Assistant"
           >
-            Assistant
+            <NavIcon name="assistant" />
+            {!collapsed && <span>Assistant</span>}
           </NavLink>
+        </nav>
+        <div className="sidebar-spacer" />
+        <nav className="sidebar-nav sidebar-nav-bottom" aria-label="Settings navigation">
           <NavLink
             to="/admin"
             className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+            title="Admin"
           >
-            Admin
+            <NavIcon name="admin" />
+            {!collapsed && <span>Admin</span>}
           </NavLink>
         </nav>
-        <div className="sidebar-foot">
-          <strong>
-            {FIXED_DEMO_USER.rank} {FIXED_DEMO_USER.name}
-          </strong>
-          <span>
-            {FIXED_DEMO_USER.station} | {FIXED_DEMO_USER.kgid}
-          </span>
-        </div>
+        {!isNarrowViewport && (
+          <button
+            type="button"
+            className="sidebar-collapse-toggle"
+            onClick={() => setSidebarCollapsed((current) => !current)}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <AssistantIcon name={collapsed ? "chevron-right" : "chevron-left"} />
+          </button>
+        )}
       </aside>
       <main className="main-panel">
-        <Outlet />
+        <div className={`main-content${isFlushRoute ? " flush" : ""}`}>
+          <Outlet />
+        </div>
       </main>
     </div>
   );
@@ -416,20 +830,23 @@ function DashboardPage() {
   return (
     <div className="page-wrap">
       <header className="page-head">
-        <p className="kicker">Overview</p>
-        <h2>Overview</h2>
-        <p className="page-subtitle">
-          Move from case documents to a connected intelligence picture. The workflow runs in four
-          steps: ingest, review, investigate, and configure.
-        </p>
-        <p className="demo-officer-note">
-          Demo officer identity:{" "}
-          <strong>
-            {FIXED_DEMO_USER.rank} {FIXED_DEMO_USER.name}
-          </strong>{" "}
-          · {FIXED_DEMO_USER.station} · {FIXED_DEMO_USER.kgid}. All uploads and assistant sessions
-          are attributed to this sample officer.
-        </p>
+        <div className="page-head-copy">
+          <p className="kicker">Overview</p>
+          <h2>Overview</h2>
+          <p className="page-subtitle">
+            Move from case documents to a connected intelligence picture. The workflow runs in four
+            steps: ingest, review, investigate, and configure.
+          </p>
+          <p className="demo-officer-note">
+            Demo officer identity:{" "}
+            <strong>
+              {FIXED_DEMO_USER.rank} {FIXED_DEMO_USER.name}
+            </strong>{" "}
+            · {FIXED_DEMO_USER.station} · {FIXED_DEMO_USER.kgid}. All uploads and assistant sessions
+            are attributed to this sample officer.
+          </p>
+        </div>
+        <UserProfileMenu />
       </header>
 
       <section className="guide-steps">
@@ -601,11 +1018,21 @@ function IngestPage() {
     };
   }, [runId]);
 
+  // Both effects below depend on [runId] only, not on `run`. Including `run` caused
+  // a reconnect/reset storm: every incoming message called setRun(), which re-ran
+  // the effects, which tore down and reopened the socket / interval, which
+  // immediately fetched again and called setRun() again -- observed as a new WS
+  // connection roughly every 200-300ms instead of the intended handful-of-seconds
+  // cadence. Terminal status is instead handled by each effect closing/clearing
+  // itself once a terminal payload arrives (not by gating on mount), since gating
+  // on a stale `run` left over from a *previous* run_id would otherwise skip
+  // attaching updates entirely for the next run in the same page session.
   useEffect(() => {
-    if (!runId || (run && TERMINAL_PIPELINE_STATUSES.has(run.status))) {
+    if (!runId) {
       return;
     }
 
+    let closedByTerminalStatus = false;
     const ws = new WebSocket(buildPipelineWebSocketUrl(runId));
     ws.onmessage = (event) => {
       try {
@@ -614,36 +1041,47 @@ function IngestPage() {
           return;
         }
         setRun(payload);
+        if (payload.status && TERMINAL_PIPELINE_STATUSES.has(payload.status)) {
+          closedByTerminalStatus = true;
+          ws.close();
+        }
       } catch {
         setError("Failed to parse live pipeline update.");
       }
     };
     ws.onerror = () => {
-      setError("Live pipeline socket disconnected. Using status polling fallback.");
+      if (!closedByTerminalStatus) {
+        setError("Live pipeline socket disconnected. Using status polling fallback.");
+      }
     };
 
     return () => {
       ws.close();
     };
-  }, [runId, run]);
+  }, [runId]);
 
   useEffect(() => {
-    if (!runId || (run && TERMINAL_PIPELINE_STATUSES.has(run.status))) {
+    if (!runId) {
       return;
     }
+    // Backstop only -- the WebSocket above is push-driven and carries most updates,
+    // so this can run infrequently without hurting perceived responsiveness.
     const timer = window.setInterval(() => {
       void getPipelineStatus(runId)
         .then((status) => {
           setRun(status);
+          if (status.status && TERMINAL_PIPELINE_STATUSES.has(status.status)) {
+            window.clearInterval(timer);
+          }
         })
         .catch(() => {
           setError("Polling pipeline status failed.");
         });
-    }, 5000);
+    }, STATUS_POLL_INTERVAL_MS);
     return () => {
       window.clearInterval(timer);
     };
-  }, [runId, run]);
+  }, [runId]);
 
   useEffect(() => {
     if (!runId || !run || run.status !== "REVIEW_PENDING") {
@@ -851,12 +1289,15 @@ function IngestPage() {
   return (
     <div className="page-wrap">
       <header className="page-head">
-        <p className="kicker">Ingestion</p>
-        <h2>Data ingestion</h2>
-        <p className="page-subtitle">
-          Select a prepared scenario to stage its FIR, then run the ingestion pipeline and monitor
-          the current run.
-        </p>
+        <div className="page-head-copy">
+          <p className="kicker">Ingestion</p>
+          <h2>Data ingestion</h2>
+          <p className="page-subtitle">
+            Select a prepared scenario to stage its FIR, then run the ingestion pipeline and monitor
+            the current run.
+          </p>
+        </div>
+        <UserProfileMenu />
       </header>
 
       {notice && <p className="alert alert-ok">{notice}</p>}
@@ -963,7 +1404,7 @@ function IngestPage() {
           )}
 
           <p className="muted">
-            {draftFiles.length} files staged | {(totalUploadBytes / (1024 * 1024)).toFixed(2)} MB total
+            {draftFiles.length} files staged | {formatFileSize(totalUploadBytes)} total
           </p>
 
           <ul className="file-list">
@@ -971,7 +1412,7 @@ function IngestPage() {
               <li key={entry.id} className="file-row">
                 <div className="file-meta">
                   <strong>{entry.file.name}</strong>
-                  <span>{(entry.file.size / (1024 * 1024)).toFixed(2)} MB</span>
+                  <span>{formatFileSize(entry.file.size)}</span>
                 </div>
                 <select
                   value={entry.fileType}
@@ -1025,9 +1466,11 @@ function IngestPage() {
               {run.error_message && <p className="text-danger">{run.error_message}</p>}
               <p>Updated: {formatDate(run.updated_at)}</p>
 
-              {run.files_progress && Object.keys(run.files_progress).length > 0 && (
+              {run.files_progress && Object.keys(run.files_progress).filter((k) => k !== "_meta").length > 0 && (
                 <ul className="simple-list compact">
-                  {Object.entries(run.files_progress).map(([fileName, progress]) => (
+                  {Object.entries(run.files_progress)
+                    .filter(([fileName]) => fileName !== "_meta")
+                    .map(([fileName, progress]) => (
                     <li key={fileName}>
                       <strong>{fileName}</strong>
                       <span>{progress.stage_label || progress.stage || progress.status_label || "Pending"}</span>
@@ -1078,6 +1521,137 @@ function IngestPage() {
             </div>
           ) : (
             <p className="muted">Loading findings summary...</p>
+          )}
+
+          {findings && (
+            <div className="findings-detail">
+              {findings.files.length > 0 && (
+                <div className="findings-section">
+                  <h4>Documents processed</h4>
+                  <ul className="simple-list compact">
+                    {findings.files.map((f) => (
+                      <li key={f.filename}>
+                        <strong>{f.filename}</strong>
+                        <span>{f.doc_type_label}: {f.summary}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {findings.entities.people.length > 0 && (
+                <div className="findings-section">
+                  <h4>People ({findings.entities.people.length})</h4>
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Role</th>
+                          <th>Source file</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {findings.entities.people.map((p, i) => (
+                          <tr key={i}>
+                            <td>{p.name}</td>
+                            <td>{p.role}</td>
+                            <td className="mono">{p.file}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {(findings.entities.bank_accounts.length > 0 ||
+                findings.entities.upi_handles.length > 0 ||
+                findings.entities.phone_numbers.length > 0 ||
+                findings.entities.devices.length > 0) && (
+                <div className="findings-section">
+                  <h4>Financial &amp; device identifiers</h4>
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Type</th>
+                          <th>Identifier</th>
+                          <th>Detail</th>
+                          <th>Source file</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {findings.entities.bank_accounts.map((a, i) => (
+                          <tr key={`acc-${i}`}>
+                            <td>Bank account</td>
+                            <td className="mono">{a.account_number}</td>
+                            <td>{[a.holder_name, a.bank_name].filter(Boolean).join(" · ") || "—"}</td>
+                            <td className="mono">{a.file}</td>
+                          </tr>
+                        ))}
+                        {findings.entities.upi_handles.map((u, i) => (
+                          <tr key={`upi-${i}`}>
+                            <td>UPI</td>
+                            <td className="mono">{u.vpa}</td>
+                            <td>{u.holder_name || "—"}</td>
+                            <td className="mono">{u.file}</td>
+                          </tr>
+                        ))}
+                        {findings.entities.phone_numbers.map((p, i) => (
+                          <tr key={`ph-${i}`}>
+                            <td>Phone</td>
+                            <td className="mono">{p.number}</td>
+                            <td>{p.holder_name || "—"}</td>
+                            <td className="mono">{p.file}</td>
+                          </tr>
+                        ))}
+                        {findings.entities.devices.map((d, i) => (
+                          <tr key={`dev-${i}`}>
+                            <td>Device (IMEI)</td>
+                            <td className="mono">{d.imei}</td>
+                            <td>—</td>
+                            <td className="mono">{d.file}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {findings.transactions.length > 0 && (
+                <div className="findings-section">
+                  <h4>Transactions ({findings.transactions.length})</h4>
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>From</th>
+                          <th>To</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <th>Mode</th>
+                          <th>Source file</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {findings.transactions.map((t, i) => (
+                          <tr key={i}>
+                            <td className="mono">{t.from}</td>
+                            <td className="mono">{t.to}</td>
+                            <td>₹{Number(t.amount).toLocaleString("en-IN")}</td>
+                            <td>{formatDate(t.date ?? undefined)}</td>
+                            <td>{t.mode || "—"}</td>
+                            <td className="mono">{t.file}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           {reviewItems.length > 0 && (
@@ -1260,12 +1834,15 @@ function AdminPage() {
   return (
     <div className="page-wrap">
       <header className="page-head">
-        <p className="kicker">Configuration</p>
-        <h2>Admin</h2>
-        <p className="page-subtitle">
-          Set the entity review threshold and inspect how each FIR, IR and evidence schema maps
-          extracted entities into SQL tables and graph objects.
-        </p>
+        <div className="page-head-copy">
+          <p className="kicker">Configuration</p>
+          <h2>Admin</h2>
+          <p className="page-subtitle">
+            Set the entity review threshold and inspect how each FIR, IR and evidence schema maps
+            extracted entities into SQL tables and graph objects.
+          </p>
+        </div>
+        <UserProfileMenu />
       </header>
       {notice && <p className="alert alert-ok">{notice}</p>}
       {error && <p className="alert alert-danger">{error}</p>}
@@ -1440,440 +2017,6 @@ function AdminPage() {
           </div>
         )}
       </section>
-    </div>
-  );
-}
-
-const TOOL_LABELS: Record<ToolKind, string> = {
-  reason: "Reasoning",
-  neo4j: "Neo4j",
-  pinecone: "Pinecone",
-  sql: "SQL",
-  stratus: "Stratus",
-};
-
-function AssistantGraphView({ graph }: { graph: AssistantGraph }) {
-  function nodeFor(id: string) {
-    return graph.nodes.find((node) => node.id === id);
-  }
-
-  return (
-    <div className="assistant-graph-card">
-      <svg viewBox={`0 0 ${graph.width} ${graph.height}`} role="img" aria-label={graph.caption || "Assistant graph"}>
-        {graph.edges.map((edge, index) => {
-          const from = nodeFor(edge.from);
-          const to = nodeFor(edge.to);
-          if (!from || !to) {
-            return null;
-          }
-          return (
-            <line
-              key={`${edge.from}-${edge.to}-${index}`}
-              className={`assistant-edge ${edge.kind}`}
-              x1={from.x}
-              y1={from.y}
-              x2={to.x}
-              y2={to.y}
-            />
-          );
-        })}
-        {graph.nodes.map((node) => (
-          <g key={node.id} className={`assistant-node ${node.kind}`}>
-            {node.kind === "leader" && <circle className="assistant-node-halo" cx={node.x} cy={node.y} r="23" />}
-            <circle cx={node.x} cy={node.y} r={node.kind === "leader" ? 23 : 17} />
-            <text x={node.x} y={node.y + 34} textAnchor="middle">
-              {node.label}
-            </text>
-            {node.sub && (
-              <text className="node-sub" x={node.x} y={node.y + 48} textAnchor="middle">
-                {node.sub}
-              </text>
-            )}
-          </g>
-        ))}
-      </svg>
-      {graph.caption && <p>{graph.caption}</p>}
-    </div>
-  );
-}
-
-function AssistantResponseView({ response }: { response: AssistantResponse }) {
-  return (
-    <div className="assistant-response">
-      <div className="agent-trace">
-        <div className="trace-title">Agent reasoning</div>
-        {response.steps.map((step, index) => (
-          <article key={step.id} className={`trace-step ${step.kind}`}>
-            <span className="trace-step-index">{String(index + 1).padStart(2, "0")}</span>
-            <div>
-              <header>
-                <span>{TOOL_LABELS[step.kind]}</span>
-                <strong>{step.title}</strong>
-              </header>
-              {step.detail && <code>{step.detail}</code>}
-              {step.output && <p>{step.output}</p>}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <div className="assistant-answer">
-        {response.answer.split("\n\n").map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </div>
-
-      {response.graph && <AssistantGraphView graph={response.graph} />}
-
-      {response.citations && response.citations.length > 0 && (
-        <div className="citation-panel">
-          <div className="trace-title">Cited sources</div>
-          {response.citations.map((citation, index) => (
-            <a key={citation.id} className="citation-card" href={citation.href} target="_blank" rel="noreferrer">
-              <span>[{index + 1}] {citation.label}</span>
-              <code>{citation.source}</code>
-              {citation.snippet && <small>{citation.snippet}</small>}
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function buildSeedHistory(scenario: DemoScenario): ChatMessage[] {
-  const seedPrompt = scenario.prompts[0];
-  const seeded = getScenarioResponse(scenario.id);
-  const stamp = nowLabel();
-  const intro: ChatMessage = {
-    id: makeId("assistant"),
-    role: "assistant",
-    at: stamp,
-    content: `Session ready for ${scenario.shortTitle}. Case context is attached — ask a question or use a prompt below.`,
-  };
-  if (!seedPrompt || !seeded) {
-    return [intro];
-  }
-  return [
-    intro,
-    {
-      id: makeId("user"),
-      role: "user",
-      at: stamp,
-      content: seedPrompt.prompt,
-    },
-    {
-      id: makeId("assistant"),
-      role: "assistant",
-      at: stamp,
-      content: seeded.answer,
-      response: seeded,
-    },
-  ];
-}
-
-function AssistantPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [caseList, setCaseList] = useState<CaseSummary[]>([]);
-  const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
-  const [selectedCaseDetail, setSelectedCaseDetail] = useState<CaseDetail | null>(null);
-  const [activeScenarioId, setActiveScenarioId] = useState<string>(DEMO_SCENARIOS[0]?.id ?? "");
-  const [messages, setMessages] = useState<ChatMessage[]>(() =>
-    DEMO_SCENARIOS[0] ? buildSeedHistory(DEMO_SCENARIOS[0]) : [],
-  );
-  const [input, setInput] = useState<string>("");
-  const [activePrompt, setActivePrompt] = useState<ScenarioPrompt | null>(
-    () => DEMO_SCENARIOS[0]?.prompts[0] ?? null,
-  );
-  const [busy, setBusy] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
-
-  const activeScenario = useMemo(
-    () => DEMO_SCENARIOS.find((scenario) => scenario.id === activeScenarioId) ?? null,
-    [activeScenarioId],
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    void listCases(200)
-      .then((cases) => {
-        if (cancelled) {
-          return;
-        }
-        setCaseList(cases);
-        const caseFromQuery = Number(searchParams.get("case"));
-        if (!Number.isNaN(caseFromQuery) && caseFromQuery > 0) {
-          setSelectedCaseId(caseFromQuery);
-          return;
-        }
-        if (cases.length > 0) {
-          setSelectedCaseId((current) => current ?? cases[0].case_master_id);
-        }
-      })
-      .catch((loadErr) => {
-        if (!cancelled) {
-          setError(loadErr instanceof Error ? loadErr.message : "Failed to load case list.");
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    const caseFromQuery = Number(searchParams.get("case"));
-    if (Number.isNaN(caseFromQuery) || caseFromQuery <= 0) {
-      return;
-    }
-    setSelectedCaseId((current) => (current === caseFromQuery ? current : caseFromQuery));
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (!selectedCaseId) {
-      setSelectedCaseDetail(null);
-      return;
-    }
-    let cancelled = false;
-    void getCase(selectedCaseId)
-      .then((detail) => {
-        if (!cancelled) {
-          setSelectedCaseDetail(detail);
-        }
-      })
-      .catch((loadErr) => {
-        if (!cancelled) {
-          setError(loadErr instanceof Error ? loadErr.message : "Failed to load selected case.");
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedCaseId]);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [messages, busy]);
-
-  function handleCaseSelect(caseId: number): void {
-    setSelectedCaseId(caseId);
-    setSearchParams({ case: String(caseId) });
-  }
-
-  function selectScenario(scenario: DemoScenario): void {
-    setActiveScenarioId(scenario.id);
-    setActivePrompt(scenario.prompts[0] ?? null);
-    setInput(scenario.prompts[0]?.prompt ?? "");
-    setMessages(buildSeedHistory(scenario));
-    setError(null);
-  }
-
-  function applyScenarioPrompt(prompt: ScenarioPrompt): void {
-    setActivePrompt(prompt);
-    setInput(prompt.prompt);
-  }
-
-  async function sendMessage(event: FormEvent<HTMLFormElement>): Promise<void> {
-    event.preventDefault();
-    const trimmed = input.trim();
-    if (!trimmed || busy) {
-      return;
-    }
-
-    const userMessage: ChatMessage = {
-      id: makeId("user"),
-      role: "user",
-      at: nowLabel(),
-      content: trimmed,
-    };
-    setMessages((current) => [...current, userMessage]);
-    setInput("");
-    setBusy(true);
-    setError(null);
-
-    try {
-      const response = await assistantClient.sendMessage({
-        caseDetails: selectedCaseDetail,
-        prompt: trimmed,
-        scenarioId: activeScenario?.id,
-        scenarioTitle: activeScenario?.title,
-      });
-      const assistantMessage: ChatMessage = {
-        id: makeId("assistant"),
-        role: "assistant",
-        at: nowLabel(),
-        content: response.answer,
-        response,
-      };
-      setMessages((current) => [...current, assistantMessage]);
-    } catch (sendErr) {
-      setError(sendErr instanceof Error ? sendErr.message : "Failed to generate assistant response.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  return (
-    <div className="page-wrap page-wrap-wide">
-      <header className="page-head">
-        <p className="kicker">Investigation</p>
-        <h2>Assistant</h2>
-        <p className="page-subtitle">
-          Select a scenario, then ask questions about the case. The assistant shows its tool calls,
-          reasoning, network graph, and cited sources.
-        </p>
-      </header>
-      {error && <p className="alert alert-danger">{error}</p>}
-
-      <section className="scenario-card-grid">
-        {DEMO_SCENARIOS.map((scenario, index) => (
-          <article
-            key={scenario.id}
-            className={`card scenario-card${activeScenarioId === scenario.id ? " active" : ""}`}
-          >
-            <span className="scenario-index">Scenario {String(index + 1).padStart(2, "0")}</span>
-            <h3>{scenario.shortTitle}</h3>
-            <p>{scenario.description}</p>
-            <button
-              className={activeScenarioId === scenario.id ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"}
-              type="button"
-              onClick={() => selectScenario(scenario)}
-            >
-              {activeScenarioId === scenario.id ? "Active session" : "Open session"}
-            </button>
-          </article>
-        ))}
-      </section>
-
-      <div className="assistant-layout">
-        <aside className="card panel assistant-rail">
-          <div className="section-headline">
-            <h3>Case context</h3>
-          </div>
-          <label className="stack-label">
-            Case
-            <select
-              value={selectedCaseId ?? ""}
-              onChange={(event) => handleCaseSelect(Number(event.target.value))}
-            >
-              {caseList.length === 0 && <option value="">No cases loaded</option>}
-              {caseList.map((caseItem) => (
-                <option key={caseItem.case_master_id} value={caseItem.case_master_id}>
-                  Case {caseItem.case_master_id} — {caseItem.crime_no || caseItem.case_no || "Unknown"}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          {selectedCaseDetail ? (
-            <div className="case-detail">
-              <p className="mono">ID {selectedCaseDetail.case_master_id}</p>
-              <p>
-                <span className="meta-label">Crime No</span>
-                {selectedCaseDetail.crime_no || "N/A"}
-              </p>
-              <p>
-                <span className="meta-label">Registered</span>
-                {formatDate(selectedCaseDetail.crime_registered_date)}
-              </p>
-              <p className="muted small">
-                {selectedCaseDetail.brief_facts || "No brief facts on file for this case."}
-              </p>
-            </div>
-          ) : (
-            <p className="muted small">Select a case to attach investigation context.</p>
-          )}
-
-          {activeScenario && (
-            <>
-              <div className="section-headline">
-                <h3>Suggested prompts</h3>
-              </div>
-              <div className="chip-wrap">
-                {activeScenario.prompts.map((prompt) => (
-                  <button
-                    key={prompt.id}
-                    className={`chip-button${activePrompt?.id === prompt.id ? " active" : ""}`}
-                    type="button"
-                    onClick={() => applyScenarioPrompt(prompt)}
-                  >
-                    {prompt.label}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </aside>
-
-        <section className="card panel chat-panel">
-          <div className="section-headline">
-            <div>
-              <h3>{activeScenario ? activeScenario.shortTitle : "Chat session"}</h3>
-              <p className="section-sub">
-                {messages.filter((m) => m.role === "user").length} officer messages ·{" "}
-                {messages.filter((m) => m.role === "assistant" && m.response).length} agent replies
-              </p>
-            </div>
-            <span className="status-pill neutral">Agent trace preview</span>
-          </div>
-
-          <div className="chat-window">
-            {messages.length === 0 ? (
-              <div className="chat-empty">
-                <strong>No conversation yet</strong>
-                <p>Select a scenario above to load a sample investigation thread.</p>
-              </div>
-            ) : (
-              messages.map((message) => (
-                <article
-                  key={message.id}
-                  className={`chat-bubble ${message.role === "assistant" ? "assistant" : "user"}`}
-                >
-                  <header>
-                    <span>{message.role === "assistant" ? "Assistant" : "Officer"}</span>
-                    {message.at && <time>{message.at}</time>}
-                  </header>
-                  {message.response ? (
-                    <AssistantResponseView response={message.response} />
-                  ) : (
-                    <p>{message.content}</p>
-                  )}
-                </article>
-              ))
-            )}
-            {busy && (
-              <article className="chat-bubble assistant thinking">
-                <header>
-                  <span>Assistant</span>
-                  <time>now</time>
-                </header>
-                <p className="thinking-line">Querying SQL · Neo4j · Pinecone…</p>
-              </article>
-            )}
-            <div ref={chatEndRef} />
-          </div>
-
-          <form className="chat-form" onSubmit={(event) => void sendMessage(event)}>
-            <label className="stack-label">
-              Message
-              <textarea
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                placeholder="Ask about timeline, money flow, alias links, or legal checklist."
-                rows={3}
-              />
-            </label>
-            <div className="action-row">
-              <button className="btn btn-primary" type="submit" disabled={busy || !input.trim()}>
-                {busy ? "Thinking…" : "Send"}
-              </button>
-              <button className="btn btn-ghost" type="button" onClick={() => setInput("")}>
-                Clear
-              </button>
-            </div>
-          </form>
-        </section>
-      </div>
     </div>
   );
 }

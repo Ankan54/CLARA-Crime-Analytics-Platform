@@ -91,7 +91,7 @@ LATERAL (
     group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
     target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
 
 -- -------------------------------------------------------------------------
 -- IR fields
@@ -125,7 +125,7 @@ LATERAL (
     group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
     target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
 
 -- -------------------------------------------------------------------------
 -- EVIDENCE_BANK_STATEMENT fields
@@ -161,7 +161,7 @@ LATERAL (
     group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
     target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
 
 -- -------------------------------------------------------------------------
 -- EVIDENCE_UPI_SCREENSHOT fields
@@ -190,7 +190,7 @@ LATERAL (
     group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
     target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
 
 -- -------------------------------------------------------------------------
 -- EVIDENCE_CHAT_SCREENSHOT fields
@@ -214,7 +214,7 @@ LATERAL (
     group_name, is_repeating_group, pole_entity_type, field_name, data_type, is_required,
     target_table, target_column, is_identifier, identifier_type, extraction_hint, display_order
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (schema_id, group_name, field_name) DO NOTHING;
 
 -- -------------------------------------------------------------------------
 -- Seed relationships
@@ -265,7 +265,7 @@ JOIN (
       ('EVIDENCE_CHAT_SCREENSHOT', 'ChatParticipant', 'MentionedUPI', 'MENTIONS', 'from_to', '{}', NULL)
 ) AS r(doc_type, from_group, to_group, relationship_type, direction, fixed_edge_properties, edge_fields)
   ON d.doc_type = r.doc_type
-ON CONFLICT DO NOTHING;
+ON CONFLICT (schema_id, from_group, to_group, relationship_type) DO NOTHING;
 
 INSERT INTO AppConfig(config_key, config_value, updated_by)
 VALUES ('entity_review_threshold', '0.80', 'seed')

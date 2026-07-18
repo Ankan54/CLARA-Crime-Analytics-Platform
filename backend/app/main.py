@@ -9,7 +9,17 @@ from sqlalchemy import text
 
 from .config import settings
 from .db import db_session
-from .routers import cases, demo_scenarios, internal, process, review, schema_admin, status, upload
+from .routers import (
+    assistant,
+    cases,
+    demo_scenarios,
+    internal,
+    process,
+    review,
+    schema_admin,
+    status,
+    upload,
+)
 
 
 logging.basicConfig(
@@ -59,15 +69,19 @@ def startup_check() -> None:
 
 @app.get("/healthz")
 def healthz() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "build_id": os.getenv("BUILD_ID", "unknown")}
 
 
 app.include_router(cases.router, prefix=settings.api_prefix)
 app.include_router(upload.router, prefix=settings.api_prefix)
 app.include_router(process.router, prefix=settings.api_prefix)
 app.include_router(demo_scenarios.router, prefix=settings.api_prefix)
+app.include_router(assistant.router, prefix=settings.api_prefix)
 app.include_router(schema_admin.router)
 app.include_router(review.router)
 app.include_router(status.router)
 app.include_router(internal.router)
+# No prefix: the frontend strips /api/v1 before dialling /ws/assistant/{run_id}
+# (buildAssistantWsUrl in assistantClient.ts), matching the /ws/pipeline convention.
+app.include_router(assistant.ws_router)
 

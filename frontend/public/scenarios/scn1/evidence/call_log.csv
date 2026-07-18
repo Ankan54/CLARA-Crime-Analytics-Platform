@@ -1,3 +1,0 @@
-timestamp,from,to,duration_sec,type
-2026-05-12T10:03:00,+919100000001,+91-VICTIM,2340,incoming
-2026-05-12T10:45:00,+91-VICTIM,+919100000001,120,outgoing

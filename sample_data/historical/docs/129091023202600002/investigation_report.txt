@@ -5,7 +5,7 @@ Crime No.        : 129091023202600002
 Case No.         : 202600002
 CaseMasterID     : 1000028
 Police Station   : Shivamogga CEN Police Station
-Report Date      : 2026-02-15
+Report Date      : 2026-06-02
 IO Officer       : Priya Shankar (EmployeeID: 5002)
 
 Status           : Case under investigation. Preliminary enquiry completed.

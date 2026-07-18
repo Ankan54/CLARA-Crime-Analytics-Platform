@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from ..config import settings
 from ..db import SessionLocal, get_db
 from ..services.pipeline_broadcast import subscribe, unsubscribe
+from ..services.run_watchdog import reap_stale_runs
 from ..services.stage_labels import annotate_run
 
 logger = logging.getLogger(__name__)
@@ -31,6 +32,7 @@ _RUN_STATUS_QUERY = """
 @router.get("/api/v1/pipeline-status/{run_id}")
 def get_pipeline_status(run_id: str, db: Session = Depends(get_db)) -> dict[str, object]:
     logger.info("get_pipeline_status run_id=%s", run_id)
+    reap_stale_runs(db, run_id=run_id)
     row = db.execute(text(_RUN_STATUS_QUERY), {"run_id": run_id}).mappings().first()
     if row is None:
         logger.warning("get_pipeline_status run not found run_id=%s", run_id)
@@ -57,6 +59,7 @@ def _fetch_run(run_id: str) -> dict[str, object] | None:
     logger.debug("status _fetch_run run_id=%s", run_id)
     db = SessionLocal()
     try:
+        reap_stale_runs(db, run_id=run_id)
         row = db.execute(text(_RUN_STATUS_QUERY), {"run_id": run_id}).mappings().first()
         return annotate_run(dict(row)) if row else None
     except Exception:

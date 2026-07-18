@@ -8,7 +8,7 @@ export interface ScenarioPrompt {
 
 export interface ScenarioDocument {
   name: string;
-  /** Path under public/ served at site root, or a Vite glob-resolved URL. */
+  /** Vite-resolved URL from src/assets/live_demo. */
   path: string;
   fileType: UploadFileType;
   label: string;
@@ -26,6 +26,23 @@ export interface DemoScenario {
   prompts: ScenarioPrompt[];
 }
 
+// Single source of truth: src/assets/live_demo (no public/scenarios copies).
+const assetUrls = import.meta.glob(
+  [
+    "../assets/live_demo/live_scn*/fir.txt",
+    "../assets/live_demo/live_scn*/investigation_report.txt",
+    "../assets/live_demo/evidence/**/*",
+  ],
+  { query: "?url", import: "default", eager: true },
+) as Record<string, string>;
+
+function asset(rel: string): string {
+  const key = `../assets/live_demo/${rel}`;
+  const url = assetUrls[key];
+  if (!url) throw new Error(`Missing scenario asset: ${rel}`);
+  return url;
+}
+
 export const DEMO_SCENARIOS: DemoScenario[] = [
   {
     id: "digital-arrest",
@@ -34,14 +51,13 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     description: "Cross-district digital arrest scam ring with fast money movement analysis.",
     ingestHook: "3 district FIRs → 1 HDFC hub account (₹54L in ~2 hours).",
     liveKey: "scn1",
-    crimeNo: "129011001202600001",
+    crimeNo: "129011001202690001",
     documents: [
-      { name: "fir.txt", path: "/scenarios/scn1/fir.txt", fileType: "fir", label: "FIR · Bengaluru CEN" },
-      { name: "investigation_report.txt", path: "/scenarios/scn1/investigation_report.txt", fileType: "ir", label: "IR · Investigation Report" },
-      { name: "call_log.csv", path: "/scenarios/scn1/evidence/call_log.csv", fileType: "evidence", label: "Evidence · Call Log" },
-      { name: "transaction_ledger.csv", path: "/scenarios/scn1/evidence/transaction_ledger.csv", fileType: "evidence", label: "Evidence · Transaction Ledger" },
-      { name: "messaging_screenshot_1.html", path: "/scenarios/scn1/evidence/messaging_screenshot_1.html", fileType: "evidence", label: "Evidence · Messaging Screenshot" },
-      { name: "README_EVIDENCE_GAP.txt", path: "/scenarios/scn1/evidence/README_EVIDENCE_GAP.txt", fileType: "evidence", label: "Evidence · Gap Analysis" },
+      { name: "fir.txt", path: asset("live_scn1/fir.txt"), fileType: "fir", label: "FIR · Bengaluru CEN" },
+      { name: "investigation_report.txt", path: asset("live_scn1/investigation_report.txt"), fileType: "ir", label: "IR · Investigation Report" },
+      { name: "call_log.csv", path: asset("evidence/scenario_1/evidence/call_log.csv"), fileType: "evidence", label: "Evidence · Call Log" },
+      { name: "transaction_ledger.csv", path: asset("evidence/scenario_1/evidence/transaction_ledger.csv"), fileType: "evidence", label: "Evidence · Transaction Ledger" },
+      { name: "messaging_screenshot_1.html", path: asset("evidence/scenario_1/evidence/messaging_screenshot_1.html"), fileType: "evidence", label: "Evidence · Messaging Screenshot" },
     ],
     prompts: [
       { id: "s1-timeline", label: "Build timeline", prompt: "Summarise this case and lay out the timeline of events and transfers." },
@@ -58,13 +74,13 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     description: "Alias resolution, repeat offender profiling, and escalation over time.",
     ingestHook: "One accused, three aliases — escalating ₹1.5L → ₹8L.",
     liveKey: "scn2",
-    crimeNo: "129011005202600001",
+    crimeNo: "129011005202690002",
     documents: [
-      { name: "fir.txt", path: "/scenarios/scn2/fir.txt", fileType: "fir", label: "FIR · repeat offender" },
-      { name: "investigation_report.txt", path: "/scenarios/scn2/investigation_report.txt", fileType: "ir", label: "IR · Investigation Report" },
-      { name: "bsa_63_certificate.txt", path: "/scenarios/scn2/evidence/bsa_63_certificate.txt", fileType: "evidence", label: "Evidence · BSA 63 Certificate" },
-      { name: "device_forensics.txt", path: "/scenarios/scn2/evidence/device_forensics.txt", fileType: "evidence", label: "Evidence · Device Forensics" },
-      { name: "messaging_screenshot_1.html", path: "/scenarios/scn2/evidence/messaging_screenshot_1.html", fileType: "evidence", label: "Evidence · Messaging Screenshot" },
+      { name: "fir.txt", path: asset("live_scn2/fir.txt"), fileType: "fir", label: "FIR · repeat offender" },
+      { name: "investigation_report.txt", path: asset("live_scn2/investigation_report.txt"), fileType: "ir", label: "IR · Investigation Report" },
+      { name: "bsa_63_certificate.txt", path: asset("evidence/scenario_2/evidence/bsa_63_certificate.txt"), fileType: "evidence", label: "Evidence · BSA 63 Certificate" },
+      { name: "device_forensics.txt", path: asset("evidence/scenario_2/evidence/device_forensics.txt"), fileType: "evidence", label: "Evidence · Device Forensics" },
+      { name: "messaging_screenshot_1.html", path: asset("evidence/scenario_2/evidence/messaging_screenshot_1.html"), fileType: "evidence", label: "Evidence · Messaging Screenshot" },
     ],
     prompts: [
       { id: "s2-known-accused", label: "Known accused check", prompt: "Do we already know this accused under other names or identifiers?" },
@@ -81,13 +97,13 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     description: "Layering analysis, bridge account detection, and PMLA readiness checks.",
     ingestHook: "Victim → bridge → 5 mules → crypto; ₹6.2L still freezable.",
     liveKey: "scn3",
-    crimeNo: "129191018202600001",
+    crimeNo: "129191018202690003",
     documents: [
-      { name: "fir.txt", path: "/scenarios/scn3/fir.txt", fileType: "fir", label: "FIR · money laundering" },
-      { name: "investigation_report.txt", path: "/scenarios/scn3/investigation_report.txt", fileType: "ir", label: "IR · Investigation Report" },
-      { name: "account_details.txt", path: "/scenarios/scn3/evidence/account_details.txt", fileType: "evidence", label: "Evidence · Account Details" },
-      { name: "bsa_63_certificate.txt", path: "/scenarios/scn3/evidence/bsa_63_certificate.txt", fileType: "evidence", label: "Evidence · BSA 63 Certificate" },
-      { name: "transaction_ledger.csv", path: "/scenarios/scn3/evidence/transaction_ledger.csv", fileType: "evidence", label: "Evidence · Transaction Ledger" },
+      { name: "fir.txt", path: asset("live_scn3/fir.txt"), fileType: "fir", label: "FIR · money laundering" },
+      { name: "investigation_report.txt", path: asset("live_scn3/investigation_report.txt"), fileType: "ir", label: "IR · Investigation Report" },
+      { name: "account_details.txt", path: asset("evidence/scenario_3/evidence/account_details.txt"), fileType: "evidence", label: "Evidence · Account Details" },
+      { name: "bsa_63_certificate.txt", path: asset("evidence/scenario_3/evidence/bsa_63_certificate.txt"), fileType: "evidence", label: "Evidence · BSA 63 Certificate" },
+      { name: "transaction_ledger.csv", path: asset("evidence/scenario_3/evidence/transaction_ledger.csv"), fileType: "evidence", label: "Evidence · Transaction Ledger" },
     ],
     prompts: [
       { id: "s3-trace", label: "Trace money", prompt: "Trace the money path end-to-end and highlight still-freezable funds." },
@@ -103,13 +119,13 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     description: "Emerging pattern detection, hotspot analysis, and ring takedown planning.",
     ingestHook: "14 micro-FIRs → 7 shared mules → 1 controller device.",
     liveKey: "scn4",
-    crimeNo: "129011002202600001",
+    crimeNo: "129011002202690004",
     documents: [
-      { name: "fir.txt", path: "/scenarios/scn4/fir.txt", fileType: "fir", label: "FIR · task-job scam" },
-      { name: "investigation_report.txt", path: "/scenarios/scn4/investigation_report.txt", fileType: "ir", label: "IR · Investigation Report" },
-      { name: "bsa_63_certificate.txt", path: "/scenarios/scn4/evidence/bsa_63_certificate.txt", fileType: "evidence", label: "Evidence · BSA 63 Certificate" },
-      { name: "device_pool.csv", path: "/scenarios/scn4/evidence/device_pool.csv", fileType: "evidence", label: "Evidence · Device Pool" },
-      { name: "messaging_screenshot_1.html", path: "/scenarios/scn4/evidence/messaging_screenshot_1.html", fileType: "evidence", label: "Evidence · Messaging Screenshot" },
+      { name: "fir.txt", path: asset("live_scn4/fir.txt"), fileType: "fir", label: "FIR · task-job scam" },
+      { name: "investigation_report.txt", path: asset("live_scn4/investigation_report.txt"), fileType: "ir", label: "IR · Investigation Report" },
+      { name: "bsa_63_certificate.txt", path: asset("evidence/scenario_4/evidence/bsa_63_certificate.txt"), fileType: "evidence", label: "Evidence · BSA 63 Certificate" },
+      { name: "device_pool.csv", path: asset("evidence/scenario_4/evidence/device_pool.csv"), fileType: "evidence", label: "Evidence · Device Pool" },
+      { name: "messaging_screenshot_1.html", path: asset("evidence/scenario_4/evidence/messaging_screenshot_1.html"), fileType: "evidence", label: "Evidence · Messaging Screenshot" },
     ],
     prompts: [
       { id: "s4-pattern", label: "Pattern alert", prompt: "Is this FIR part of an emerging scam pattern in the last few weeks?" },

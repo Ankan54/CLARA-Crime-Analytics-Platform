@@ -361,6 +361,28 @@ CREATE TABLE IF NOT EXISTS EXT_IPCSection (
     Title         TEXT
 );
 
+-- Bridges KSP-ER section identity to the legal layer's. ActSectionAssociation keys a
+-- charge as (ActCode='ITACT', SectionCode='66C'); EXT_LegalElement/EXT_Precedent key on
+-- SectionID='IT_66C'. Without this the legal chain (charge -> element -> evidence ->
+-- precedent) can't be walked in SQL at all. KSP-ER tables must stay byte-faithful to the
+-- ER diagram, so the bridge is an EXT_ table rather than a column on Section.
+CREATE TABLE IF NOT EXISTS EXT_SectionMap (
+    ActCode     TEXT NOT NULL,
+    SectionCode TEXT NOT NULL,
+    SectionID   TEXT NOT NULL,
+    PRIMARY KEY (ActCode, SectionCode)
+);
+
+CREATE INDEX IF NOT EXISTS idx_section_map_section_id ON EXT_SectionMap(SectionID);
+
+-- Which evidence types can satisfy a legal element -- i.e. what would actually close a
+-- gap the checklist flags.
+CREATE TABLE IF NOT EXISTS EXT_ElementSatisfiedBy (
+    ElementID      TEXT NOT NULL,
+    EvidenceTypeID TEXT NOT NULL,
+    PRIMARY KEY (ElementID, EvidenceTypeID)
+);
+
 -- ============================================================
 -- SPEC SECTION 4.2 TABLES
 -- ============================================================
@@ -460,7 +482,23 @@ CREATE TABLE IF NOT EXISTS Device (
     source_evidence_id   BIGINT REFERENCES Evidence(evidence_id),
     created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+-- CREATE TABLE IF NOT EXISTS is a no-op against a database that already has this table
+-- from before holder_entity_uid existed, so the column is added separately and
+-- idempotently -- this must run on every schema apply, not just a fresh database.
+ALTER TABLE Device ADD COLUMN IF NOT EXISTS holder_entity_uid UUID REFERENCES EntityMap(entity_uid);
 
+-- The normalized identifier is the join key that makes a live upload land on the SAME
+-- row (and therefore the same EntityMap entity_uid, and therefore the same Neo4j node)
+-- as pre-loaded historical data. Dedup is enforced in app code by SELECT-then-INSERT
+-- (processor.py::_write_object_row), which is racy -- two concurrent uploads of the same
+-- account would produce two rows, two entity_uids and two disconnected nodes, silently
+-- severing the planted cross-case links.
+--
+-- NOT created UNIQUE here: this file runs BEFORE the data reload deletes/dedupes
+-- Account/UPIHandle/PhoneNumber/Device, so a database with any pre-existing duplicate
+-- normalized values (e.g. leftover partial demo runs) would fail schema application
+-- entirely. migrate_sqlite_to_pg.py::_upgrade_unique_indexes upgrades these to UNIQUE
+-- AFTER the reload, once the data is guaranteed deduped.
 CREATE INDEX IF NOT EXISTS idx_device_imei_norm ON Device(imei_normalized);
 
 CREATE TABLE IF NOT EXISTS Account (
@@ -482,6 +520,7 @@ CREATE TABLE IF NOT EXISTS Account (
     created_at                  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- see the Device comment above: plain here, upgraded to UNIQUE post-reload.
 CREATE INDEX IF NOT EXISTS idx_account_number_norm ON Account(account_number_normalized);
 
 CREATE TABLE IF NOT EXISTS UPIHandle (
@@ -495,6 +534,7 @@ CREATE TABLE IF NOT EXISTS UPIHandle (
     created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- see the Device comment above: plain here, upgraded to UNIQUE post-reload.
 CREATE INDEX IF NOT EXISTS idx_upi_vpa_norm ON UPIHandle(vpa_normalized);
 
 CREATE TABLE IF NOT EXISTS PhoneNumber (
@@ -508,6 +548,7 @@ CREATE TABLE IF NOT EXISTS PhoneNumber (
     created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- see the Device comment above: plain here, upgraded to UNIQUE post-reload.
 CREATE INDEX IF NOT EXISTS idx_phone_number_norm ON PhoneNumber(number_normalized);
 
 CREATE TABLE IF NOT EXISTS Transaction (
@@ -516,6 +557,12 @@ CREATE TABLE IF NOT EXISTS Transaction (
     from_upi_id         BIGINT REFERENCES UPIHandle(upi_id),
     to_account_id       BIGINT REFERENCES Account(account_id),
     to_upi_id           BIGINT REFERENCES UPIHandle(upi_id),
+    -- A crypto cash-out's counterparty is a wallet address, not an account or a VPA.
+    -- Without somewhere to put it, the final hop of the money trail was silently
+    -- dropped: to_account_id stayed NULL and the trail dead-ended at the mule, losing
+    -- exactly the endpoint the "money left the jurisdiction" finding depends on.
+    -- Plain TEXT, no FK to EXT_Wallet: EXT_ tables are truncated/reloaded wholesale by
+    -- the migration and an FK would dictate its truncate order.
     amount              NUMERIC(18,2) NOT NULL,
     txn_timestamp       TIMESTAMPTZ NOT NULL,
     mode                TEXT,
@@ -524,9 +571,13 @@ CREATE TABLE IF NOT EXISTS Transaction (
     source_evidence_id  BIGINT REFERENCES Evidence(evidence_id),
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+-- Added separately, idempotently: see the Device.holder_entity_uid comment above for why
+-- CREATE TABLE IF NOT EXISTS can't add a column to a pre-existing table.
+ALTER TABLE Transaction ADD COLUMN IF NOT EXISTS to_wallet_address TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_transaction_utr_ref ON Transaction(utr_ref);
 CREATE INDEX IF NOT EXISTS idx_transaction_timestamp ON Transaction(txn_timestamp);
+CREATE INDEX IF NOT EXISTS idx_transaction_to_wallet ON Transaction(to_wallet_address);
 
 CREATE TABLE IF NOT EXISTS ReviewQueueItem (
     review_id                   BIGSERIAL PRIMARY KEY,
@@ -564,6 +615,19 @@ CREATE TABLE IF NOT EXISTS SchemaField (
 
 CREATE INDEX IF NOT EXISTS idx_schemafield_schema_group ON SchemaField(schema_id, group_name);
 
+-- One-time cleanup for DBs that already accumulated duplicate rows from re-running
+-- seed_schema_config.sql before this constraint existed (its ON CONFLICT DO NOTHING had
+-- no unique index to guard against, so every re-run re-inserted the full seed set).
+DELETE FROM SchemaField a
+USING SchemaField b
+WHERE a.field_id > b.field_id
+  AND a.schema_id = b.schema_id
+  AND a.group_name = b.group_name
+  AND a.field_name = b.field_name;
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_schemafield_natural
+    ON SchemaField(schema_id, group_name, field_name);
+
 CREATE TABLE IF NOT EXISTS SchemaRelationship (
     relationship_id            BIGSERIAL PRIMARY KEY,
     schema_id                  BIGINT NOT NULL REFERENCES SchemaDefinition(schema_id),
@@ -577,10 +641,77 @@ CREATE TABLE IF NOT EXISTS SchemaRelationship (
 
 CREATE INDEX IF NOT EXISTS idx_schemarel_schema ON SchemaRelationship(schema_id);
 
+-- Same duplicate-cleanup rationale as SchemaField above.
+DELETE FROM SchemaRelationship a
+USING SchemaRelationship b
+WHERE a.relationship_id > b.relationship_id
+  AND a.schema_id = b.schema_id
+  AND a.from_group = b.from_group
+  AND a.to_group = b.to_group
+  AND a.relationship_type = b.relationship_type;
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_schemarelationship_natural
+    ON SchemaRelationship(schema_id, from_group, to_group, relationship_type);
+
 CREATE TABLE IF NOT EXISTS AppConfig (
     config_key   TEXT PRIMARY KEY,
     config_value TEXT NOT NULL,
     updated_by   TEXT,
     updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- ============================================================
+-- TYPE-DRIFT CORRECTION
+--
+-- CREATE TABLE IF NOT EXISTS is a no-op against a table that already exists -- it does
+-- not retrofit column types either. The live database predates several date/timestamp
+-- columns above being declared TIMESTAMPTZ/DATE (they were TEXT from an earlier schema
+-- revision), so every CaseMaster date, ArrestSurrenderDate, ChargesheetDetails.CSDate,
+-- Employee's two date columns, and five EXT_*.observed_date/timestamp columns silently
+-- stayed TEXT no matter how many times the schema was "applied" -- confirmed live: this
+-- broke any date arithmetic/formatting query (to_char() on TEXT errors outright) and
+-- would have made every date column sort/compare lexicographically rather than
+-- chronologically.
+--
+-- ALTER COLUMN ... TYPE ... USING is safe to re-run: casting an already-correct
+-- TIMESTAMPTZ column to TIMESTAMPTZ is a no-op. This block is intentionally one place,
+-- not scattered per-table, so a future drift is easy to find and extend.
+-- ============================================================
+
+DO $$
+DECLARE
+    fix RECORD;
+BEGIN
+    FOR fix IN SELECT * FROM (VALUES
+        ('employee', 'employeedob', 'date'),
+        ('employee', 'appointmentdate', 'date'),
+        ('casemaster', 'crimeregistereddate', 'timestamptz'),
+        ('casemaster', 'incidentfromdate', 'timestamptz'),
+        ('casemaster', 'incidenttodate', 'timestamptz'),
+        ('casemaster', 'inforeceivedpsdate', 'timestamptz'),
+        ('arrestsurrender', 'arrestsurrenderdate', 'date'),
+        ('chargesheetdetails', 'csdate', 'timestamptz'),
+        ('ext_uses', 'observed_date', 'timestamptz'),
+        ('ext_mentions', 'observed_date', 'timestamptz'),
+        ('ext_accusedin', 'observed_date', 'timestamptz'),
+        ('ext_complainantin', 'observed_date', 'timestamptz'),
+        ('ext_subevent', 'timestamp', 'timestamptz'),
+        ('ext_subevent', 'observed_date', 'timestamptz')
+    ) AS t(table_name, column_name, target_type)
+    LOOP
+        IF EXISTS (
+            SELECT 1 FROM information_schema.columns c
+            WHERE c.table_schema = 'public' AND c.table_name = fix.table_name
+              AND c.column_name = fix.column_name AND c.data_type <> (
+                CASE fix.target_type WHEN 'timestamptz' THEN 'timestamp with time zone' ELSE fix.target_type END
+              )
+        ) THEN
+            EXECUTE format(
+                'ALTER TABLE %I ALTER COLUMN %I TYPE %s USING %I::%s',
+                fix.table_name, fix.column_name, fix.target_type, fix.column_name, fix.target_type
+            );
+            RAISE NOTICE 'type-drift fix: %.% -> %', fix.table_name, fix.column_name, fix.target_type;
+        END IF;
+    END LOOP;
+END $$;
 

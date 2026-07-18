@@ -9,3 +9,30 @@ zcatalyst-sdk>=1.4.0
 rapidfuzz>=3.9.0
 neo4j>=5.24.0
 pinecone>=5.0.0
+
+# Assistant (LangGraph agent over Postgres/Neo4j/Pinecone).
+#
+# All langchain/langgraph lines are capped <1.0.0 deliberately -- do not "upgrade" them,
+# and keep them in step with backend/requirements.txt and
+# catalyst_functions/ingest_processor/requirements.txt.
+# langchain-core>=1.0 depends on langchain-protocol, which needs typing-extensions>=4.13,
+# while zcatalyst-sdk 1.4.0 (newest release; checked) hard-pins typing-extensions
+# ~=4.12.1. The ranges never overlap and the resolver aborts the whole file on one
+# unresolvable line -- which, since Dockerfile.appsail installs ONLY this file, means the
+# image build fails outright rather than degrading. Capping <1.0 keeps langchain-protocol
+# out of the dependency graph entirely.
+langgraph>=0.2.0,<1.0.0
+langchain-core>=0.3.0,<1.0.0
+langchain-openai>=0.2.0,<1.0.0
+langchain-anthropic>=0.2.0,<1.0.0
+langchain-aws>=0.2.0,<1.0.0
+# boto3 for Bedrock (chat + Titan query embeddings). The "Catalyst strips botocore/data"
+# problem is specific to the function ZIP upload path; AppSail is a plain python:3.11-slim
+# image with a normal `uv pip install`, so the botocore data tree is complete here.
+boto3>=1.34.0
+
+# PDF export. xhtml2pdf, not WeasyPrint: pure Python with no GTK/Pango system
+# libraries, so it behaves identically in this image and on a Windows dev box.
+xhtml2pdf>=0.2.16
+jinja2>=3.1.0
+markdown>=3.6

@@ -1,0 +1,56 @@
+KARNATAKA STATE POLICE
+FIRST INFORMATION REPORT (FIR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Crime No.        : 129041012202600001
+Case No.         : 202600001
+Police Station   : Mangaluru Cyber Crime Police Station
+District         : Mangaluru
+Date Registered  : 2026-04-08
+Date of Offence  : 2026-04-03
+IO Officer       : Kavitha Reddy
+
+COMPLAINANT DETAILS
+-------------------
+Name             : Shanthi Iyengar
+Age              : 18 years
+Occupation       : MBA Student
+Address          : 
+
+ACCUSED DETAILS
+---------------
+  A1. Unknown (Age: -, Gender: -)
+
+SECTIONS CHARGED
+----------------
+Section 66D ITACT, Section 318 BNS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRIEF FACTS / COMPLAINT NARRATIVE
+FIR_SCN4_BASE_04
+DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
+--------------------------------------------------------
+  Bank Accounts  : INDP_ACC_BASE_04_78448
+  UPI VPAs       : baseline.task04@okicici
+
+CASE TIMELINE (SUB-EVENTS)
+------------------------------
+  2026-04-03T06:05  |  Instagram message about reel liking job
+  2026-04-04T06:05  |  first task completed, small payment
+  2026-04-05T06:05  |  money deposited to unlock premium tasks
+  2026-04-08T06:05  |  withdrawal refused
+  2026-04-08T06:05  |  FIR filed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CaseMasterID     : 1000027
+PoliceStationID  : 1012
+CaseCategoryID   : 1
+GravityOffenceID : 3
+CrimeHeadID      : 101
+CrimeSubHeadID   : 1013
+CaseStatusID     : 1
+CourtID          : 7004
+Lat/Long         : 12.887318, 74.873582
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Place, Date: Mangaluru, 2026-04-08
+Signature of Complainant: Shanthi Iyengar
+Signature of Recording Officer: Kavitha Reddy, Mangaluru Cyber Crime Police Station

@@ -15,7 +15,7 @@ from __future__ import annotations
 import logging
 import uuid
 
-from sqlalchemy import text
+from sqlalchemy import bindparam, text
 from sqlalchemy.orm import Session
 
 from ..demo_scenarios import SCENARIO_ALLOWLIST, get_crime_no
@@ -114,10 +114,10 @@ def prepare_scenario(db: Session, scenario_key: str, idempotency_key: str) -> di
             """
             INSERT INTO DemoResetOperation
                 (operation_id, scenario_key, idempotency_key, generation, cleanup_plan, status, created_at)
-            VALUES (:op_id, :key, :ikey, :gen, :plan::jsonb, 'RUNNING', NOW())
+            VALUES (:op_id, :key, :ikey, :gen, CAST(:plan AS jsonb), 'RUNNING', NOW())
             ON CONFLICT (scenario_key, idempotency_key)
             DO UPDATE SET operation_id = :op_id, generation = :gen,
-                          cleanup_plan = :plan::jsonb, status = 'RUNNING',
+                          cleanup_plan = CAST(:plan AS jsonb), status = 'RUNNING',
                           error_message = NULL, created_at = NOW(), completed_at = NULL
             """
         ),
@@ -136,6 +136,7 @@ def prepare_scenario(db: Session, scenario_key: str, idempotency_key: str) -> di
         _execute_cleanup(db, operation_id, scenario_key, crime_no, cleanup_plan)
     except Exception as exc:
         logger.exception("Reset saga failed scenario=%s op=%s", scenario_key, operation_id)
+        db.rollback()
         db.execute(
             text(
                 """
@@ -183,7 +184,7 @@ def _build_cleanup_plan(db: Session, scenario_key: str, crime_no: str) -> dict:
     """Snapshot IDs that need cleanup."""
     # Find case IDs by crime_no
     case_ids = [
-        row["CaseMasterID"]
+        row["casemasterid"]
         for row in db.execute(
             text("SELECT CaseMasterID FROM CaseMaster WHERE CrimeNo = :cno"),
             {"cno": crime_no},
@@ -293,46 +294,52 @@ def _execute_cleanup(db: Session, operation_id: str, scenario_key: str, crime_no
 
 
 def _cleanup_pinecone(pinecone_ids: list[str], run_ids: list[str]) -> int:
-    """Delete vectors from Pinecone. Returns count deleted."""
+    """Delete vectors from Pinecone. Returns count deleted.
+
+    This previously used a raw REST call gated on PINECONE_INDEX_HOST, an env
+    var nothing else in the codebase sets (_load_vector uses the pinecone SDK
+    with PINECONE_INDEX, an index *name*) -- so this silently no-op'd on every
+    reset (confirmed live: pinecone_deleted=0 across every DemoResetOperation).
+    It also filtered by metadata (`filter: {"run_id": ...}`), which Pinecone
+    serverless indexes don't support for delete at all -- would never have
+    worked even with the host configured. Fixed to use the SDK like the rest
+    of the codebase, and to enumerate ids via index.list(prefix=...) (chunk
+    ids are deterministically "demo::{run_id}::{filename}::{chunk_index}",
+    confirmed live) since serverless only supports delete-by-id.
+    """
     import os
-    import requests
 
     api_key = os.environ.get("PINECONE_API_KEY", "")
-    index_host = os.environ.get("PINECONE_INDEX_HOST", "")
-    if not api_key or not index_host:
+    if not api_key:
         logger.debug("Pinecone not configured, skipping vector cleanup")
         return 0
 
-    headers = {"Api-Key": api_key, "Content-Type": "application/json"}
+    try:
+        from pinecone import Pinecone
+
+        pc = Pinecone(api_key=api_key)
+        index = pc.Index(os.environ.get("PINECONE_INDEX", "ksp-crime-intel"))
+    except Exception:
+        logger.warning("Pinecone cleanup: could not init client", exc_info=True)
+        return 0
+
     deleted = 0
 
     if pinecone_ids:
-        for i in range(0, len(pinecone_ids), 100):
-            batch = pinecone_ids[i : i + 100]
-            try:
-                resp = requests.post(
-                    f"{index_host}/vectors/delete",
-                    headers=headers,
-                    json={"ids": batch},
-                    timeout=30,
-                )
-                if resp.ok:
-                    deleted += len(batch)
-            except Exception:
-                logger.warning("Pinecone batch delete failed batch_size=%d", len(batch), exc_info=True)
+        try:
+            index.delete(ids=list(pinecone_ids))
+            deleted += len(pinecone_ids)
+        except Exception:
+            logger.warning("Pinecone delete-by-id failed count=%d", len(pinecone_ids), exc_info=True)
 
     for rid in run_ids:
         try:
-            resp = requests.post(
-                f"{index_host}/vectors/delete",
-                headers=headers,
-                json={"filter": {"run_id": {"$eq": rid}}},
-                timeout=30,
-            )
-            if resp.ok:
-                deleted += 1
+            ids = [item.id for page in index.list(prefix=f"demo::{rid}::") for item in page.vectors]
+            if ids:
+                index.delete(ids=ids)
+                deleted += len(ids)
         except Exception:
-            logger.warning("Pinecone filter delete failed run_id=%s", rid, exc_info=True)
+            logger.warning("Pinecone list/delete failed run_id=%s", rid, exc_info=True)
 
     return deleted
 
@@ -356,14 +363,17 @@ def _cleanup_neo4j(case_ids: list[int], run_ids: list[str]) -> int:
         deleted = 0
         with driver.session() as session:
             if case_ids:
+                # _load_graph stamps n.case_id as an integer (RunParams.case_id: int) —
+                # matching against strings here would silently match nothing.
                 result = session.run(
                     "MATCH (n) WHERE n.case_id IN $case_ids DETACH DELETE n RETURN count(n) AS cnt",
-                    case_ids=[str(c) for c in case_ids],
+                    case_ids=[int(c) for c in case_ids],
                 )
                 deleted += result.single()["cnt"]
             for rid in run_ids:
+                # _load_graph stamps the property as n.run_id, not n.source_run_id.
                 result = session.run(
-                    "MATCH (n) WHERE n.source_run_id = $rid DETACH DELETE n RETURN count(n) AS cnt",
+                    "MATCH (n) WHERE n.run_id = $rid DETACH DELETE n RETURN count(n) AS cnt",
                     rid=rid,
                 )
                 deleted += result.single()["cnt"]
@@ -414,7 +424,14 @@ def _cleanup_stratus(prefixes: list[str]) -> int:
 
 
 def _cleanup_postgres(db: Session, case_ids: list[int], batch_ids: list[str], run_ids: list[str], scenario_key: str) -> int:
-    """Delete Postgres rows in FK order. Returns total rows deleted."""
+    """Delete Postgres rows in FK order. Returns total rows deleted.
+
+    Account/UPIHandle/PhoneNumber/Device are a deduplicated identifier pool that is
+    deliberately shared between historical (pre-loaded) and live cases (see
+    data_generation README "shared entity pool" + migrate_sqlite_to_pg.py, which loads
+    historical identifiers into these same tables) — a scenario reset must never delete
+    rows from them, only detach this case's evidence-provenance pointer.
+    """
     deleted = 0
 
     if run_ids:
@@ -432,47 +449,123 @@ def _cleanup_postgres(db: Session, case_ids: list[int], batch_ids: list[str], ru
         deleted += r.rowcount
 
     if batch_ids:
-        r = db.execute(text("DELETE FROM BatchUpload WHERE batch_id = ANY(:bids::uuid[])"), {"bids": batch_ids})
+        r = db.execute(
+            text("DELETE FROM BatchUpload WHERE batch_id IN :bids").bindparams(bindparam("bids", expanding=True)),
+            {"bids": batch_ids},
+        )
         deleted += r.rowcount
 
     if case_ids:
-        # Evidence, InvestigationReport, then entities referencing the case
-        r = db.execute(text("DELETE FROM Evidence WHERE case_id = ANY(:ids)"), {"ids": case_ids})
-        deleted += r.rowcount
+        evidence_ids = [
+            int(row["evidence_id"])
+            for row in db.execute(text("SELECT evidence_id FROM Evidence WHERE case_id = ANY(:ids)"), {"ids": case_ids}).mappings().all()
+        ]
+        accused_ids = [
+            int(row["accusedmasterid"])
+            for row in db.execute(text("SELECT AccusedMasterID FROM Accused WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids}).mappings().all()
+        ]
+        victim_ids = [
+            int(row["victimmasterid"])
+            for row in db.execute(text("SELECT VictimMasterID FROM Victim WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids}).mappings().all()
+        ]
+        complainant_ids = [
+            int(row["complainantid"])
+            for row in db.execute(text("SELECT ComplainantID FROM ComplainantDetails WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids}).mappings().all()
+        ]
+        report_ids = [
+            int(row["report_id"])
+            for row in db.execute(text("SELECT report_id FROM InvestigationReport WHERE case_id = ANY(:ids)"), {"ids": case_ids}).mappings().all()
+        ]
+
+        # Transaction rows are always freshly inserted per case (never deduped), so they're
+        # safe to hard-delete. They're the only thing still pointing at this case's Evidence
+        # via source_evidence_id, so they must go before Evidence.
+        if evidence_ids:
+            r = db.execute(text("DELETE FROM Transaction WHERE source_evidence_id = ANY(:eids)"), {"eids": evidence_ids})
+            deleted += r.rowcount
+
+            # Detach (never delete) the shared identifier pool's provenance pointer so the
+            # Evidence row can be removed without an FK violation.
+            for table in ("Account", "UPIHandle", "PhoneNumber", "Device"):
+                db.execute(
+                    text(f"UPDATE {table} SET source_evidence_id = NULL WHERE source_evidence_id = ANY(:eids)"),
+                    {"eids": evidence_ids},
+                )
+
+        # _write_object_row also stamps Account.linked_case_id (RESTRICT -> CaseMaster) the
+        # first time a case references that account; clear it too or CaseMaster delete fails.
+        db.execute(text("UPDATE Account SET linked_case_id = NULL WHERE linked_case_id = ANY(:ids)"), {"ids": case_ids})
+
+        # InvestigationReport and ActSectionAssociation reference CaseMaster directly.
         r = db.execute(text("DELETE FROM InvestigationReport WHERE case_id = ANY(:ids)"), {"ids": case_ids})
         deleted += r.rowcount
+        r = db.execute(text("DELETE FROM ActSectionAssociation WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+        r = db.execute(text("DELETE FROM ChargesheetDetails WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+        r = db.execute(text("DELETE FROM ArrestSurrender WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
 
-        # POLE tables (Account, UPIHandle, PhoneNumber, Device, Transaction) reference case
-        for table in ("Transaction", "Account", "UPIHandle", "PhoneNumber", "Device"):
-            try:
-                r = db.execute(text(f"DELETE FROM {table} WHERE case_id = ANY(:ids)"), {"ids": case_ids})
-                deleted += r.rowcount
-            except Exception:
-                logger.debug("Table %s cleanup skipped (may not exist or no case_id column)", table)
-
-        # Accused references case
-        try:
-            r = db.execute(text("DELETE FROM Accused WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        # Historical extension tables are seeded too; scope deletes to this demo case set
+        # and person ids before deleting parent rows.
+        for table in ("EXT_Uses", "EXT_Mentions", "EXT_SubEvent"):
+            r = db.execute(text(f"DELETE FROM {table} WHERE source_caseid = ANY(:ids)"), {"ids": case_ids})
             deleted += r.rowcount
-        except Exception:
-            pass
+        r = db.execute(text("DELETE FROM EXT_Mentions WHERE case_master_id = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+        r = db.execute(text("DELETE FROM EXT_CaseGeo WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+        if accused_ids:
+            r = db.execute(text("DELETE FROM EXT_AccusedDetail WHERE AccusedMasterID = ANY(:aids)"), {"aids": accused_ids})
+            deleted += r.rowcount
+            r = db.execute(text("DELETE FROM EXT_AccusedIn WHERE AccusedMasterID = ANY(:aids) OR CaseMasterID = ANY(:ids) OR source_caseid = ANY(:ids)"), {"aids": accused_ids, "ids": case_ids})
+            deleted += r.rowcount
+        else:
+            r = db.execute(text("DELETE FROM EXT_AccusedIn WHERE CaseMasterID = ANY(:ids) OR source_caseid = ANY(:ids)"), {"ids": case_ids})
+            deleted += r.rowcount
+        if victim_ids:
+            r = db.execute(text("DELETE FROM EXT_VictimDetail WHERE VictimMasterID = ANY(:vids)"), {"vids": victim_ids})
+            deleted += r.rowcount
+        if complainant_ids:
+            r = db.execute(text("DELETE FROM EXT_ComplainantIn WHERE ComplainantID = ANY(:cids) OR CaseMasterID = ANY(:ids) OR source_caseid = ANY(:ids)"), {"cids": complainant_ids, "ids": case_ids})
+            deleted += r.rowcount
+        else:
+            r = db.execute(text("DELETE FROM EXT_ComplainantIn WHERE CaseMasterID = ANY(:ids) OR source_caseid = ANY(:ids)"), {"ids": case_ids})
+            deleted += r.rowcount
 
-        # EntityMap: delete only entities owned solely by these cases
-        try:
+        # Person rows (Accused/Victim/ComplainantDetails) reference CaseMaster too.
+        r = db.execute(text("DELETE FROM Accused WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+        r = db.execute(text("DELETE FROM Victim WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+        r = db.execute(text("DELETE FROM ComplainantDetails WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+
+        # Evidence now has nothing left pointing at it.
+        r = db.execute(text("DELETE FROM Evidence WHERE case_id = ANY(:ids)"), {"ids": case_ids})
+        deleted += r.rowcount
+
+        # EntityMap: clean up only this case's own Case/Person/Evidence/IR entities — never
+        # the shared Object pool (Account/UPIHandle/PhoneNumber/Device), matching leaving
+        # those rows intact above.
+        entity_scopes = [
+            ("CaseMaster", [str(c) for c in case_ids]),
+            ("Accused", [str(a) for a in accused_ids]),
+            ("Victim", [str(v) for v in victim_ids]),
+            ("ComplainantDetails", [str(c) for c in complainant_ids]),
+            ("Evidence", [str(e) for e in evidence_ids]),
+            ("InvestigationReport", [str(r_id) for r_id in report_ids]),
+        ]
+        for sql_table, pks in entity_scopes:
+            if not pks:
+                continue
             r = db.execute(
-                text(
-                    "DELETE FROM EntityMap WHERE entity_uid IN ("
-                    "  SELECT entity_uid FROM IngestArtifact "
-                    "  WHERE scenario_key = :skey AND entity_uid IS NOT NULL AND is_owner = TRUE"
-                    ")"
-                ),
-                {"skey": scenario_key},
+                text("DELETE FROM EntityMap WHERE sql_table = :table AND sql_pk = ANY(:pks)"),
+                {"table": sql_table, "pks": pks},
             )
             deleted += r.rowcount
-        except Exception:
-            logger.debug("EntityMap cleanup skipped", exc_info=True)
 
-        # CaseMaster last
+        # CaseMaster last — everything referencing it is now gone.
         r = db.execute(text("DELETE FROM CaseMaster WHERE CaseMasterID = ANY(:ids)"), {"ids": case_ids})
         deleted += r.rowcount
 

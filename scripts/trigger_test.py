@@ -145,7 +145,7 @@ def _stratus_upload(key: str, data: bytes, token: str) -> None:
 def _submit_job(token: str, run_id: str, batch_id: str, case_id: int) -> dict:
     url = f"{ZOHO_PROJECT_DOMAIN}/baas/v1/project/{ZOHO_PROJECT_ID}/job_scheduling/job"
     payload = {
-        "job_name": f"test-{run_id}",
+        "job_name": f"test_{run_id}"[:20],  # Catalyst: alphanumeric + underscore, 1-20 chars
         "jobpool_id": JOBPOOL_ID,
         "jobpool_name": JOBPOOL_NAME,
         "target_type": "Function",

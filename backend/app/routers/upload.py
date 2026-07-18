@@ -12,6 +12,7 @@ from ..db import get_db
 from ..demo_scenarios import SCENARIO_ALLOWLIST
 from ..schemas import UploadResponse, UploadResponseItem
 from ..services.catalyst_queue import build_raw_key, list_raw_objects, upload_file_to_stratus
+from ..services.run_watchdog import reap_stale_runs
 from ..services.stage_labels import annotate_run
 
 
@@ -202,6 +203,8 @@ def get_batch(batch_id: str, db: Session = Depends(get_db)) -> dict[str, object]
     ).mappings().first()
     if batch is None:
         raise HTTPException(status_code=404, detail="Batch not found.")
+
+    reap_stale_runs(db)
 
     files = [
         {"key": entry["key"], "filename": entry["key"].rsplit("/", 1)[-1]}

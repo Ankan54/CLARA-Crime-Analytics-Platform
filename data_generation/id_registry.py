@@ -1,4 +1,4 @@
-﻿"""
+"""
 id_registry.py - Deterministic logical-string-key -> INT PK mapping.
 
 All IDs are assigned in a fixed, deterministic order so reruns are byte-identical.
@@ -162,6 +162,21 @@ LIVE_SCENARIO_STATIONS = {
 LIVE_CASE_CATEGORY = 1   # FIR
 LIVE_CASE_YEAR = 2026
 
+# Live FIRs draw CrimeNo serials from a reserved HIGH band that historical minting
+# can never reach. Historical serials start at 1 and, per (unit, category, year),
+# never exceed a few dozen (max observed ~11), so a base of 90000 leaves a vast gap.
+# This is what makes live CrimeNos collision-proof REGARDLESS of whether the
+# historical CSVs are rebuilt in a separate process from the live reservation --
+# previously they shared one counter, and a standalone historical rebuild (the
+# documented `--stages sql_csv,db_load --no-resume` shortcut) restarted historical
+# serials at 1 and reclaimed the live serial-1 slot, colliding with the already
+# baked live FIRs (3 of 4 scenarios). Minting here does NOT advance the shared
+# historical counter (km.next_serial), so historical cases at the same station
+# still get serial 1, 2, 3 ...
+# ponytail: ceiling is <90000 historical cases per (unit, category, year). True by
+# ~4 orders of magnitude today; if a station ever exceeds it, widen the band.
+LIVE_SERIAL_BASE = 90000
+
 # Populated by reserve_live_cases(); exported to manifest
 _live_reserved: Dict[str, Dict] = {}
 
@@ -173,10 +188,12 @@ def reserve_live_cases() -> Dict[str, Dict]:
     Returns the reservation map (also stored in _live_reserved).
     """
     _live_reserved.clear()
-    for scenario_key, station_id in LIVE_SCENARIO_STATIONS.items():
+    for index, (scenario_key, station_id) in enumerate(LIVE_SCENARIO_STATIONS.items(), start=1):
         unit_id = km.STATION_ID_TO_UNIT_ID[station_id]
         district_id = km.UNIT_MAP[unit_id].district_id
-        crime_no = km.assign_crime_no(station_id, LIVE_CASE_CATEGORY, LIVE_CASE_YEAR)
+        serial = LIVE_SERIAL_BASE + index
+        # Mint directly so the shared historical serial counter is NOT advanced.
+        crime_no = km.format_crime_no(LIVE_CASE_CATEGORY, district_id, unit_id, LIVE_CASE_YEAR, serial)
         case_no = km.case_no_from_crime_no(crime_no)
         _live_reserved[scenario_key] = {
             "station_id":  station_id,

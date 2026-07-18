@@ -1,0 +1,25 @@
+FROM node:20-slim AS build
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend ./
+# VITE_API_BASE_URL intentionally unset at build time -- api.ts falls back to
+# same-origin /api/v1, which nginx.conf.template reverse-proxies to the real
+# backend at runtime (see comment there for why this is needed, not optional).
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY frontend/nginx.conf.template /etc/nginx/server.conf.template
+
+ENV BACKEND_URL=https://ksp-catalyst-backend-50043496759.development.catalystappsail.in
+EXPOSE 8080
+
+# Deliberately not using nginx's built-in /etc/nginx/templates/ auto-envsubst --
+# it substitutes every currently-set env var with no default-value support, and
+# X_ZOHO_CATALYST_LISTEN_PORT (like the backend's own port var) needs a fallback
+# for non-AppSail runs (local docker run, etc).
+# BACKEND_HOST is BACKEND_URL with the scheme (and any path) stripped -- the
+# nginx template MUST send it as the upstream Host header, otherwise Catalyst's
+# gateway loops the /api/ + /ws/ proxy back to this frontend (see nginx.conf.template).
+CMD ["/bin/sh", "-c", "export PORT=${X_ZOHO_CATALYST_LISTEN_PORT:-8080}; BACKEND_HOST=${BACKEND_URL#*://}; export BACKEND_HOST=${BACKEND_HOST%%/*}; envsubst '${PORT} ${BACKEND_URL} ${BACKEND_HOST}' < /etc/nginx/server.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]

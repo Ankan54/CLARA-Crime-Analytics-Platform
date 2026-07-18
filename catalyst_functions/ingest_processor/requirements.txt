@@ -1,5 +1,4 @@
-psycopg>=3.2.1
-psycopg-binary>=3.2.1
+psycopg[binary]>=3.2.1
 requests>=2.32.0
 python-dotenv>=1.0.0
 zcatalyst-sdk>=1.4.0
@@ -10,6 +9,18 @@ pypdf>=4.2.0
 python-docx>=1.1.0
 beautifulsoup4>=4.12.0
 rapidfuzz>=3.9.0
-langchain-core>=0.3.0
-langchain-openai>=0.2.0
-langchain-anthropic>=0.2.0
+# Capped <1.0.0 deliberately: langchain-core>=1.0 depends on langchain-protocol,
+# which requires typing-extensions>=4.13.0 -- but zcatalyst-sdk==1.4.0 hard-pins
+# typing-extensions~=4.12.1 (4.12.x only). Those two ranges never overlap, so
+# `pip install -r` on this file fails with ResolutionImpossible for the *whole*
+# batch (confirmed via `pip download`), leaving nothing installed -- including
+# unrelated packages like psycopg, since pip aborts the entire install on any
+# unresolvable line. Staying on langchain-core 0.3.x avoids langchain-protocol
+# entirely (not installed at all), sidestepping the conflict rather than fighting
+# it. If this needs to move to langchain-core>=1.0 later, zcatalyst-sdk's pin is
+# the one that has to give (check for a newer zcatalyst-sdk release first).
+langchain-core>=0.3.0,<1.0.0
+langchain-openai>=0.2.0,<1.0.0
+langchain-anthropic>=0.2.0,<1.0.0
+# Same cap logic as above: langchain-aws>=1.0 needs langchain-core>=1.4.7.
+langchain-aws>=0.2.0,<1.0.0

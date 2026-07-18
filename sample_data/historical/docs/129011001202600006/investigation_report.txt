@@ -1,36 +1,35 @@
 KARNATAKA STATE POLICE
 INVESTIGATION REPORT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Report ID        : IR:5000019
+Report ID        : IR:5000021
 Crime No.        : 129011001202600006
 Case No.         : 202600006
-CaseMasterID     : 1000050
+CaseMasterID     : 1000052
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Report Date      : 2026-04-04
-IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
+Report Date      : 2026-03-28
+IO Officer       : Basavaraj Gudadinni (EmployeeID: 5011)
 Accused          : Unknown
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INVESTIGATION FINDINGS
-Victim transferred ₹37,297 via UPI. Account BG29028523818 flagged as mule.
+Victim transferred ₹402,770 via UPI. Account BG41010877260 flagged as mule.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG29028523818
-  UPI VPAs       : nalinipa83@okicici
-  Phone Numbers  : 9708939813
+  Bank Accounts  : BG41010877260
+  UPI VPAs       : arjunkam83@okicici
+  Phone Numbers  : 9622744248
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-03-07T16:59  |  loan app installed
-  2026-03-07T17:59  |  personal data harvested
-  2026-03-21T16:59  |  harassment calls started
-  2026-03-27T16:59  |  FIR filed
+  2026-03-11T21:27  |  fake UPI request sent
+  2026-03-11T21:32  |  payment made under confusion
+  2026-03-12T21:27  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-03-07  |  From: VICTIM_ACC_FIR_BG_321  ->  To: BG29028523818  |  Rs. 37,297  |  Channel: IMPS
+  2026-03-11  |  From: VICTIM_ACC_FIR_BG_323  ->  To: BG41010877260  |  Rs. 402,770  |  Channel: IMPS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-04-04
-Signature of IO: Venkatesh Kumar, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-03-28
+Signature of IO: Basavaraj Gudadinni, CEN Police Station - East Division

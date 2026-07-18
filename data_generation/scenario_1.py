@@ -230,7 +230,11 @@ def _build_case(case_data: dict) -> tuple[FIR, Person, Account, list[Transaction
         it_act_sections=["IT_66C", "IT_66D"],
         identifiers_mentioned={
             "phones": [],
-            "accounts": [coll_raw["account_no"]],
+            # Mention BOTH the collection account the victim paid AND the shared
+            # aggregation account its trail converges on, so find_links_between_cases
+            # (which matches a shared MENTIONS node) reveals the 4-cases-one-account
+            # convergence — the marquee "these separate cases are one network" moment.
+            "accounts": [coll_raw["account_no"], AGG_ACC_01["account_no"]],
             "upis": [],
             "imeis": [],
             "ips": [],

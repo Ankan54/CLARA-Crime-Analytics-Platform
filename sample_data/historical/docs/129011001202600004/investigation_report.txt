@@ -1,36 +1,37 @@
 KARNATAKA STATE POLICE
 INVESTIGATION REPORT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Report ID        : IR:5000008
+Report ID        : IR:5000018
 Crime No.        : 129011001202600004
 Case No.         : 202600004
-CaseMasterID     : 1000038
+CaseMasterID     : 1000049
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Report Date      : 2026-04-16
-IO Officer       : Kavitha Reddy (EmployeeID: 5010)
+Report Date      : 2026-03-06
+IO Officer       : Savitha Nagaraj (EmployeeID: 5004)
 Accused          : Unknown
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INVESTIGATION FINDINGS
-Victim transferred ₹296,983 via IMPS. Account BG71901301368 flagged as mule.
+Victim transferred ₹417,235 via UPI. Account BG96612869449 flagged as mule.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG71901301368
-  UPI VPAs       : saralash91@okicici
-  Phone Numbers  : 9517310810
+  Bank Accounts  : BG96612869449
+  UPI VPAs       : sunithap93@okicici
+  Phone Numbers  : 9179116734
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-03-23T00:28  |  fake job offer received
-  2026-03-24T00:28  |  registration fee paid
-  2026-04-02T00:28  |  offer turned out fake
-  2026-04-03T00:28  |  FIR filed
+  2026-02-08T15:30  |  investment offer on WhatsApp
+  2026-02-11T15:30  |  test withdrawal succeeded
+  2026-02-15T15:30  |  large investment transferred
+  2026-02-18T15:30  |  withdrawal blocked
+  2026-02-20T15:30  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-03-23  |  From: VICTIM_ACC_FIR_BG_309  ->  To: BG71901301368  |  Rs. 296,983  |  Channel: UPI
+  2026-02-08  |  From: VICTIM_ACC_FIR_BG_320  ->  To: BG96612869449  |  Rs. 417,235  |  Channel: UPI
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-04-16
-Signature of IO: Kavitha Reddy, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-03-06
+Signature of IO: Savitha Nagaraj, CEN Police Station - East Division

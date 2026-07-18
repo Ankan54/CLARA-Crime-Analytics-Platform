@@ -23,7 +23,19 @@ from psycopg.types.json import Json
 from pypdf import PdfReader
 from rapidfuzz import fuzz
 
-from ..llm import build_classifier, build_extractor, describe_image
+try:
+    # Package-submodule context (backend's INGEST_LOCAL_INVOKE local-invoke path):
+    # this file loads as catalyst_functions.ingest_processor.pipeline.processor, so
+    # ..llm correctly resolves to the sibling ingest_processor/llm.py.
+    from ..llm import build_classifier, build_extractor, describe_image
+except ImportError:
+    # Deployed Catalyst runtime: main.py sits flat at /catalyst/ with pipeline/ as a
+    # sibling dir and no parent package, so `pipeline` itself loads as a top-level
+    # package -- `..llm` tries to go above that (ImportError: attempted relative
+    # import beyond top-level package). llm.py is a flat sibling of pipeline/ there,
+    # so the plain top-level name resolves via sys.path instead (confirmed live,
+    # same pattern as main.py's own .pipeline.processor fallback).
+    from llm import build_classifier, build_extractor, describe_image
 
 
 logger = logging.getLogger(__name__)
@@ -106,6 +118,21 @@ def _utc_now() -> str:
     return datetime.now(tz=timezone.utc).isoformat()
 
 
+def _normalize_timestamp(raw: Any) -> str:
+    """The LLM sometimes extracts a bare time (e.g. a chat screenshot's "10:05")
+    instead of a full timestamp -- postgres rejects that for a timestamptz column.
+    Fall back to now() rather than fail the whole file's load over one field."""
+    if not raw:
+        return _utc_now()
+    text_value = str(raw).strip()
+    try:
+        datetime.fromisoformat(text_value.replace("Z", "+00:00"))
+        return text_value
+    except ValueError:
+        logger.warning("normalize_timestamp: unparseable value %r — using now()", raw)
+        return _utc_now()
+
+
 def _sanitize_label(label: str) -> str:
     return _LABEL_SANITIZE_RE.sub("", label) or "Object"
 
@@ -125,6 +152,9 @@ def _build_database_url() -> str:
         logger.error("db_url: DB_USER is not set — connection will fail")
     logger.debug("db_url: host=%s port=%s user=%s dbname=%s sslmode=%s", host, port, user, name, ssl)
     password = _env("DB_PASSWORD").strip("\"'")
+    # prepare_threshold is a psycopg.connect() kwarg, not a libpq/psycopg URI
+    # parameter -- embedding it in the query string raises "invalid URI query
+    # parameter" at connect time. Callers pass prepare_threshold=None explicitly.
     return f"postgresql://{user}:{password}@{host}:{port}/{name}?sslmode={ssl}"
 
 
@@ -228,15 +258,55 @@ class IngestProcessor:
         )
         db_url = _build_database_url()
         try:
-            self.pg = psycopg.connect(db_url, row_factory=dict_row, prepare_threshold=0)
+            self.pg = psycopg.connect(db_url, row_factory=dict_row, prepare_threshold=None)
             logger.debug("db_connect: ok server_version=%s", self.pg.info.server_version)
         except Exception as exc:
             logger.error("db_connect: FAILED host=%s port=%s user=%s dbname=%s — %s",
                          _env("DB_HOST"), _env("DB_PORT", "5432"), _env("DB_USER"), _env("DB_NAME", "ksp_crime"), exc)
             raise
+        self._lookup_cache: dict[str, dict[str, int]] = {}
 
     def close(self) -> None:
         self.pg.close()
+
+    # ------------------------------------------------------------------
+    # Master-data lookups (Occupation/Caste/Religion are INTEGER FKs, but the LLM
+    # extractor returns free text -- e.g. "Retired Professor" for OccupationID --
+    # so free text must be resolved against the master table before INSERT or
+    # psycopg raises InvalidTextRepresentation. Columns are nullable FKs, so an
+    # unresolvable value degrades to NULL (logged) rather than failing the load.
+    # ------------------------------------------------------------------
+
+    _LOOKUP_TABLES: dict[str, tuple[str, str, str]] = {
+        "OccupationID": ("OccupationMaster", "OccupationID", "OccupationName"),
+        "CasteID": ("CasteMaster", "caste_master_id", "caste_master_name"),
+        "ReligionID": ("ReligionMaster", "ReligionID", "ReligionName"),
+    }
+
+    def _resolve_lookup_id(self, column: str, raw_value: str) -> int | None:
+        cache = self._lookup_cache.setdefault(column, {})
+        if not cache:
+            table, id_col, name_col = self._LOOKUP_TABLES[column]
+            with self.pg.cursor() as cur:
+                cur.execute(f"SELECT {id_col} AS id, {name_col} AS name FROM {table}")
+                for row in cur.fetchall():
+                    cache[str(row["name"]).strip().lower()] = int(row["id"])
+
+        key = raw_value.strip().lower()
+        if key in cache:
+            return cache[key]
+
+        best_name, best_score = None, 0.0
+        for name in cache:
+            score = fuzz.ratio(key, name)
+            if score > best_score:
+                best_name, best_score = name, score
+        if best_name and best_score >= 85:
+            logger.debug("lookup: fuzzy-matched %s=%r -> %r (score=%.0f)", column, raw_value, best_name, best_score)
+            return cache[best_name]
+
+        logger.warning("lookup: no match for %s=%r — leaving NULL", column, raw_value)
+        return None
 
     # ------------------------------------------------------------------
     # Status / Signals
@@ -256,7 +326,7 @@ class IngestProcessor:
                     WHERE run_id = %s
                     RETURNING files_progress
                     """,
-                    ([file], Json({"stage": stage, "status": status or "in_progress", "ts": _utc_now()}), error_message, self.params.run_id),
+                    (stage, status, [file], Json({"stage": stage, "status": status or "in_progress", "ts": _utc_now()}), error_message, self.params.run_id),
                 )
             else:
                 cur.execute(
@@ -277,9 +347,10 @@ class IngestProcessor:
     def _publish_signal(self, stage: str, status: str | None, file: str | None, files_progress: dict[str, Any]) -> None:
         url = _env("SIGNALS_PIPELINE_PUBLISHER_URL")
         if not url:
+            logger.debug("publish_signal: SIGNALS_PIPELINE_PUBLISHER_URL not set — skipping signal stage=%s", stage)
             return
         try:
-            requests.post(
+            resp = requests.post(
                 url,
                 json={
                     "run_id": self.params.run_id,
@@ -291,8 +362,18 @@ class IngestProcessor:
                 },
                 timeout=2,
             )
+            # This is a best-effort push (the WS's Postgres poll fallback covers a
+            # missed signal), but a non-2xx response was previously invisible --
+            # requests.post() doesn't raise on its own, so a wrong digest/expired
+            # auth on the Signals publisher URL would silently degrade every run
+            # to poll-only with no log line anywhere pointing at why.
+            if not resp.ok:
+                logger.warning(
+                    "signals publish non-2xx run_id=%s stage=%s status_code=%s body=%s",
+                    self.params.run_id, stage, resp.status_code, resp.text[:300],
+                )
         except Exception as exc:
-            logger.debug("signals publish failed stage=%s: %s", stage, exc)
+            logger.warning("signals publish failed run_id=%s stage=%s: %s", self.params.run_id, stage, exc)
 
     # ------------------------------------------------------------------
     # Stratus (raw / processed / archive)
@@ -400,20 +481,27 @@ class IngestProcessor:
 
     def _extract_text(self, key: str, payload: bytes) -> str:
         lower = key.lower()
+        logger.debug("extract_text: key=%s size=%d", key, len(payload))
         if lower.endswith(".txt"):
+            logger.debug("extract_text: format=txt")
             return payload.decode("utf-8", errors="ignore")
         if lower.endswith(".html") or lower.endswith(".htm"):
+            logger.debug("extract_text: format=html")
             html = payload.decode("utf-8", errors="ignore")
             soup = BeautifulSoup(html, "html.parser")
             return unescape(soup.get_text("\n"))
         if lower.endswith(".pdf"):
+            logger.debug("extract_text: format=pdf")
             reader = PdfReader(BytesIO(payload))
             return "\n".join((page.extract_text() or "") for page in reader.pages)
         if lower.endswith(".docx"):
+            logger.debug("extract_text: format=docx")
             document = DocxDocument(BytesIO(payload))
             return "\n".join(p.text for p in document.paragraphs if p.text)
         if lower.endswith((".png", ".jpg", ".jpeg", ".webp")):
+            logger.debug("extract_text: format=image — calling VLM")
             return describe_image(payload)
+        logger.debug("extract_text: format=unknown — treating as utf-8 text")
         return payload.decode("utf-8", errors="ignore")
 
     def _active_evidence_doc_types(self) -> list[dict[str, Any]]:
@@ -425,29 +513,38 @@ class IngestProcessor:
 
     def _classify(self, raw_text: str, file_type: str) -> str:
         if file_type == "fir":
+            logger.debug("classify: file_type=fir — returning FIR directly")
             return "FIR"
         if file_type == "ir":
+            logger.debug("classify: file_type=ir — returning IR directly")
             return "IR"
 
         candidates = self._active_evidence_doc_types()
         labels = [c["doc_type"] for c in candidates] or ["EVIDENCE_BANK_STATEMENT", "EVIDENCE_UPI_SCREENSHOT", "EVIDENCE_CHAT_SCREENSHOT"]
         prompt_lines = [f"- {c['doc_type']}: {c.get('description') or ''}" for c in candidates]
+        logger.debug("classify: evidence file — LLM classification among %s", labels)
         classifier = build_classifier()
-        response = classifier.invoke(
-            [
-                SystemMessage(
-                    content=(
-                        "Classify this evidence document into exactly one of these labels:\n"
-                        + "\n".join(prompt_lines or labels)
-                    )
-                ),
-                HumanMessage(content=raw_text[:4000]),
-            ]
-        )
+        try:
+            response = classifier.invoke(
+                [
+                    SystemMessage(
+                        content=(
+                            "Classify this evidence document into exactly one of these labels:\n"
+                            + "\n".join(prompt_lines or labels)
+                        )
+                    ),
+                    HumanMessage(content=raw_text[:4000]),
+                ]
+            )
+        except Exception as exc:
+            logger.error("classify: LLM classifier failed — defaulting to %s: %s", labels[0], exc)
+            return labels[0]
         content = str(getattr(response, "content", "")).upper()
         for candidate in labels:
             if candidate in content:
+                logger.debug("classify: LLM returned doc_type=%s", candidate)
                 return candidate
+        logger.warning("classify: LLM response did not match any label (response=%s) — defaulting to %s", content[:100], labels[0])
         return labels[0]
 
     # ------------------------------------------------------------------
@@ -455,6 +552,7 @@ class IngestProcessor:
     # ------------------------------------------------------------------
 
     def _load_schema(self, doc_type: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+        logger.debug("load_schema: doc_type=%s", doc_type)
         with self.pg.cursor() as cur:
             cur.execute(
                 """
@@ -468,6 +566,7 @@ class IngestProcessor:
             )
             schema = cur.fetchone()
             if not schema:
+                logger.error("load_schema: no active schema found for doc_type=%s", doc_type)
                 raise RuntimeError(f"No active schema for doc_type={doc_type}")
 
             cur.execute(
@@ -481,6 +580,7 @@ class IngestProcessor:
                 (schema["schema_id"],),
             )
             fields = cur.fetchall()
+        logger.debug("load_schema: found schema_id=%s version=%s fields=%d", schema["schema_id"], schema.get("version"), len(fields))
         return schema, fields
 
     @staticmethod
@@ -583,6 +683,14 @@ class IngestProcessor:
 
         file_entries: list[dict[str, Any]] = []
         review_items_created = 0
+        # Candidates extracted from files already processed *in this same run* --
+        # e.g. the FIR's Accused mention -- so a later file's mention of the same
+        # person (the IR's Accused mention) gets compared against it too, not just
+        # against historically-committed EntityMap rows. Without this, two brand
+        # new mentions of the same person within one run never get a chance to be
+        # linked (neither is in EntityMap yet), and _write_person_row would
+        # otherwise write two separate SQL rows for one person.
+        same_run_candidates: list[dict[str, Any]] = []
 
         for entry in raw_files:
             filename = entry["filename"]
@@ -607,7 +715,9 @@ class IngestProcessor:
             groups, provisional_uids = self._transform_to_groups(extracted, fields)
 
             self._update_stage("ENTITY_MATCH", file=filename)
-            created = self._request_person_review(doc_type=doc_type, groups=groups, provisional_uids=provisional_uids)
+            created = self._request_person_review(
+                doc_type=doc_type, groups=groups, provisional_uids=provisional_uids, same_run_candidates=same_run_candidates
+            )
             review_items_created += created
 
             file_entries.append(
@@ -690,7 +800,13 @@ class IngestProcessor:
 
         return groups, provisional_uids
 
-    def _request_person_review(self, doc_type: str, groups: dict[str, list[dict[str, Any]]], provisional_uids: dict[str, str]) -> int:
+    def _request_person_review(
+        self,
+        doc_type: str,
+        groups: dict[str, list[dict[str, Any]]],
+        provisional_uids: dict[str, str],
+        same_run_candidates: list[dict[str, Any]],
+    ) -> int:
         endpoint = _env("SPLINK_ENDPOINT_URL")
         secret = _env("SPLINK_SHARED_SECRET")
         if not endpoint or not secret:
@@ -710,7 +826,7 @@ class IngestProcessor:
                 LIMIT 200
                 """
             )
-            existing = cur.fetchall()
+            existing = [dict(r) for r in cur.fetchall()]
 
         created_total = 0
         for group_name, group_meta in PERSON_TABLE.items():
@@ -726,14 +842,22 @@ class IngestProcessor:
                     "source_run_id": self.params.run_id,
                     "entity_type": "Person",
                     "candidate_record": candidate,
-                    "existing_records": [dict(r) for r in existing],
+                    # existing (historical, already-committed) + same_run_candidates
+                    # (mentions already seen from earlier files in *this* run, not
+                    # yet in EntityMap) -- lets e.g. the IR's Accused mention match
+                    # against the FIR's Accused mention from the same batch.
+                    "existing_records": existing + same_run_candidates,
                     "persist_review_items": True,
                 }
                 try:
                     response = requests.post(
                         endpoint.rstrip("/") + "/internal/entity/splink-match",
-                        json=payload,
-                        headers={"X-Splink-Secret": secret},
+                        # default=str: existing_records' entity_uid comes back from psycopg
+                        # as a uuid.UUID, which requests' json= encoder can't serialize
+                        # ("Object of type UUID is not JSON serializable"), silently failing
+                        # every person match. Mirror the manifest write's json.dumps(default=str).
+                        data=json.dumps(payload, default=str),
+                        headers={"X-Splink-Secret": secret, "Content-Type": "application/json"},
                         timeout=30,
                     )
                     response.raise_for_status()
@@ -741,6 +865,8 @@ class IngestProcessor:
                 except Exception as exc:
                     logger.warning("request_person_review: splink-match failed name=%s: %s", name, exc)
                     continue
+                if provisional_uid:
+                    same_run_candidates.append({"entity_uid": provisional_uid, "name": name})
         return created_total
 
     # ------------------------------------------------------------------
@@ -762,16 +888,19 @@ class IngestProcessor:
 
         for file_entry in files_in_order:
             filename = file_entry["filename"]
+            logger.info("phase_b processing file=%s doc_type=%s", filename, file_entry.get("doc_type"))
             self._update_stage("SQL_LOAD", file=filename)
             groups, evidence_id = self._load_sql_groups(file_entry, uid_remap)
 
             self._update_stage("GRAPH_LOAD", file=filename)
             entity_uids = self._load_graph(file_entry["schema_id"], groups)
             all_entity_uids.extend(entity_uids)
+            logger.debug("phase_b file=%s sql_load done, graph_load entity_uids=%d", filename, len(entity_uids))
 
             self._update_stage("VECTOR_LOAD", file=filename)
             chunk_ids = self._load_vector(file_entry, entity_uids)
             all_chunk_ids.extend(chunk_ids)
+            logger.debug("phase_b file=%s vector_load chunk_ids=%d", filename, len(chunk_ids))
 
             self._update_stage("WRITEBACK", file=filename)
             self._writeback_links(chunk_ids, entity_uids)
@@ -818,25 +947,48 @@ class IngestProcessor:
             return int(cur.fetchone()["next_id"])
 
     def _ensure_case_master(self, fields: dict[str, Any]) -> None:
+        # process_batch may have inserted a stub CaseMaster to satisfy PipelineRun FK;
+        # enrich it from FIR when those fields arrive.
+        crime_no = fields.get("crime_no") or f"1{self.params.case_id:017d}"[:18]
+        case_no = fields.get("case_no") or str(self.params.case_id)
         with self.pg.cursor() as cur:
             cur.execute("SELECT 1 FROM CaseMaster WHERE CaseMasterID = %s", (self.params.case_id,))
             if cur.fetchone():
-                return
-            cur.execute(
-                """
-                INSERT INTO CaseMaster
-                    (CaseMasterID, CrimeNo, CaseNo, CrimeRegisteredDate, PolicePersonID, PoliceStationID,
-                     CaseCategoryID, GravityOffenceID, CrimeMajorHeadID, CrimeMinorHeadID, CaseStatusID, CourtID, BriefFacts)
-                VALUES (%s, %s, %s, COALESCE(%s, NOW()), 1, 1001, 1, 1, 101, 10001, 1, 1, %s)
-                """,
-                (
-                    self.params.case_id,
-                    fields.get("crime_no") or f"1{self.params.case_id:017d}"[:18],
-                    fields.get("case_no") or str(self.params.case_id),
-                    fields.get("crime_registered_date"),
-                    fields.get("brief_facts"),
-                ),
-            )
+                cur.execute(
+                    """
+                    UPDATE CaseMaster SET
+                        CrimeNo = COALESCE(%s, CrimeNo),
+                        CaseNo = COALESCE(%s, CaseNo),
+                        CrimeRegisteredDate = COALESCE(%s, CrimeRegisteredDate),
+                        BriefFacts = COALESCE(%s, BriefFacts)
+                    WHERE CaseMasterID = %s
+                    """,
+                    (
+                        fields.get("crime_no"),
+                        fields.get("case_no"),
+                        fields.get("crime_registered_date"),
+                        fields.get("brief_facts"),
+                        self.params.case_id,
+                    ),
+                )
+            else:
+                # Fallback only when no stub exists (non-demo path). Demo stubs are
+                # inserted by process_batch with per-scenario FIR-aligned defaults.
+                cur.execute(
+                    """
+                    INSERT INTO CaseMaster
+                        (CaseMasterID, CrimeNo, CaseNo, CrimeRegisteredDate, PolicePersonID, PoliceStationID,
+                         CaseCategoryID, GravityOffenceID, CrimeMajorHeadID, CrimeMinorHeadID, CaseStatusID, CourtID, BriefFacts)
+                    VALUES (%s, %s, %s, COALESCE(%s, NOW()), 5001, 1001, 1, 3, 101, 1011, 1, 7001, %s)
+                    """,
+                    (
+                        self.params.case_id,
+                        crime_no,
+                        case_no,
+                        fields.get("crime_registered_date"),
+                        fields.get("brief_facts"),
+                    ),
+                )
         self.pg.commit()
 
     def _ensure_entity(self, table_name: str, pk_value: int, entity_type: str, pole_subtype: str, entity_uid: str | None = None) -> str:
@@ -872,6 +1024,7 @@ class IngestProcessor:
         with self.pg.cursor() as cur:
             cur.execute(f"SELECT {spec['pk']} AS id FROM {table} WHERE {spec['norm']} = %s LIMIT 1", (normalized,))
             existing = cur.fetchone()
+            created = existing is None
             if existing:
                 object_id = int(existing["id"])
             else:
@@ -902,17 +1055,30 @@ class IngestProcessor:
             holder_name_display = other_columns.get("holder_name_raw")
 
         if evidence_id:
-            with self.pg.cursor() as cur:
-                extra = ", linked_case_id = COALESCE(linked_case_id, %s)" if table == "Account" else ""
-                params: tuple[Any, ...] = (evidence_id, object_id) if table != "Account" else (evidence_id, self.params.case_id, object_id)
-                cur.execute(
-                    f"UPDATE {table} SET source_evidence_id = COALESCE(source_evidence_id, %s){extra} WHERE {spec['pk']} = %s",
-                    params,
-                )
-            self.pg.commit()
+            # source_evidence_id is only stamped on rows THIS pipeline created -- see
+            # _stamp_source_evidence for why touching a pre-existing row is destructive.
+            sets: list[str] = []
+            values: list[Any] = []
+            if created:
+                sets.append("source_evidence_id = COALESCE(source_evidence_id, %s)")
+                values.append(evidence_id)
+            if table == "Account":
+                sets.append("linked_case_id = COALESCE(linked_case_id, %s)")
+                values.append(self.params.case_id)
+            if sets:
+                with self.pg.cursor() as cur:
+                    cur.execute(
+                        f"UPDATE {table} SET {', '.join(sets)} WHERE {spec['pk']} = %s",
+                        (*values, object_id),
+                    )
+                self.pg.commit()
 
         entity_uid = self._ensure_entity(table, object_id, "Object", table)
-        return {"entity_uid": entity_uid, "table": table, "pk": object_id, "raw": {"holder_name_display": holder_name_display, **fields}}
+        display_name = f"{holder_name_display} · {identifier_value}" if holder_name_display else str(identifier_value)
+        return {
+            "entity_uid": entity_uid, "table": table, "pk": object_id,
+            "raw": {"holder_name_display": holder_name_display, "display_name": display_name, **fields},
+        }
 
     def _write_person_row(
         self, table: str, row: dict[str, Any], idx: int, uid_remap: dict[str, str], provisional_uids: dict[str, str], provisional_key: str
@@ -920,8 +1086,47 @@ class IngestProcessor:
         spec = PERSON_TABLE[table]
         fields = row["fields"]
         columns: dict[str, str] = row.get("columns") or {}
+
+        provisional_uid = provisional_uids.get(f"{provisional_key}#{idx}")
+        final_uid = uid_remap.get(provisional_uid, provisional_uid) if provisional_uid else None
+
+        # Person tables have no natural key to dedup on (unlike Account/UPI/Phone/
+        # Device, which look up by normalized value in _insert_or_get_identifier
+        # before inserting) -- entity_uid is the only stable handle. If this
+        # mention already resolved to an existing entity (reviewed match, or a
+        # retry of an already-loaded run), reuse that row instead of minting a
+        # second SQL row for the same person.
+        if final_uid:
+            with self.pg.cursor() as cur:
+                cur.execute(
+                    "SELECT sql_table, sql_pk FROM EntityMap WHERE entity_uid = %s AND status = 'active'",
+                    (final_uid,),
+                )
+                existing = cur.fetchone()
+            if existing and existing["sql_table"] == table:
+                pk_value = int(existing["sql_pk"])
+                return {"entity_uid": final_uid, "table": table, "pk": pk_value, "raw": {"display_name": _display_name(fields), **fields}}
+
         pk_value = self._next_int_id(table, spec["pk"])
-        insert_items = [(columns[name], value) for name, value in fields.items() if value is not None and name in columns]
+        insert_items: list[tuple[str, Any]] = []
+        for name, value in fields.items():
+            if value is None or name not in columns:
+                continue
+            column = columns[name]
+            if column in self._LOOKUP_TABLES:
+                resolved = self._resolve_lookup_id(column, str(value))
+                if resolved is None:
+                    continue
+                insert_items.append((column, resolved))
+            else:
+                insert_items.append((column, value))
+
+        # An unknown accused (money-laundering/task-scam FIRs often name no offender) leaves
+        # the NOT NULL name column absent. Historical rows store "Unknown"; do the same rather
+        # than crash the whole Phase B load on a NotNullViolation.
+        name_col = spec["name_column"]
+        if not any(c == name_col for c, _ in insert_items):
+            insert_items.append((name_col, "Unknown"))
 
         with self.pg.cursor() as cur:
             col_sql = ", ".join([spec["pk"], "CaseMasterID"] + [c for c, _ in insert_items])
@@ -932,8 +1137,6 @@ class IngestProcessor:
             )
         self.pg.commit()
 
-        provisional_uid = provisional_uids.get(f"{provisional_key}#{idx}")
-        final_uid = uid_remap.get(provisional_uid, provisional_uid) if provisional_uid else None
         entity_uid = self._ensure_entity(table, pk_value, "Person", table, entity_uid=final_uid)
 
         return {"entity_uid": entity_uid, "table": table, "pk": pk_value, "raw": {"display_name": _display_name(fields), **fields}}
@@ -951,7 +1154,10 @@ class IngestProcessor:
             evidence_id = int(cur.fetchone()["evidence_id"])
         self.pg.commit()
         entity_uid = self._ensure_entity("Evidence", evidence_id, "Object", "Evidence")
-        return evidence_id, {"entity_uid": entity_uid, "table": "Evidence", "pk": evidence_id, "raw": {}}
+        return evidence_id, {
+            "entity_uid": entity_uid, "table": "Evidence", "pk": evidence_id,
+            "raw": {"display_name": file_entry["filename"], "doc_type": file_entry["doc_type"]},
+        }
 
     def _write_investigation_report_row(self, fields: dict[str, Any], schema_id: int) -> dict[str, Any]:
         with self.pg.cursor() as cur:
@@ -966,14 +1172,57 @@ class IngestProcessor:
             report_id = int(cur.fetchone()["report_id"])
         self.pg.commit()
         entity_uid = self._ensure_entity("InvestigationReport", report_id, "Event", "InvestigationReport")
-        return {"entity_uid": entity_uid, "table": "InvestigationReport", "pk": report_id, "raw": fields}
+        report_date = fields.get("report_date")
+        display_name = f"Investigation Report ({report_date})" if report_date else "Investigation Report"
+        return {
+            "entity_uid": entity_uid, "table": "InvestigationReport", "pk": report_id,
+            "raw": {**fields, "display_name": display_name},
+        }
+
+    def _resolve_act_section(self, act_raw: str, section_raw: str) -> tuple[str, str] | None:
+        """The LLM returns free text like "IT Act" / "S.66C"; ActSectionAssociation's
+        FK needs the master (ActCode, SectionCode) pair, e.g. ("ITACT", "66C")."""
+        cache = self._lookup_cache.setdefault("Act", {})
+        if not cache:
+            with self.pg.cursor() as cur:
+                cur.execute("SELECT ActCode AS code, ActDescription AS descr, ShortName AS short FROM Act")
+                for row in cur.fetchall():
+                    for key in (row["code"], row["short"], row["descr"]):
+                        if key:
+                            cache[str(key).strip().lower()] = row["code"]
+
+        act_key = act_raw.strip().lower()
+        act_code = cache.get(act_key)
+        if not act_code:
+            best_name, best_score = None, 0.0
+            for name in cache:
+                score = fuzz.ratio(act_key, name)
+                if score > best_score:
+                    best_name, best_score = name, score
+            if best_name and best_score >= 80:
+                act_code = cache[best_name]
+        if not act_code:
+            logger.warning("act_section: no Act match for %r — skipping", act_raw)
+            return None
+
+        section_code = re.sub(r"(?i)^\s*(sec(tion)?\.?|s\.)\s*", "", section_raw).strip()
+        with self.pg.cursor() as cur:
+            cur.execute("SELECT 1 FROM Section WHERE ActCode = %s AND SectionCode = %s", (act_code, section_code))
+            if cur.fetchone():
+                return act_code, section_code
+        logger.warning("act_section: no Section match for act=%s section=%r — skipping", act_code, section_raw)
+        return None
 
     def _write_act_section_rows(self, rows: list[dict[str, Any]]) -> None:
         for row in rows:
             fields = row["fields"]
-            act_code, section_code = fields.get("act_code"), fields.get("section_code")
-            if not act_code or not section_code:
+            act_raw, section_raw = fields.get("act_code"), fields.get("section_code")
+            if not act_raw or not section_raw:
                 continue
+            resolved = self._resolve_act_section(str(act_raw), str(section_raw))
+            if resolved is None:
+                continue
+            act_code, section_code = resolved
             with self.pg.cursor() as cur:
                 cur.execute(
                     """
@@ -996,7 +1245,7 @@ class IngestProcessor:
             amount = fields.get("amount")
             if amount is None:
                 continue
-            txn_ts = fields.get("txn_timestamp") or _utc_now()
+            txn_ts = _normalize_timestamp(fields.get("txn_timestamp"))
             mode, utr_ref, direction = fields.get("mode"), fields.get("utr_ref"), str(fields.get("direction") or "").lower()
 
             from_account_id = to_account_id = from_upi_id = to_upi_id = None
@@ -1050,12 +1299,31 @@ class IngestProcessor:
                 edges.append({"from_uid": from_uid, "to_uid": to_uid, "amount": amount, "txn_timestamp": str(txn_ts), "utr_ref": utr_ref})
         return edges
 
+    def _stamp_source_evidence(self, table: str, spec: dict[str, Any], object_id: int, evidence_id: int) -> None:
+        """Record which demo evidence file first produced this row.
+
+        Only ever called for rows this pipeline just created. A pre-existing row may be
+        a *historical* object that a live upload legitimately references -- the planted
+        aggregation account is exactly that, and it is the point of the demo. Historical
+        rows carry source_evidence_id = NULL, so COALESCE(source_evidence_id, <demo>)
+        would happily claim them for the demo; reset_demo_data.py then deletes every
+        object whose source_evidence_id belongs to a demo case, taking the planted
+        account with it and quietly breaking the demo's own links on re-run.
+        """
+        with self.pg.cursor() as cur:
+            cur.execute(
+                f"UPDATE {table} SET source_evidence_id = COALESCE(source_evidence_id, %s) WHERE {spec['pk']} = %s",
+                (evidence_id, object_id),
+            )
+        self.pg.commit()
+
     def _insert_or_get_identifier(self, table: str, raw_value: str, evidence_id: int | None) -> tuple[int, str]:
         spec = OBJECT_TABLE[table]
         normalized = _norm(spec["identifier_type"], raw_value)
         with self.pg.cursor() as cur:
             cur.execute(f"SELECT {spec['pk']} AS id FROM {table} WHERE {spec['norm']} = %s LIMIT 1", (normalized,))
             existing = cur.fetchone()
+            created = existing is None
             if existing:
                 object_id = int(existing["id"])
             else:
@@ -1065,10 +1333,8 @@ class IngestProcessor:
                 )
                 object_id = int(cur.fetchone()["id"])
         self.pg.commit()
-        if evidence_id:
-            with self.pg.cursor() as cur:
-                cur.execute(f"UPDATE {table} SET source_evidence_id = COALESCE(source_evidence_id, %s) WHERE {spec['pk']} = %s", (evidence_id, object_id))
-            self.pg.commit()
+        if evidence_id and created:
+            self._stamp_source_evidence(table, spec, object_id, evidence_id)
         entity_uid = self._ensure_entity(table, object_id, "Object", table)
         return object_id, entity_uid
 
@@ -1086,7 +1352,14 @@ class IngestProcessor:
         case_entity_uid = self._ensure_entity(
             "CaseMaster", self.params.case_id, "Event", "Case",
         )
-        produced["CaseMaster"] = [{"entity_uid": case_entity_uid, "table": "CaseMaster", "pk": self.params.case_id, "raw": {}}]
+        with self.pg.cursor() as cur:
+            cur.execute("SELECT CrimeNo FROM CaseMaster WHERE CaseMasterID = %s", (self.params.case_id,))
+            crime_no_row = cur.fetchone()
+        case_display_name = (crime_no_row or {}).get("crimeno") or f"Case {self.params.case_id}"
+        produced["CaseMaster"] = [{
+            "entity_uid": case_entity_uid, "table": "CaseMaster", "pk": self.params.case_id,
+            "raw": {"display_name": case_display_name},
+        }]
 
         evidence_id: int | None = None
         if doc_type.startswith("EVIDENCE"):
@@ -1162,12 +1435,38 @@ class IngestProcessor:
                         if not uid:
                             continue
                         label = _sanitize_label(group_name)
+                        display_name = (node.get("raw") or {}).get("display_name")
+                        # MERGE must key on entity_uid alone, not entity_uid+label --
+                        # Cypher's MERGE (n:Label {prop: val}) only reuses a node if
+                        # BOTH the label and property already match. The same real
+                        # account gets mentioned under different schema group names
+                        # (e.g. "MentionedAccount" from a FIR, "BankStatement" from a
+                        # bank-statement evidence file) -- with a label in the MERGE
+                        # pattern, the second write couldn't find the first node and
+                        # silently created a duplicate with the same entity_uid.
+                        # Confirmed live: a single account ended up as two disconnected
+                        # Neo4j nodes. Label-less MERGE + SET n:Label adds the label to
+                        # whichever node already owns that entity_uid, idempotently.
+                        # origin is first-writer-wins, NOT unconditional. The planted
+                        # shared objects (aggregation account, controller UPI/IMEI) are
+                        # historical nodes that a live upload legitimately touches --
+                        # that shared node IS the demo's payoff. Overwriting origin to
+                        # 'demo' here made reset_demo_data.py's
+                        # `MATCH (n {origin:'demo'}) DETACH DELETE n` delete the planted
+                        # historical node and every historical edge hanging off it, so
+                        # the demo silently stopped finding its own links on the second
+                        # run. coalesce keeps 'historical' on shared nodes; genuinely
+                        # new live-only nodes still get 'demo' and stay wipeable.
                         session.run(
                             f"""
-                            MERGE (n:{label} {{entity_uid: $uid}})
-                            SET n.origin = 'demo', n.run_id = $run_id, n.case_id = $case_id, n.updated_at = datetime($ts)
+                            MERGE (n {{entity_uid: $uid}})
+                            SET n:{label},
+                                n.origin = coalesce(n.origin, 'demo'), n.run_id = $run_id, n.case_id = $case_id,
+                                n.updated_at = datetime($ts),
+                                n.display_name = coalesce($display_name, n.display_name)
                             """,
                             uid=uid, run_id=self.params.run_id, case_id=self.params.case_id, ts=_utc_now(),
+                            display_name=display_name,
                         )
                         touched.append(uid)
 
@@ -1283,7 +1582,7 @@ class IngestProcessor:
             logger.error("load_vector: missing dependency: %s", exc)
             return []
 
-        region = _env("AWS_DEFAULT_REGION", "us-east-1")
+        region = _env("AWS_DEFAULT_REGION") or _env("AWS_REGION") or "us-east-1"
         embed_model = _env("BEDROCK_EMBEDDING_MODEL", "amazon.titan-embed-text-v1")
         logger.debug("load_vector: bedrock region=%s model=%s text_len=%d", region, embed_model, len(raw_text))
         try:
@@ -1292,10 +1591,10 @@ class IngestProcessor:
                 modelId=embed_model,
                 body=json.dumps({"inputText": raw_text[:40000]}),
             )
+            values = json.loads(embed_resp["body"].read().decode("utf-8")).get("embedding")
         except Exception as exc:
             logger.error("load_vector: bedrock invoke_model failed region=%s model=%s: %s", region, embed_model, exc)
             return []
-        values = json.loads(embed_resp["body"].read().decode("utf-8")).get("embedding")
         if not values:
             logger.error("load_vector: bedrock returned no embedding for file=%s", file_entry.get("filename"))
             return []

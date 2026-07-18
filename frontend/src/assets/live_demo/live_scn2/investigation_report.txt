@@ -1,5 +1,5 @@
 INVESTIGATION REPORT
-Case: 129011005202600001
+Case: 129011005202690002
 
 MONEY TRAIL SUMMARY
 Accused 'Imran S.' used phone 9611234567, UPI imran.transactions@axl, IMEI 351756078901234. Platform entity resolution should merge with historical aliases.

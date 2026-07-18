@@ -39,7 +39,7 @@ BATCH   = sys.argv[2] if len(sys.argv) > 2 else "00000000-0000-0000-0000-0000000
 CASE_ID = sys.argv[3] if len(sys.argv) > 3 else "1000063"
 
 job_meta = {
-    "job_name": f"test-{RUN_ID}",
+    "job_name": f"test_{RUN_ID}"[:20],  # Catalyst: alphanumeric + underscore, 1-20 chars
     "jobpool_name": "ingestpool",
     "jobpool_id": "42220000000026052",
     "target_type": "Function",

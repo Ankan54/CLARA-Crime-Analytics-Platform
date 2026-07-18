@@ -7,8 +7,8 @@ Translate the following First Information Report to Kannada. Do NOT translate pr
 **FIRST INFORMATION REPORT**
 Police Station: Whitefield Cyber Crime Police Station  
 District: Bengaluru Urban  
-Crime No: 129011005202600001  
-Case No: 202600001  
+Crime No: 129011005202690002  
+Case No: 202690002  
 Date of Registration: 2026-06-24  
 Date/Time of Offence: 2026-06-20T00:00:00 to 2026-06-23T23:59:00  
 
@@ -38,8 +38,8 @@ I, Kavitha Reddy, hereby lodge a complaint against an individual who has defraud
 **ಮೊದಲ ಮಾಹಿತಿ ವರದಿ**  
 ಪೋಲೀಸ್ ಠಾಣೆ: ವೈಟ್ಫೀಲ್ಡ್ ಸೈಬರ್ ಕ್ರೈಮ್ ಪೋಲೀಸ್ ಠಾಣೆ  
 ಜಿಲ್ಲೆ: ಬೆಂಗಳೂರು ನಗರ  
-ಅಪರಾಧ ಸಂಖ್ಯೆ: 129011005202600001  
-ಕೇಸ್ ಸಂಖ್ಯೆ: 202600001  
+ಅಪರಾಧ ಸಂಖ್ಯೆ: 129011005202690002  
+ಕೇಸ್ ಸಂಖ್ಯೆ: 202690002  
 ನೋಂದಣಿ ದಿನಾಂಕ: 2026-06-24  
 ಅಪರಾಧ ದಿನಾಂಕ/ಸಮಯ: 2026-06-20T00:00:00 ರಿಂದ 2026-06-23T23:59:00  
 

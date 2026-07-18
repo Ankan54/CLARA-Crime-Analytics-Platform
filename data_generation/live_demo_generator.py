@@ -29,11 +29,12 @@ from . import ksp_master as km
 from .identifier_pool import (
     AGG_ACC_01, CTRL_IMEI_01, CTRL_UPI_01, SCN1_MULE_KYC_NAME,
     DEV_IMEI_02, UPI_02, PHONE_02,
-    BRIDGE_ACC_03,
+    BRIDGE_ACC_03, HUB_ACC_03, SCN3_FREEZABLE_ACCS,
     DEV_POOL_04, IP_POOL_04, MULE_SET_04,
+    SCN4_CONTROLLER_UPI, SCN4_CONTROLLER_ACC,
 )
 from .legal_layer import sections_label_list, sections_for_crime_type
-from .narrative_generator import NarrativeGenerator
+from .narrative_generator import NarrativeGenerator, build_tier_a_digital_arrest_prompt
 
 # ---------------------------------------------------------------------------
 # FIR header block template
@@ -203,14 +204,19 @@ def generate_scn1_live(gen: NarrativeGenerator, base: Path,
         [SCN1_MULE_KYC_NAME], crime_type
     )
 
-    prompt = (
-        f"Write a realistic FIR narrative (200-300 words) for a digital arrest / fake CBI officer "
-        f"scam in Bengaluru. The complainant is Dr. Anand Rao, 58, retired professor. "
-        f"He received a video call from someone posing as a CBI officer claiming his Aadhaar "
-        f"was linked to a money laundering case. He was coerced into transferring Rs 42,00,000 "
-        f"to account {AGG_ACC_01['account_no']} (HDFC Bank, IFSC {AGG_ACC_01['ifsc']}). "
-        f"The controller used UPI {CTRL_UPI_01} and device IMEI {CTRL_IMEI_01}. "
-        f"Include the account number, IMEI, and UPI verbatim in the narrative."
+    # Use the SAME tier-A digital-arrest template as the 3 historical scn1 cases so the
+    # live FIR is near-duplicate to them by MEANING (the "same script across districts" wow).
+    # The controller IMEI/UPI are NOT in the FIR (the victim can't know them) — they are
+    # revealed in the investigation report below.
+    _station_unit = km.UNIT_MAP[km.STATION_ID_TO_UNIT_ID.get(station_id, 1001)]
+    prompt = build_tier_a_digital_arrest_prompt(
+        victim_name=complainant["name"], age=complainant["age"],
+        address="Malleswaram, Bengaluru", district="Bengaluru Urban",
+        date=reg_date, time="10:15", hours=24, amount="42,00,000",
+        num_transfers=3, channel="UPI",
+        beneficiary_account=AGG_ACC_01["account_no"],
+        realisation_trigger="the callers blocked all communication",
+        police_station=_station_unit.unit_name,
     )
     narrative_en = gen.generate(fir_id="LIVE_SCN1_FIR", prompt=prompt,
                                 tier="A", crime_type=crime_type)
@@ -369,11 +375,18 @@ def generate_scn3_live(gen: NarrativeGenerator, base: Path,
                                 tier="A", crime_type=crime_type)
     fir_txt = header + narrative_en
 
+    # IR reveals BOTH the bridge account and the high-volume aggregation hub (KYC
+    # Somashekar T), so the hub enters the graph as a mentioned node and Q3
+    # "rank hub accounts" can surface it. Freezable downstream accounts are named too.
     _write_live_files(base, fir_txt, narrative_en, gen, "LIVE_SCN3",
         crime_no, case_no, crime_type, complainant, accused, revealed, connects_to,
-        ir_newly_revealed={"accounts": [bridge_acc]},
-        ir_money_trail=f"BRIDGE_ACC_03 ({bridge_acc}) links this case to Belagavi digital arrest ring. "
-                       f"~Rs 6,20,000 still sitting in downstream accounts.",
+        ir_newly_revealed={"accounts": [bridge_acc, HUB_ACC_03["account_no"]] + list(SCN3_FREEZABLE_ACCS)},
+        ir_money_trail=(
+            f"BRIDGE_ACC_03 ({bridge_acc}) links this case to the Belagavi digital arrest ring. "
+            f"The highest-volume aggregation hub is account {HUB_ACC_03['account_no']} "
+            f"(KYC: {HUB_ACC_03['kyc_name']}). Approximately Rs 6,20,000 still sits in downstream "
+            f"accounts {', '.join(SCN3_FREEZABLE_ACCS)} with no outbound movement."
+        ),
         ir_connects_to=connects_to
     )
 
@@ -448,11 +461,26 @@ def generate_scn4_live(gen: NarrativeGenerator, base: Path,
                                 tier="A", crime_type=crime_type)
     fir_txt = header + narrative_en
 
+    # The seized handler's device dump reveals the FULL shared pool (5 IMEIs, 4 IPs) plus
+    # the controller UPI/account (live-only), so the live case joins the whole ring on
+    # shared infrastructure and the controller becomes reachable. (Operator role-typed
+    # Person nodes still require the extractor to parse a roster — tracked separately.)
+    all_pool_ips = [ip["ip"] for ip in IP_POOL_04]
     _write_live_files(base, fir_txt, narrative_en, gen, "LIVE_SCN4",
         crime_no, case_no, crime_type, complainant, accused, revealed, connects_to,
-        ir_newly_revealed={"imeis": [shared_imei], "ips": [shared_ip]},
-        ir_money_trail=f"IMEI {shared_imei} links this case to the SCN4 burst ring. "
-                       f"Platform spike-detection should show weekly count rising sharply.",
+        ir_newly_revealed={
+            "imeis": list(DEV_POOL_04),
+            "ips": all_pool_ips,
+            "upis": [SCN4_CONTROLLER_UPI],
+            "accounts": [SCN4_CONTROLLER_ACC["account_no"]],
+        },
+        ir_money_trail=(
+            f"Seized handler device dump links this case to the SCN4 burst ring via shared IMEIs "
+            f"{', '.join(DEV_POOL_04)} and operator IPs {', '.join(all_pool_ips)} "
+            f"(co-located, Electronic City Bengaluru). All commission payouts route to controller "
+            f"UPI {SCN4_CONTROLLER_UPI} and account {SCN4_CONTROLLER_ACC['account_no']}. "
+            f"Platform spike-detection should show weekly count rising sharply."
+        ),
         ir_connects_to=connects_to
     )
 

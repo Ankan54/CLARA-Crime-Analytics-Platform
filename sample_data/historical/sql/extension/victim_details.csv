@@ -22,11 +22,11 @@ VictimMasterID,OccupationID,CasteID,ReligionID,Address,Mobile,LossAmount,Residen
 4000021,9,1,5,"21, Colony Road, Davanagere",,56010,Davanagere
 4000022,12,1,5,"180, Cross Road, Hubballi-Dharwad",,10228,Hubballi-Dharwad
 4000023,1,1,5,"111, 1st Main, Chikkaballapur",,23398,Chikkaballapur
-4000024,10,1,5,,,26952,Chikkaballapur
-4000025,9,1,5,,,19400,Hassan
-4000026,1,1,5,,,17827,Mysuru
-4000027,11,1,5,,,19609,Hubballi-Dharwad
-4000028,14,1,5,,,8260,Shivamogga
+4000024,10,1,5,,,7988,Chikkaballapur
+4000025,9,1,5,,,19118,Chikkaballapur
+4000026,12,1,5,,,28454,Chikkaballapur
+4000027,13,1,5,,,10264,Mangaluru
+4000028,13,1,5,,,21763,Hassan
 4000029,20,1,5,,,332835,Bengaluru Rural
 4000030,3,1,5,,,2175185,Bengaluru Urban
 4000031,25,1,5,,,166283,Hassan

@@ -44,7 +44,7 @@ from . import ksp_master as km
 from .legal_layer import (
     build_act_section_associations, reset_asa_counter,
     LEGAL_SECTIONS, LEGAL_ELEMENTS, EVIDENCE_TYPES, PRECEDENTS,
-    IPC_SECTIONS,
+    IPC_SECTIONS, ELEMENT_SATISFIED_BY, LEGAL_SECTION_TO_KSP,
     REPLACES_EDGES, REQUIRES_EDGES, SATISFIED_BY_EDGES,
     SUPPORTS_EDGES, FAILED_ON_EDGES, INTERPRETS_EDGES,
     get_has_evidence_edges, get_charged_under_edges,
@@ -662,6 +662,57 @@ def write_extension_csvs(base: Path, corpus: Corpus,
         ["ReportID","CaseMasterID","ReportDate","IOOfficer",
          "MoneyTrailNotes","LinkedIdentifiers","SeizedItems","Arrests","IsLive"])
 
+    # Evidence — minimal document-anchored rows (not the BSA-63 legal-checklist
+    # subsystem in legal_layer.py, which stays unwired/out of scope). Historical
+    # cases previously had zero Evidence rows anywhere downstream, so their
+    # graph shape was Case-[:MENTIONS]->Account directly instead of
+    # Case-[:HAS_EVIDENCE]->Evidence-[:MENTIONS]->Account like live-ingested
+    # cases -- this gives every historical case one Evidence row for its FIR
+    # (always present) and one for its IR (where an IR exists), anchored to
+    # the actual on-disk document so file_ref is real, not synthetic.
+    evidence_rows: List[Dict[str, Any]] = []
+    evidence_seq = 0
+    for fir in corpus.firs:
+        cm_id = reg.get_case_master_id(fir.fir_id)
+        if cm_id is None:
+            continue
+        proj = fir_projections.get(fir.fir_id) or {}
+        crime_no = proj.get("crime_no") or (proj.get("case_master") or {}).get("CrimeNo")
+        if not crime_no:
+            continue
+        evidence_seq += 1
+        evidence_rows.append({
+            "EvidenceID": evidence_seq,
+            "CaseMasterID": cm_id,
+            "DocType": "FIR",
+            "FileRef": f"historical/docs/{crime_no}/fir.txt",
+            "OriginalFilename": "fir.txt",
+            "ExtractionStatus": "success",
+        })
+
+    for ir in corpus.investigation_reports:
+        if ir.is_live:
+            continue
+        cm_id = reg.resolve_source_fir_id(ir.fir_id) or reg.case_master_id(ir.fir_id)
+        if cm_id is None:
+            continue
+        proj = fir_projections.get(ir.fir_id) or {}
+        crime_no = proj.get("crime_no") or (proj.get("case_master") or {}).get("CrimeNo")
+        if not crime_no:
+            continue
+        evidence_seq += 1
+        evidence_rows.append({
+            "EvidenceID": evidence_seq,
+            "CaseMasterID": cm_id,
+            "DocType": "IR",
+            "FileRef": f"historical/docs/{crime_no}/investigation_report.txt",
+            "OriginalFilename": "investigation_report.txt",
+            "ExtractionStatus": "success",
+        })
+
+    _write_csv(ext / "evidence.csv", evidence_rows,
+        ["EvidenceID","CaseMasterID","DocType","FileRef","OriginalFilename","ExtractionStatus"])
+
     # Victim / Accused detail extension rows
     fir_map = {f.fir_id: f for f in corpus.firs}
     person_map = {p.person_id: p for p in corpus.persons}
@@ -743,6 +794,17 @@ def write_extension_csvs(base: Path, corpus: Corpus,
          for p in PRECEDENTS],
         ["PrecedentID","CaseName","Citation","Year","Court","Outcome",
          "ElementTurnedOn","SectionID","HoldingSummary","IsOverruled"])
+    # Bridges (ActCode, SectionCode) -> the legal layer's SectionID, straight from
+    # LEGAL_SECTION_TO_KSP -- the same mapping build_act_section_associations() uses to
+    # emit the charges in the first place, so the two can't drift apart.
+    _write_csv(ext / "section_map.csv",
+        [{"ActCode": act_code, "SectionCode": section_code, "SectionID": section_id}
+         for section_id, (act_code, section_code) in LEGAL_SECTION_TO_KSP.items()],
+        ["ActCode","SectionCode","SectionID"])
+    _write_csv(ext / "element_satisfied_by.csv",
+        [{"ElementID": r["element_id"], "EvidenceTypeID": r["evidence_type_id"]}
+         for r in ELEMENT_SATISFIED_BY],
+        ["ElementID","EvidenceTypeID"])
     _write_csv(ext / "ipc_sections.csv",
         [{"IPCSectionID": s.ipc_section_id, "SectionNumber": s.section_number,
           "Title": s.title}
@@ -1033,6 +1095,10 @@ def write_vector_jsonl(base: Path, corpus: Corpus,
     records = []
     _docs_root = docs_root or (base / "docs")
 
+    # crime_type/district per case, so IR vectors carry the same metadata as their FIR
+    # (needed for MO filtering; IR records otherwise had empty crime_type/district).
+    fir_meta_by_cmid: Dict[int, Dict[str, str]] = {}
+
     for fir in corpus.firs:
         cm_id = reg.get_case_master_id(fir.fir_id)
         if cm_id is None:
@@ -1043,11 +1109,16 @@ def write_vector_jsonl(base: Path, corpus: Corpus,
         unit_obj = km.UNIT_MAP.get(unit_id)
         dist_obj = km.DISTRICT_BY_ID.get(unit_obj.district_id if unit_obj else 0)
         district_name = dist_obj.district_name if dist_obj else "Unknown"
-        fir_doc_path = _docs_root / crime_no / "fir.txt"
-        if fir_doc_path.exists():
-            text = fir_doc_path.read_text(encoding="utf-8")
-        else:
-            text = narrative_map.get(fir.fir_id, "")
+        fir_meta_by_cmid[cm_id] = {"crime_type": fir.crime_type, "district": district_name}
+        # Embed the MO NARRATIVE PROSE, not the full structured FIR document. The KSP
+        # header/complainant/sections boilerplate is near-identical across all crime
+        # types, so embedding the whole doc clusters by format and buries the MO signal
+        # (digital-arrest cases ranked #38/#50 behind unrelated task-scams). The prose is
+        # what carries "same script" similarity. Fall back to the doc only if prose is missing.
+        text = narrative_map.get(fir.fir_id) or ""
+        if not text.strip():
+            fir_doc_path = _docs_root / crime_no / "fir.txt"
+            text = fir_doc_path.read_text(encoding="utf-8") if fir_doc_path.exists() else ""
         # future-consistency: key names match data_ingestion/config.VECTOR_METADATA_FIELDS.
         # latitude/longitude/pincode/district_id removed; ingest-time SQL join is authoritative.
         records.append({
@@ -1074,11 +1145,12 @@ def write_vector_jsonl(base: Path, corpus: Corpus,
         rid = reg.get_report_id(ir.report_id) or reg.report_id(ir.report_id)
         ir_proj = fir_projections.get(ir.fir_id, {})
         crime_no = ir_proj.get("crime_no","")
-        ir_doc_path = _docs_root / crime_no / "investigation_report.txt"
-        if ir_doc_path.exists():
-            text = ir_doc_path.read_text(encoding="utf-8")
-        else:
-            text = narrative_map.get(ir.report_id, ir.money_trail_notes or "")
+        # Embed IR prose, not the full doc (same reasoning as the FIR branch above).
+        text = narrative_map.get(ir.report_id) or ir.money_trail_notes or ""
+        if not text.strip():
+            ir_doc_path = _docs_root / crime_no / "investigation_report.txt"
+            text = ir_doc_path.read_text(encoding="utf-8") if ir_doc_path.exists() else ""
+        fmeta = fir_meta_by_cmid.get(cm_id, {})
         records.append({
             "node_id":  f"IR:{rid}",
             "text":     text,
@@ -1088,6 +1160,9 @@ def write_vector_jsonl(base: Path, corpus: Corpus,
                 "report_id":      ir.report_id,
                 "case_master_id": cm_id,
                 "report_date":    ir.report_date,
+                # Inherit the case's crime_type/district so IR vectors filter like FIRs.
+                "crime_type":     fmeta.get("crime_type", ""),
+                "district":       fmeta.get("district", ""),
                 "lang":           "en",
                 "doc_type":       "ir",
                 "is_live":        ir.is_live,

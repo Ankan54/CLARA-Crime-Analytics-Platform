@@ -1,6 +1,6 @@
 FIRST INFORMATION REPORT
 Police Station: Whitefield Cyber Crime Police Station   District: Bengaluru Urban
-Crime No: 129011005202600001   Case No: 202600001
+Crime No: 129011005202690002   Case No: 202690002
 Date of Registration: 2026-06-24   Date/Time of Offence: 2026-06-20T00:00:00 to 2026-06-23T23:59:00
 Complainant: Kavitha Reddy, Age 34, Occupation: Software Engineer
 Accused: Imran S.

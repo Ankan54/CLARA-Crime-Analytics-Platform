@@ -31,6 +31,12 @@ except Exception:  # pragma: no cover
     ChatAnthropic = None  # type: ignore[assignment]
     logging.getLogger(__name__).debug("langchain_anthropic unavailable", exc_info=True)
 
+try:
+    from langchain_aws import ChatBedrockConverse
+except Exception:  # pragma: no cover
+    ChatBedrockConverse = None  # type: ignore[assignment]
+    logging.getLogger(__name__).debug("langchain_aws unavailable", exc_info=True)
+
 
 _token_cache: dict[str, float | str | None] = {"token": None, "expires_at": 0.0}
 logger = logging.getLogger(__name__)
@@ -240,20 +246,36 @@ class ChatZohoGLM(BaseChatModel):
         return self.bind(tools=openai_tools, **kwargs)
 
 
-def _provider_for_purpose(purpose: str) -> str:
+# Whatever the primary provider is, fall back to OpenAI -- it's the one provider with
+# no self-hosted/rate-limited dependency. OpenAI itself falls back to Anthropic.
+_FALLBACK_PROVIDER = {
+    "zoho": "openai",
+    "anthropic": "openai",
+    "bedrock": "openai",
+    "openai": "anthropic",
+}
+
+
+def _provider_for_purpose(purpose: str) -> tuple[str, str]:
+    """Returns (provider, model_id_override). model_id_override is "" when the
+    provider's own configured default should be used."""
     purpose = purpose.lower()
     if purpose == "data_ingestion":
         logger.debug("llm provider for purpose=%s provider=%s", purpose, settings.data_ingestion_llm)
-        return settings.data_ingestion_llm
+        return settings.data_ingestion_llm, ""
     if purpose == "conv_ai":
-        logger.debug("llm provider for purpose=%s provider=%s", purpose, settings.conv_ai_llm)
-        return settings.conv_ai_llm
+        logger.debug(
+            "llm provider for purpose=%s provider=%s model=%s",
+            purpose, settings.chat_llm_provider, settings.chat_llm_id or "(provider default)",
+        )
+        return settings.chat_llm_provider, settings.chat_llm_id
     raise ValueError(f"Unknown purpose: {purpose}")
 
 
-def _build_single_model(provider: str) -> BaseChatModel:
+def _build_single_model(provider: str, model_id: str = "") -> BaseChatModel:
+    """model_id overrides the provider's configured default model (CHAT_LLM_ID)."""
     provider = provider.lower()
-    logger.debug("build_single_model provider=%s", provider)
+    logger.debug("build_single_model provider=%s model_id=%s", provider, model_id or "(default)")
     rate_limiter = None
     if InMemoryRateLimiter is not None:
         rate_limiter = InMemoryRateLimiter(
@@ -263,16 +285,17 @@ def _build_single_model(provider: str) -> BaseChatModel:
         )
 
     if provider == "zoho":
-        logger.debug("build_single_model using Zoho GLM model=%s endpoint=%s", settings.zoho_quickml_model_name, settings.zoho_quickml_endpoint_url)
-        return ChatZohoGLM(rate_limiter=rate_limiter)
+        model = model_id or settings.zoho_quickml_model_name
+        logger.debug("build_single_model using Zoho GLM model=%s endpoint=%s", model, settings.zoho_quickml_endpoint_url)
+        return ChatZohoGLM(model_name=model, rate_limiter=rate_limiter)
 
     if provider == "openai":
         if ChatOpenAI is None:
             logger.error("build_single_model provider=openai requested but langchain-openai not installed")
             raise RuntimeError("langchain-openai is not installed.")
-        logger.debug("build_single_model using OpenAI model=%s", settings.openai_model)
+        logger.debug("build_single_model using OpenAI model=%s", model_id or settings.openai_model)
         return ChatOpenAI(
-            model=settings.openai_model,
+            model=model_id or settings.openai_model,
             api_key=settings.openai_api_key or os.getenv("OPENAI_API_KEY", ""),
             temperature=0.2,
             max_retries=3,
@@ -283,31 +306,53 @@ def _build_single_model(provider: str) -> BaseChatModel:
         if ChatAnthropic is None:
             logger.error("build_single_model provider=anthropic requested but langchain-anthropic not installed")
             raise RuntimeError("langchain-anthropic is not installed.")
-        logger.debug("build_single_model using Anthropic model=%s", settings.anthropic_model)
+        logger.debug("build_single_model using Anthropic model=%s", model_id or settings.anthropic_model)
         return ChatAnthropic(
-            model=settings.anthropic_model,
+            model=model_id or settings.anthropic_model,
             api_key=settings.anthropic_api_key or os.getenv("ANTHROPIC_API_KEY", ""),
             temperature=0.2,
             max_retries=3,
             rate_limiter=rate_limiter,
         )
 
-    raise ValueError(f"Unsupported provider '{provider}'. Expected one of zoho|openai|anthropic.")
+    if provider == "bedrock":
+        if ChatBedrockConverse is None:
+            logger.error("build_single_model provider=bedrock requested but langchain-aws not installed")
+            raise RuntimeError("langchain-aws is not installed.")
+        # Credentials come from boto3's default chain (AWS_ACCESS_KEY_ID /
+        # AWS_SECRET_ACCESS_KEY), not passed explicitly -- same as the ingest
+        # function's llm.py. Note the "Catalyst strips botocore/data" caveat applies
+        # to the function ZIP, not here: AppSail is a plain Docker image with a normal
+        # uv pip install, so boto3's data tree is intact.
+        model = model_id or settings.bedrock_model_id
+        logger.debug("build_single_model using Bedrock model=%s region=%s", model, settings.aws_region)
+        return ChatBedrockConverse(
+            model=model,
+            region_name=settings.aws_region,
+            temperature=0.2,
+            max_tokens=1024,
+            rate_limiter=rate_limiter,
+        )
+
+    raise ValueError(f"Unsupported provider '{provider}'. Expected one of zoho|openai|anthropic|bedrock.")
 
 
 def build_llm_pair(purpose: str) -> tuple[BaseChatModel, BaseChatModel]:
-    primary_provider = _provider_for_purpose(purpose)
-    if primary_provider == "zoho":
-        fallback_provider = "openai"
-    elif primary_provider == "anthropic":
-        fallback_provider = "openai"
-    elif primary_provider == "openai":
-        fallback_provider = "anthropic"
-    else:
-        raise ValueError(f"Invalid provider '{primary_provider}' for {purpose}.")
+    primary_provider, model_id = _provider_for_purpose(purpose)
+    fallback_provider = _FALLBACK_PROVIDER.get(primary_provider)
+    if fallback_provider is None:
+        raise ValueError(
+            f"Invalid provider '{primary_provider}' for {purpose}. "
+            f"Expected one of {'|'.join(_FALLBACK_PROVIDER)}."
+        )
 
-    logger.info("build_llm_pair purpose=%s primary=%s fallback=%s", purpose, primary_provider, fallback_provider)
-    primary = _build_single_model(primary_provider)
+    logger.info(
+        "build_llm_pair purpose=%s primary=%s model=%s fallback=%s",
+        purpose, primary_provider, model_id or "(default)", fallback_provider,
+    )
+    # The model_id override applies to the primary only -- the fallback is a different
+    # provider, where that id would be meaningless.
+    primary = _build_single_model(primary_provider, model_id)
     fallback = _build_single_model(fallback_provider)
     return primary, fallback
 

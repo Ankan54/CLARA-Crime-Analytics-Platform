@@ -1,6 +1,0 @@
-Bridge Account: 5530123456789001
-Bank: Union Bank of India
-IFSC: UBIN0557301
-Branch District: Belagavi
-Status: Flagged as mule account
-Freezable amount: ~Rs 6,20,000 (TXN_SCN3_E04 pending)

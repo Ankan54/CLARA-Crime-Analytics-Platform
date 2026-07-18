@@ -29,16 +29,16 @@ BRIEF FACTS / COMPLAINT NARRATIVE
 FIR_SCN4_BASE_05
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : INDP_ACC_BASE_05_48409
+  Bank Accounts  : INDP_ACC_BASE_05_53918
   UPI VPAs       : baseline.task05@okicici
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-02-13T01:14  |  Instagram message about reel liking job
-  2026-02-14T01:14  |  first task completed, small payment
-  2026-02-15T01:14  |  money deposited to unlock premium tasks
-  2026-02-15T01:14  |  FIR filed
-  2026-02-18T01:14  |  withdrawal refused
+  2026-05-30T21:34  |  Instagram message about reel liking job
+  2026-05-31T21:34  |  first task completed, small payment
+  2026-06-01T21:34  |  money deposited to unlock premium tasks
+  2026-06-02T21:34  |  FIR filed
+  2026-06-04T21:34  |  withdrawal refused
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CaseMasterID     : 1000028

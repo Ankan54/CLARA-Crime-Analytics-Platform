@@ -143,6 +143,7 @@ def build_db(sql_dir: str = DEFAULT_SQL_DIR,
     load("EXT_ComplainantIn",        ext / "rels_complainant_in.csv")
     load("EXT_CaseGeo",              ext / "case_geo.csv")
     load("EXT_InvestigationReport",  ext / "investigation_reports.csv")
+    load("EXT_Evidence",             ext / "evidence.csv")
     load("EXT_VictimDetail",         ext / "victim_details.csv")
     load("EXT_AccusedDetail",        ext / "accused_details.csv")
     load("EXT_SubEvent",             ext / "sub_events.csv")
@@ -150,6 +151,8 @@ def build_db(sql_dir: str = DEFAULT_SQL_DIR,
     load("EXT_EvidenceType",         ext / "evidence_types.csv")
     load("EXT_Precedent",            ext / "precedents.csv")
     load("EXT_IPCSection",           ext / "ipc_sections.csv")
+    load("EXT_SectionMap",           ext / "section_map.csv")
+    load("EXT_ElementSatisfiedBy",   ext / "element_satisfied_by.csv")
     conn.commit()
 
     # -----------------------------------------------------------------------
@@ -170,7 +173,7 @@ def build_db(sql_dir: str = DEFAULT_SQL_DIR,
         "ArrestSurrender","ActSectionAssociation","ChargesheetDetails",
         "EXT_Account","EXT_Transaction","EXT_Uses","EXT_Mentions",
         "EXT_AccusedIn","EXT_ComplainantIn","EXT_VictimDetail",
-        "EXT_AccusedDetail","EXT_SubEvent",
+        "EXT_AccusedDetail","EXT_SubEvent","EXT_Evidence",
     ]:
         try:
             n = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]

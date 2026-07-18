@@ -49,7 +49,7 @@ def list_review_queue(
                    match_score, matched_fields_json, status, resolved_by, resolved_at, created_at
             FROM ReviewQueueItem
             WHERE status = :status
-              AND (:run_id IS NULL OR source_run_id = :run_id)
+              AND (source_run_id = :run_id OR :run_id IS NULL)
             ORDER BY created_at ASC
             LIMIT :limit
             """

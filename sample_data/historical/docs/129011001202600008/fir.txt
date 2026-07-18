@@ -5,15 +5,15 @@ Crime No.        : 129011001202600008
 Case No.         : 202600008
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Date Registered  : 2026-03-09
-Date of Offence  : 2026-03-08
+Date Registered  : 2026-05-13
+Date of Offence  : 2026-05-12
 IO Officer       : Girish Rao
 
 COMPLAINANT DETAILS
 -------------------
-Name             : Virupaksha Kamath
-Age              : 36 years
-Occupation       : Software Engineer
+Name             : Ambika Acharya
+Age              : 50 years
+Occupation       : Retired IAS Officer
 Address          : 
 
 ACCUSED DETAILS
@@ -22,40 +22,38 @@ ACCUSED DETAILS
 
 SECTIONS CHARGED
 ----------------
-Section 66D ITACT, Section 318 BNS, Section 3 PMLA
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_325
+FIR_BG_326
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG64567105083
-  UPI VPAs       : virupaks79@okicici
-  Phone Numbers  : 9466881217
+  Bank Accounts  : BG88235313465
+  Phone Numbers  : 9132253270
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-03-08T07:51  |  investment offer on WhatsApp
-  2026-03-11T07:51  |  test withdrawal succeeded
-  2026-03-15T07:51  |  large investment transferred
-  2026-03-18T07:51  |  withdrawal blocked
-  2026-03-20T07:51  |  FIR filed
+  2026-05-12T04:35  |  call from fake official
+  2026-05-12T04:45  |  digital arrest threat
+  2026-05-12T05:05  |  fund transfer
+  2026-05-14T04:35  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-03-08  |  From: VICTIM_ACC_FIR_BG_325  ->  To: BG64567105083  |  Rs. 480,660  |  Channel: IMPS
+  2026-05-12  |  From: VICTIM_ACC_FIR_BG_326  ->  To: BG88235313465  |  Rs. 2,050,847  |  Channel: NEFT
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CaseMasterID     : 1000054
+CaseMasterID     : 1000055
 PoliceStationID  : 1001
 CaseCategoryID   : 1
 GravityOffenceID : 3
 CrimeHeadID      : 101
-CrimeSubHeadID   : 1012
+CrimeSubHeadID   : 1011
 CaseStatusID     : 1
 CourtID          : 7002
-Lat/Long         : 13.056315, 77.543008
+Lat/Long         : 12.367864, 75.831847
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-03-09
-Signature of Complainant: Virupaksha Kamath
+Place, Date: Bengaluru Urban, 2026-05-13
+Signature of Complainant: Ambika Acharya
 Signature of Recording Officer: Girish Rao, CEN Police Station - East Division

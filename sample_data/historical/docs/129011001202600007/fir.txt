@@ -5,15 +5,15 @@ Crime No.        : 129011001202600007
 Case No.         : 202600007
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Date Registered  : 2026-03-17
-Date of Offence  : 2026-03-11
-IO Officer       : Basavaraj Gudadinni
+Date Registered  : 2026-03-09
+Date of Offence  : 2026-03-08
+IO Officer       : Girish Rao
 
 COMPLAINANT DETAILS
 -------------------
-Name             : Arjun Kamath
-Age              : 30 years
-Occupation       : Trader
+Name             : Virupaksha Kamath
+Age              : 36 years
+Occupation       : Software Engineer
 Address          : 
 
 ACCUSED DETAILS
@@ -22,38 +22,40 @@ ACCUSED DETAILS
 
 SECTIONS CHARGED
 ----------------
-Section 66C ITACT, Section 66D ITACT, Section 318 BNS
+Section 66D ITACT, Section 318 BNS, Section 3 PMLA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_323
+FIR_BG_325
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG41010877260
-  UPI VPAs       : arjunkam83@okicici
-  Phone Numbers  : 9622744248
+  Bank Accounts  : BG64567105083
+  UPI VPAs       : virupaks79@okicici
+  Phone Numbers  : 9466881217
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-03-11T21:27  |  fake UPI request sent
-  2026-03-11T21:32  |  payment made under confusion
-  2026-03-12T21:27  |  FIR filed
+  2026-03-08T07:51  |  investment offer on WhatsApp
+  2026-03-11T07:51  |  test withdrawal succeeded
+  2026-03-15T07:51  |  large investment transferred
+  2026-03-18T07:51  |  withdrawal blocked
+  2026-03-20T07:51  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-03-11  |  From: VICTIM_ACC_FIR_BG_323  ->  To: BG41010877260  |  Rs. 402,770  |  Channel: IMPS
+  2026-03-08  |  From: VICTIM_ACC_FIR_BG_325  ->  To: BG64567105083  |  Rs. 480,660  |  Channel: IMPS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CaseMasterID     : 1000052
+CaseMasterID     : 1000054
 PoliceStationID  : 1001
 CaseCategoryID   : 1
 GravityOffenceID : 3
 CrimeHeadID      : 101
-CrimeSubHeadID   : 1014
+CrimeSubHeadID   : 1012
 CaseStatusID     : 1
 CourtID          : 7002
-Lat/Long         : 16.173526, 75.725017
+Lat/Long         : 13.056315, 77.543008
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-03-17
-Signature of Complainant: Arjun Kamath
-Signature of Recording Officer: Basavaraj Gudadinni, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-03-09
+Signature of Complainant: Virupaksha Kamath
+Signature of Recording Officer: Girish Rao, CEN Police Station - East Division

@@ -7,7 +7,7 @@ Police Station   : Chikkaballapur CEN Police Station
 District         : Chikkaballapur
 Date Registered  : 2026-05-16
 Date of Offence  : 2026-05-14
-IO Officer       : Manjunath Gowda
+IO Officer       : Anand Hegde
 
 COMPLAINANT DETAILS
 -------------------
@@ -53,4 +53,4 @@ Lat/Long         : 13.422615, 77.735892
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Place, Date: Chikkaballapur, 2026-05-16
 Signature of Complainant: Mohan Venkataraman
-Signature of Recording Officer: Manjunath Gowda, Chikkaballapur CEN Police Station
+Signature of Recording Officer: Anand Hegde, Chikkaballapur CEN Police Station

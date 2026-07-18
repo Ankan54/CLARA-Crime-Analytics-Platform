@@ -64,11 +64,11 @@ TARGET_INVESTIGATION_REPORTS_HISTORICAL = 31
 TARGET_INVESTIGATION_REPORTS_LIVE = 4
 
 TARGET_PERSONS = 110        # victims ~65 + criminal/mule/operator ~45
-TARGET_ACCOUNTS = 57
+TARGET_ACCOUNTS = 62        # 57 pool + 5 scenario_4 baseline (now real Account rows, not dangling strings)
 TARGET_TRANSACTIONS = 101
 TARGET_DEVICES = 7
 TARGET_PHONES = 2
-TARGET_UPIS = 9
+TARGET_UPIS = 14            # 9 pool + 5 scenario_4 baseline (same reason as TARGET_ACCOUNTS)
 TARGET_IPS = 4
 TARGET_WALLETS = 1
 TARGET_LEGAL_SECTIONS = 10

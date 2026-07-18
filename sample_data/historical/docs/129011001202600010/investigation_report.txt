@@ -1,36 +1,35 @@
 KARNATAKA STATE POLICE
 INVESTIGATION REPORT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Report ID        : IR:5000027
+Report ID        : IR:5000028
 Crime No.        : 129011001202600010
 Case No.         : 202600010
-CaseMasterID     : 1000058
+CaseMasterID     : 1000059
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Report Date      : 2026-02-20
-IO Officer       : Anand Hegde (EmployeeID: 5006)
+Report Date      : 2026-03-27
+IO Officer       : Savitha Nagaraj (EmployeeID: 5004)
 Accused          : Unknown
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INVESTIGATION FINDINGS
-Victim transferred ₹386,331 via IMPS. Account BG84455438916 flagged as mule.
+Victim transferred ₹2,006,000 via UPI. Account BG53872097477 flagged as mule.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG84455438916
-  UPI VPAs       : lakshmil68@okicici
-  Phone Numbers  : 9764231018
+  Bank Accounts  : BG53872097477
+  Phone Numbers  : 9782890413
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-01-31T08:42  |  task group invite
-  2026-02-01T08:42  |  first deposit to unlock tasks
-  2026-02-05T08:42  |  withdrawal refused
-  2026-02-06T08:42  |  FIR filed
+  2026-03-20T20:54  |  call from fake official
+  2026-03-20T21:04  |  digital arrest threat
+  2026-03-20T21:24  |  fund transfer
+  2026-03-22T20:54  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-01-31  |  From: VICTIM_ACC_FIR_BG_329  ->  To: BG84455438916  |  Rs. 386,331  |  Channel: IMPS
+  2026-03-20  |  From: VICTIM_ACC_FIR_BG_330  ->  To: BG53872097477  |  Rs. 2,006,000  |  Channel: NEFT
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-02-20
-Signature of IO: Anand Hegde, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-03-27
+Signature of IO: Savitha Nagaraj, CEN Police Station - East Division

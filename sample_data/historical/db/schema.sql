@@ -360,6 +360,15 @@ CREATE TABLE IF NOT EXISTS EXT_InvestigationReport (
     IsLive             INTEGER DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS EXT_Evidence (
+    EvidenceID       INTEGER PRIMARY KEY,
+    CaseMasterID     INTEGER NOT NULL REFERENCES CaseMaster(CaseMasterID),
+    DocType          TEXT NOT NULL,
+    FileRef          TEXT NOT NULL,
+    OriginalFilename TEXT NOT NULL,
+    ExtractionStatus TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS EXT_VictimDetail (
     VictimMasterID INTEGER PRIMARY KEY REFERENCES Victim(VictimMasterID),
     OccupationID   INTEGER REFERENCES OccupationMaster(OccupationID),
@@ -424,4 +433,28 @@ CREATE TABLE IF NOT EXISTS EXT_IPCSection (
     IPCSectionID  TEXT PRIMARY KEY,
     SectionNumber TEXT,
     Title         TEXT
+);
+
+-- Bridges the KSP-ER section identity to the legal layer's.
+-- ActSectionAssociation keys charges as (ActCode='ITACT', SectionCode='66C'); the legal
+-- layer keys elements and precedents as SectionID='IT_66C'. Nothing joined the two, so
+-- "which elements must I prove for this case's charges?" was unanswerable from SQL --
+-- the whole legal chain (charge -> element -> evidence -> precedent) dead-ended at the
+-- first hop. Derived from LEGAL_SECTIONS, so it stays in step with the legal layer
+-- instead of living as a prefix-guessing constant in the agent.
+CREATE TABLE IF NOT EXISTS EXT_SectionMap (
+    ActCode     TEXT NOT NULL,
+    SectionCode TEXT NOT NULL,
+    SectionID   TEXT NOT NULL,
+    PRIMARY KEY (ActCode, SectionCode)
+);
+
+-- Which kinds of evidence can satisfy a given legal element. Real curated legal
+-- reference data (ELEMENT_SATISFIED_BY), previously built in memory and returned by
+-- get_legal_data() but never persisted anywhere -- leaving the checklist unable to say
+-- what would actually close a gap.
+CREATE TABLE IF NOT EXISTS EXT_ElementSatisfiedBy (
+    ElementID      TEXT NOT NULL,
+    EvidenceTypeID TEXT NOT NULL,
+    PRIMARY KEY (ElementID, EvidenceTypeID)
 );

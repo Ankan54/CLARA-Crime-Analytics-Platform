@@ -5,15 +5,15 @@ Crime No.        : 129011001202600002
 Case No.         : 202600002
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Date Registered  : 2026-04-18
-Date of Offence  : 2026-04-12
-IO Officer       : Ravi Krishnamurthy
+Date Registered  : 2026-04-06
+Date of Offence  : 2026-04-03
+IO Officer       : Nirmala Shetty
 
 COMPLAINANT DETAILS
 -------------------
-Name             : Ajay Patel
-Age              : 45 years
-Occupation       : Government Employee
+Name             : Siddappa Iyer
+Age              : 21 years
+Occupation       : Job Seeker
 Address          : 
 
 ACCUSED DETAILS
@@ -22,40 +22,39 @@ ACCUSED DETAILS
 
 SECTIONS CHARGED
 ----------------
-Section 66D ITACT, Section 318 BNS, Section 3 PMLA
+Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_304
+FIR_BG_307
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG28261026675
-  UPI VPAs       : ajaypate67@okicici
-  Phone Numbers  : 9644425867
+  Bank Accounts  : BG41943151749
+  UPI VPAs       : siddappa52@okicici
+  Phone Numbers  : 9482479207
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-04-12T11:44  |  investment offer on WhatsApp
-  2026-04-15T11:44  |  test withdrawal succeeded
-  2026-04-19T11:44  |  large investment transferred
-  2026-04-22T11:44  |  withdrawal blocked
-  2026-04-24T11:44  |  FIR filed
+  2026-04-03T03:39  |  task group invite
+  2026-04-04T03:39  |  first deposit to unlock tasks
+  2026-04-08T03:39  |  withdrawal refused
+  2026-04-09T03:39  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-04-12  |  From: VICTIM_ACC_FIR_BG_304  ->  To: BG28261026675  |  Rs. 328,830  |  Channel: UPI
+  2026-04-03  |  From: VICTIM_ACC_FIR_BG_307  ->  To: BG41943151749  |  Rs. 283,059  |  Channel: UPI
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CaseMasterID     : 1000033
+CaseMasterID     : 1000036
 PoliceStationID  : 1001
 CaseCategoryID   : 1
 GravityOffenceID : 3
 CrimeHeadID      : 101
-CrimeSubHeadID   : 1012
+CrimeSubHeadID   : 1013
 CaseStatusID     : 1
 CourtID          : 7002
-Lat/Long         : 13.281559, 75.797082
+Lat/Long         : 11.911649, 77.202107
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-04-18
-Signature of Complainant: Ajay Patel
-Signature of Recording Officer: Ravi Krishnamurthy, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-04-06
+Signature of Complainant: Siddappa Iyer
+Signature of Recording Officer: Nirmala Shetty, CEN Police Station - East Division

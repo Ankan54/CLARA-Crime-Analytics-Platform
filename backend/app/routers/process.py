@@ -9,9 +9,11 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from ..db import get_db
+from ..demo_scenarios import case_defaults_for, get_scenario
 from ..schemas import ProcessBatchResponse, ProcessProceedResponse
 from ..services.catalyst_queue import build_processed_prefix, get_checkpoint_manifest, list_raw_objects, submit_ingestion_job
 from ..services.findings import build_findings
+from ..services.run_watchdog import reap_stale_runs
 from ..services.stage_labels import annotate_run, status_label
 
 
@@ -37,12 +39,13 @@ def list_runs(
 ) -> dict[str, object]:
     """Newest-first PipelineRun listing — the FE's source for 'runs awaiting your
     review' (status=REVIEW_PENDING) and for rediscovering runs after a refresh."""
+    reap_stale_runs(db)
     limit = max(1, min(limit, 200))
     sql = """
         SELECT run_id, batch_id, case_id, phase, current_stage, status, error_message, created_at, updated_at
         FROM PipelineRun
-        WHERE (:case_id IS NULL OR case_id = :case_id)
-          AND (:status IS NULL OR status = :status)
+        WHERE (case_id = :case_id OR :case_id IS NULL)
+          AND (status = :status OR :status IS NULL)
         ORDER BY created_at DESC
         LIMIT :limit
     """
@@ -62,6 +65,10 @@ def process_batch(batch_id: str, db: Session = Depends(get_db)) -> ProcessBatchR
     if not list_raw_objects(batch_id):
         raise HTTPException(status_code=400, detail="No raw files found for this batch.")
 
+    # A stale QUEUED/RUNNING row (job never actually executed) must not permanently
+    # block reprocessing this batch with a false "already being processed" 409.
+    reap_stale_runs(db)
+
     existing_run = db.execute(
         text(
             "SELECT run_id, status FROM PipelineRun WHERE batch_id = :batch_id AND status = ANY(:statuses) "
@@ -80,8 +87,44 @@ def process_batch(batch_id: str, db: Session = Depends(get_db)) -> ProcessBatchR
     scenario_generation = batch["scenario_generation"]
 
     if case_id is None:
+        # PipelineRun.case_id FK requires CaseMaster to exist before the run row.
+        # Phase B (_ensure_case_master) will enrich this stub from FIR fields.
         next_id = db.execute(text("SELECT COALESCE(MAX(CaseMasterID), 0) + 1 AS next_id FROM CaseMaster")).mappings().one()
         case_id = int(next_id["next_id"])
+        scenario = get_scenario(scenario_key) if scenario_key else None
+        crime_no = (scenario.crime_no if scenario else None) or f"1{case_id:017d}"[:18]
+        d = case_defaults_for(scenario_key)
+        case_no = d.case_no or str(case_id)
+        db.execute(
+            text(
+                """
+                INSERT INTO CaseMaster
+                    (CaseMasterID, CrimeNo, CaseNo, CrimeRegisteredDate, PolicePersonID, PoliceStationID,
+                     CaseCategoryID, GravityOffenceID, CrimeMajorHeadID, CrimeMinorHeadID, CaseStatusID, CourtID, BriefFacts)
+                VALUES
+                    (:case_id, :crime_no, :case_no, NOW(), :police_person_id, :police_station_id,
+                     :case_category_id, :gravity_offence_id, :crime_major_head_id, :crime_minor_head_id,
+                     :case_status_id, :court_id, NULL)
+                """
+            ),
+            {
+                "case_id": case_id,
+                "crime_no": crime_no,
+                "case_no": case_no,
+                "police_person_id": d.police_person_id,
+                "police_station_id": d.police_station_id,
+                "case_category_id": d.case_category_id,
+                "gravity_offence_id": d.gravity_offence_id,
+                "crime_major_head_id": d.crime_major_head_id,
+                "crime_minor_head_id": d.crime_minor_head_id,
+                "case_status_id": d.case_status_id,
+                "court_id": d.court_id,
+            },
+        )
+        db.execute(
+            text("UPDATE BatchUpload SET case_id = :case_id WHERE batch_id = :batch_id"),
+            {"case_id": case_id, "batch_id": batch_id},
+        )
 
     run_id = _mint_run_id(case_id)
     checkpoint_prefix = build_processed_prefix(case_id, run_id)
@@ -198,9 +241,15 @@ def process_proceed(run_id: str, db: Session = Depends(get_db)) -> ProcessProcee
 
 @router.post("/process/{run_id}/retry", response_model=ProcessProceedResponse)
 def process_retry(run_id: str, db: Session = Depends(get_db)) -> ProcessProceedResponse:
-    """Re-submit a failed run's current phase. Safe to retry: raw/ files survive
-    a Phase A failure, the processed/ checkpoint survives a Phase B failure, and
-    both phases are idempotent (MERGE-keyed graph writes, checkpoint overwrite)."""
+    """Re-submit a failed run's current phase. raw/ files survive a Phase A failure
+    and the processed/ checkpoint survives a Phase B failure, so retry always has
+    its inputs. Graph (MERGE-keyed) and vector (upsert-by-id) writes are idempotent,
+    but Phase B's Postgres person/evidence/transaction writes are plain INSERTs with
+    a freshly computed pk -- if Phase B failed partway through a file's SQL load
+    (some rows already committed) rather than before any SQL write, retrying will
+    duplicate those rows. Prefer re-preparing the scenario (full purge) over retry
+    when a Phase B failure's error_stage is SQL_LOAD/LOAD_FAILED partway through a
+    file, until the SQL writes are made idempotent too."""
     run = db.execute(
         text("SELECT run_id, batch_id, case_id, phase, status FROM PipelineRun WHERE run_id = :run_id"),
         {"run_id": run_id},

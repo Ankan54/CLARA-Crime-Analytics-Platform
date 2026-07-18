@@ -5,15 +5,15 @@ Crime No.        : 129141025202600002
 Case No.         : 202600002
 Police Station   : Hassan CEN Police Station
 District         : Hassan
-Date Registered  : 2026-04-20
-Date of Offence  : 2026-04-15
-IO Officer       : Savitha Nagaraj
+Date Registered  : 2026-06-02
+Date of Offence  : 2026-05-30
+IO Officer       : Ravi Krishnamurthy
 
 COMPLAINANT DETAILS
 -------------------
-Name             : Shakuntala Gaonkar
-Age              : 26 years
-Occupation       : Fresher
+Name             : Sanjay Pillai
+Age              : 19 years
+Occupation       : MBA Student
 Address          : 
 
 ACCUSED DETAILS
@@ -26,22 +26,22 @@ Section 66D ITACT, Section 318 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_SCN4_BASE_02
+FIR_SCN4_BASE_05
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : INDP_ACC_BASE_02_80001
-  UPI VPAs       : baseline.task02@okicici
+  Bank Accounts  : INDP_ACC_BASE_05_53918
+  UPI VPAs       : baseline.task05@okicici
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-04-15T09:01  |  Instagram message about reel liking job
-  2026-04-16T09:01  |  first task completed, small payment
-  2026-04-17T09:01  |  money deposited to unlock premium tasks
-  2026-04-20T09:01  |  withdrawal refused
-  2026-04-20T09:01  |  FIR filed
+  2026-05-30T21:34  |  Instagram message about reel liking job
+  2026-05-31T21:34  |  first task completed, small payment
+  2026-06-01T21:34  |  money deposited to unlock premium tasks
+  2026-06-02T21:34  |  FIR filed
+  2026-06-04T21:34  |  withdrawal refused
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CaseMasterID     : 1000025
+CaseMasterID     : 1000028
 PoliceStationID  : 1025
 CaseCategoryID   : 1
 GravityOffenceID : 3
@@ -49,8 +49,8 @@ CrimeHeadID      : 101
 CrimeSubHeadID   : 1013
 CaseStatusID     : 1
 CourtID          : 7001
-Lat/Long         : 13.05319, 76.136633
+Lat/Long         : 12.975029, 76.148159
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Hassan, 2026-04-20
-Signature of Complainant: Shakuntala Gaonkar
-Signature of Recording Officer: Savitha Nagaraj, Hassan CEN Police Station
+Place, Date: Hassan, 2026-06-02
+Signature of Complainant: Sanjay Pillai
+Signature of Recording Officer: Ravi Krishnamurthy, Hassan CEN Police Station

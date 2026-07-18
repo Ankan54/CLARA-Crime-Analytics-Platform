@@ -6,9 +6,9 @@ Case No.         : 202600003
 CaseMasterID     : 1000024
 Police Station   : Chikkaballapur CEN Police Station
 Report Date      : 2026-05-16
-IO Officer       : Manjunath Gowda (EmployeeID: 5003)
+IO Officer       : Anand Hegde (EmployeeID: 5006)
 
 Status           : Case under investigation. Preliminary enquiry completed.
                    Cyber Cell notified. Further investigation ongoing.
 
-Signature: Manjunath Gowda, Chikkaballapur CEN Police Station
+Signature: Anand Hegde, Chikkaballapur CEN Police Station

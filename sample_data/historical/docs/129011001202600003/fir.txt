@@ -5,15 +5,15 @@ Crime No.        : 129011001202600003
 Case No.         : 202600003
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Date Registered  : 2026-04-06
-Date of Offence  : 2026-04-03
-IO Officer       : Nirmala Shetty
+Date Registered  : 2026-03-26
+Date of Offence  : 2026-03-23
+IO Officer       : Kavitha Reddy
 
 COMPLAINANT DETAILS
 -------------------
-Name             : Siddappa Iyer
-Age              : 21 years
-Occupation       : Job Seeker
+Name             : Sarala Shastri
+Age              : 19 years
+Occupation       : Part-time Worker
 Address          : 
 
 ACCUSED DETAILS
@@ -22,39 +22,39 @@ ACCUSED DETAILS
 
 SECTIONS CHARGED
 ----------------
-Section 66D ITACT, Section 318 BNS
+Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_307
+FIR_BG_309
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG41943151749
-  UPI VPAs       : siddappa52@okicici
-  Phone Numbers  : 9482479207
+  Bank Accounts  : BG71901301368
+  UPI VPAs       : saralash91@okicici
+  Phone Numbers  : 9517310810
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-04-03T03:39  |  task group invite
-  2026-04-04T03:39  |  first deposit to unlock tasks
-  2026-04-08T03:39  |  withdrawal refused
-  2026-04-09T03:39  |  FIR filed
+  2026-03-23T00:28  |  fake job offer received
+  2026-03-24T00:28  |  registration fee paid
+  2026-04-02T00:28  |  offer turned out fake
+  2026-04-03T00:28  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-04-03  |  From: VICTIM_ACC_FIR_BG_307  ->  To: BG41943151749  |  Rs. 283,059  |  Channel: UPI
+  2026-03-23  |  From: VICTIM_ACC_FIR_BG_309  ->  To: BG71901301368  |  Rs. 296,983  |  Channel: UPI
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CaseMasterID     : 1000036
+CaseMasterID     : 1000038
 PoliceStationID  : 1001
 CaseCategoryID   : 1
 GravityOffenceID : 3
 CrimeHeadID      : 101
-CrimeSubHeadID   : 1013
+CrimeSubHeadID   : 1017
 CaseStatusID     : 1
 CourtID          : 7002
-Lat/Long         : 11.911649, 77.202107
+Lat/Long         : 12.307727, 75.851338
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-04-06
-Signature of Complainant: Siddappa Iyer
-Signature of Recording Officer: Nirmala Shetty, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-03-26
+Signature of Complainant: Sarala Shastri
+Signature of Recording Officer: Kavitha Reddy, CEN Police Station - East Division

@@ -5,15 +5,15 @@ Crime No.        : 129011001202600010
 Case No.         : 202600010
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Date Registered  : 2026-02-01
-Date of Offence  : 2026-01-31
-IO Officer       : Anand Hegde
+Date Registered  : 2026-03-27
+Date of Offence  : 2026-03-20
+IO Officer       : Savitha Nagaraj
 
 COMPLAINANT DETAILS
 -------------------
-Name             : Lakshmi Lamani
-Age              : 28 years
-Occupation       : Engineering Student
+Name             : Bhavana Gaonkar
+Age              : 53 years
+Occupation       : Retired Engineer
 Address          : 
 
 ACCUSED DETAILS
@@ -22,39 +22,38 @@ ACCUSED DETAILS
 
 SECTIONS CHARGED
 ----------------
-Section 66D ITACT, Section 318 BNS
+Section 66C ITACT, Section 66D ITACT, Section 318 BNS, Section 319 BNS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BRIEF FACTS / COMPLAINT NARRATIVE
-FIR_BG_329
+FIR_BG_330
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG84455438916
-  UPI VPAs       : lakshmil68@okicici
-  Phone Numbers  : 9764231018
+  Bank Accounts  : BG53872097477
+  Phone Numbers  : 9782890413
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-01-31T08:42  |  task group invite
-  2026-02-01T08:42  |  first deposit to unlock tasks
-  2026-02-05T08:42  |  withdrawal refused
-  2026-02-06T08:42  |  FIR filed
+  2026-03-20T20:54  |  call from fake official
+  2026-03-20T21:04  |  digital arrest threat
+  2026-03-20T21:24  |  fund transfer
+  2026-03-22T20:54  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-01-31  |  From: VICTIM_ACC_FIR_BG_329  ->  To: BG84455438916  |  Rs. 386,331  |  Channel: IMPS
+  2026-03-20  |  From: VICTIM_ACC_FIR_BG_330  ->  To: BG53872097477  |  Rs. 2,006,000  |  Channel: NEFT
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CaseMasterID     : 1000058
+CaseMasterID     : 1000059
 PoliceStationID  : 1001
 CaseCategoryID   : 1
 GravityOffenceID : 3
 CrimeHeadID      : 101
-CrimeSubHeadID   : 1013
+CrimeSubHeadID   : 1011
 CaseStatusID     : 1
 CourtID          : 7002
-Lat/Long         : 12.529842, 76.929805
+Lat/Long         : 14.27991, 76.410763
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-02-01
-Signature of Complainant: Lakshmi Lamani
-Signature of Recording Officer: Anand Hegde, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-03-27
+Signature of Complainant: Bhavana Gaonkar
+Signature of Recording Officer: Savitha Nagaraj, CEN Police Station - East Division

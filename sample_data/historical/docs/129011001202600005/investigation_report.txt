@@ -1,37 +1,36 @@
 KARNATAKA STATE POLICE
 INVESTIGATION REPORT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Report ID        : IR:5000018
+Report ID        : IR:5000019
 Crime No.        : 129011001202600005
 Case No.         : 202600005
-CaseMasterID     : 1000049
+CaseMasterID     : 1000050
 Police Station   : CEN Police Station - East Division
 District         : Bengaluru Urban
-Report Date      : 2026-03-06
-IO Officer       : Savitha Nagaraj (EmployeeID: 5004)
+Report Date      : 2026-04-04
+IO Officer       : Venkatesh Kumar (EmployeeID: 5001)
 Accused          : Unknown
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INVESTIGATION FINDINGS
-Victim transferred ₹417,235 via UPI. Account BG96612869449 flagged as mule.
+Victim transferred ₹37,297 via UPI. Account BG29028523818 flagged as mule.
 DIGITAL EVIDENCE AND IDENTIFIERS MENTIONED IN COMPLAINT
 --------------------------------------------------------
-  Bank Accounts  : BG96612869449
-  UPI VPAs       : sunithap93@okicici
-  Phone Numbers  : 9179116734
+  Bank Accounts  : BG29028523818
+  UPI VPAs       : nalinipa83@okicici
+  Phone Numbers  : 9708939813
 
 CASE TIMELINE (SUB-EVENTS)
 ------------------------------
-  2026-02-08T15:30  |  investment offer on WhatsApp
-  2026-02-11T15:30  |  test withdrawal succeeded
-  2026-02-15T15:30  |  large investment transferred
-  2026-02-18T15:30  |  withdrawal blocked
-  2026-02-20T15:30  |  FIR filed
+  2026-03-07T16:59  |  loan app installed
+  2026-03-07T17:59  |  personal data harvested
+  2026-03-21T16:59  |  harassment calls started
+  2026-03-27T16:59  |  FIR filed
 
 FINANCIAL TRANSACTIONS REFERENCED IN COMPLAINT
 ------------------------------------------------
-  2026-02-08  |  From: VICTIM_ACC_FIR_BG_320  ->  To: BG96612869449  |  Rs. 417,235  |  Channel: UPI
+  2026-03-07  |  From: VICTIM_ACC_FIR_BG_321  ->  To: BG29028523818  |  Rs. 37,297  |  Channel: IMPS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Place, Date: Bengaluru Urban, 2026-03-06
-Signature of IO: Savitha Nagaraj, CEN Police Station - East Division
+Place, Date: Bengaluru Urban, 2026-04-04
+Signature of IO: Venkatesh Kumar, CEN Police Station - East Division
