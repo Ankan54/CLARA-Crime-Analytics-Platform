@@ -88,7 +88,8 @@ def save_message(session_id: str, role: str, content: str, run_id: str | None = 
 
 def save_artifact(artifact: AssistantArtifact, session_id: str, run_id: str,
                   stratus_key: str | None = None) -> None:
-    body = artifact.model_dump(by_alias=True, exclude_none=True)
+    # mode="json" so datetime/Decimal in Any-typed table rows serialise (see to_wire).
+    body = artifact.model_dump(by_alias=True, exclude_none=True, mode="json")
     encoded = json.dumps(body)
     inline = encoded if len(encoded.encode("utf-8")) <= INLINE_BODY_MAX_BYTES else None
     with db_session() as db:
@@ -119,6 +120,32 @@ def load_artifact(artifact_id: str) -> dict[str, Any] | None:
             FROM AssistantArtifact WHERE artifact_id = :aid
         """), {"aid": artifact_id}).mappings().first()
     return dict(row) if row else None
+
+
+def load_session_artifacts(session_id: str) -> list[dict[str, Any]]:
+    """Every inline artifact body produced across the whole session, oldest first.
+
+    The report skill uses this so 'put all the findings in the chat into a PDF' attaches
+    the tables/graphs/charts from EVERY turn -- not just the current run's bus history,
+    which only holds the current turn and is swept once the run ends.
+    """
+    with db_session() as db:
+        rows = db.execute(text("""
+            SELECT body FROM AssistantArtifact
+            WHERE session_id = :sid AND body IS NOT NULL
+            ORDER BY created_at ASC, artifact_id ASC
+        """), {"sid": session_id}).mappings().all()
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        body = r["body"]
+        if isinstance(body, str):  # jsonb usually decodes to dict, but be defensive
+            try:
+                body = json.loads(body)
+            except Exception:
+                continue
+        if isinstance(body, dict):
+            out.append(body)
+    return out
 
 
 def persist_run_artifacts(session_id: str, run_id: str, events: list[dict[str, Any]]) -> None:

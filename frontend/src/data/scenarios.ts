@@ -176,7 +176,6 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
       { id: "s2-known-accused", label: "Known accused check", prompt: "Do we already know this accused under other names or identifiers?" },
       { id: "s2-alias-collapse", label: "Alias collapse", prompt: "Show the alias resolution evidence and confidence factors." },
       { id: "s2-escalation", label: "Escalation history", prompt: "Show the offender history timeline and escalation in amount and severity." },
-      { id: "s2-cdr-update", label: "CDR update", prompt: "Incorporate new CDR and account evidence and update the network view." },
       { id: "s2-intent-gap", label: "Intent proof gap", prompt: "What is missing to prove dishonest intent at inception under BNS 318?" },
     ],
     briefing: {

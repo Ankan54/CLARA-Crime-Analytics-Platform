@@ -9,7 +9,8 @@ interface SuggestedPromptsProps {
   disabled?: boolean;
 }
 
-/** Collapsible strip of the scenario's headline questions, shown above the composer. */
+/** Collapsible strip of the scenario's headline questions, shown above the composer.
+ *  Clicking a chip fills the composer (does not send); another click replaces the draft. */
 export function SuggestedPrompts({ prompts, onSelect, title, disabled }: SuggestedPromptsProps) {
   const [expanded, setExpanded] = useState(true);
 

@@ -1,0 +1,58 @@
+{
+  "appsail": [
+    {
+      "name": "ksp-catalyst-backend",
+      "source": "backend",
+      "env_variables": {
+        "X_ZOHO_CATALYST_ACCOUNTS_URL": "https://accounts.zohoportal.in",
+        "X_ZOHO_CATALYST_CONSOLE_URL": "https://api.catalyst.zoho.in",
+        "X_ZOHO_STRATUS_RESOURCE_SUFFIX": ".zohostratus.in",
+        "ZOHO_CATALYST_PROJECT_ID": "your_project_id",
+        "ZOHO_CATALYST_PROJECT_KEY": "your_project_key",
+        "ZOHO_CATALYST_ENVIRONMENT": "Development",
+        "ZOHO_CATALYST_PROJECT_DOMAIN": "https://api.catalyst.zoho.in",
+        "ZOHO_CATALYST_AUTH_DOMAIN": "https://accounts.zohoportal.in",
+        "ZOHO_CATALYST_CLIENT_ID": "your_client_id",
+        "ZOHO_CATALYST_CLIENT_SECRET": "your_client_secret",
+        "ZOHO_CATALYST_REFRESH_TOKEN": "your_refresh_token",
+        "ZOHO_STRATUS_BUCKET": "ksp-data-files",
+        "ZOHO_QUICKML_ENDPOINT_URL": "https://api.catalyst.zoho.in/quickml/v1/project/<project_id>/glm/chat",
+        "ZOHO_QUICKML_CATALYST_ORG": "your_org_id",
+        "ZOHO_QUICKML_MODEL_NAME": "crm-di-glm47b_30b_it",
+        "ZOHO_QUICKML_VLM_ENDPOINT_URL": "https://api.catalyst.zoho.in/quickml/v1/project/<project_id>/vlm/chat",
+        "ZOHO_QUICKML_VLM_MODEL_NAME": "VL-Qwen3.6-35B-A3B",
+        "DATA_INGESTION_LLM": "zoho",
+        "CHAT_LLM_PROVIDER": "zoho",
+        "DB_HOST": "your-db-host.pooler.example.com",
+        "DB_PORT": "6543",
+        "DB_NAME": "postgres",
+        "DB_USER": "your_db_user",
+        "DB_PASSWORD": "your_db_password",
+        "DB_SSL": "require",
+        "NEO4J_URI": "neo4j+s://your-instance.databases.neo4j.io",
+        "NEO4J_USERNAME": "neo4j",
+        "NEO4J_PASSWORD": "your_neo4j_password",
+        "PINECONE_API_KEY": "your_pinecone_api_key",
+        "PINECONE_INDEX": "ksp-crime-intel",
+        "CATALYST_JOBPOOL_ID": "your_jobpool_id",
+        "CATALYST_JOBPOOL_NAME": "ingestpool",
+        "INGEST_LOCAL_INVOKE": "false",
+        "SPLINK_ENDPOINT_URL": "https://your-backend-host.example",
+        "SPLINK_SHARED_SECRET": "change-me",
+        "SIGNALS_PIPELINE_PUBLISHER_URL": "",
+        "DEMO_REFERENCE_DATE": "2026-06-26",
+        "ASSISTANT_MULTI_AGENT": "true",
+        "CHAT_MAX_TOKENS": "4096"
+      }
+    },
+    {
+      "name": "ksp-catalyst-frontend",
+      "source": "frontend"
+    }
+  ],
+  "functions": {
+    "source": "catalyst_functions",
+    "targets": ["ingest_processor"],
+    "ignore": []
+  }
+}

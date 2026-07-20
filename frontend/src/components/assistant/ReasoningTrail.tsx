@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { AgentKind, AssistantStep, PlanPayload } from "../../lib/assistantTypes";
 import { AssistantIcon } from "./icons";
 import { CodeBlock } from "./CodeBlock";
+import { Markdown } from "./Markdown";
 
 const AGENT_LABELS: Record<AgentKind, string> = {
   supervisor: "CLARA",
@@ -10,6 +11,45 @@ const AGENT_LABELS: Record<AgentKind, string> = {
   vector: "Similar cases",
   legal: "Legal",
 };
+
+// Tool args the officer should read as prose vs. code vs. noise.
+const INPUT_DESC_KEYS = ["purpose", "subtask", "question", "description"];
+const INPUT_NOISE_KEYS = new Set(["purpose", "subtask", "question", "description", "sql", "cypher", "query", "code", "gate", "error", "stripped"]);
+
+/** Render tool-call arguments as a readable summary instead of a raw JSON blob.
+ *  The human-readable intent (purpose/subtask) leads; the actual SQL/Cypher/code is
+ *  shown separately via step.query / step.code, so we skip it here to avoid duplication.
+ *  P8: when a real query string is present (step.query), the scalar param list only
+ *  restates it -- suppress it so each step shows ONE query representation. */
+function ToolInputView({ input, suppressParams }: { input: Record<string, unknown>; suppressParams: boolean }) {
+  const desc = INPUT_DESC_KEYS.map((k) => input[k]).find((v) => typeof v === "string" && v.trim()) as string | undefined;
+  const extras = suppressParams
+    ? []
+    : Object.entries(input).filter(
+        ([k, v]) =>
+          !INPUT_NOISE_KEYS.has(k) &&
+          v != null &&
+          // Skip blank strings (an omitted/defaulted arg like text_query="") -- they show as
+          // an empty param row and read as "an empty query was run".
+          ((typeof v === "string" && v.trim() !== "") || typeof v === "number" || typeof v === "boolean"),
+      );
+  if (!desc && extras.length === 0) return null;
+  return (
+    <div className="reasoning-step-input">
+      {desc && <Markdown className="reasoning-step-detail reasoning-step-md">{desc}</Markdown>}
+      {extras.length > 0 && (
+        <dl className="reasoning-step-params">
+          {extras.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd>{String(v)}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </div>
+  );
+}
 
 function stepStatusLabel(step: AssistantStep): string {
   if (step.status === "running") return "Working…";
@@ -58,10 +98,12 @@ function ReasoningStepCard({ step, index }: { step: AssistantStep; index: number
 
       {open && hasBody && (
         <div className="reasoning-step-body">
-          {step.detail && <p className="reasoning-step-detail">{step.detail}</p>}
+          {step.detail && (
+            <Markdown className="reasoning-step-detail reasoning-step-md">{step.detail}</Markdown>
+          )}
           {step.toolName && <small className="reasoning-step-tool">{step.toolName}</small>}
           {step.toolInput && Object.keys(step.toolInput).length > 0 && (
-            <pre className="reasoning-step-json">{JSON.stringify(step.toolInput, null, 2)}</pre>
+            <ToolInputView input={step.toolInput} suppressParams={Boolean(step.query)} />
           )}
           {step.query && <pre className="reasoning-step-query"><code>{step.query}</code></pre>}
           {step.retrieval && (
@@ -90,7 +132,9 @@ function ReasoningStepCard({ step, index }: { step: AssistantStep; index: number
               stderr={step.code.stderr}
             />
           )}
-          {step.output && <p className="reasoning-step-output">{step.output}</p>}
+          {step.output && (
+            <Markdown className="reasoning-step-output reasoning-step-md">{step.output}</Markdown>
+          )}
         </div>
       )}
     </article>

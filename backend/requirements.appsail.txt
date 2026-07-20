@@ -31,8 +31,11 @@ langchain-aws>=0.2.0,<1.0.0
 # image with a normal `uv pip install`, so the botocore data tree is complete here.
 boto3>=1.34.0
 
-# PDF export. WeasyPrint is primary on Linux (AppSail image installs Pango/Cairo);
-# xhtml2pdf is the fallback if WeasyPrint's system libs are missing.
+# PDF export (skills/report.py) is built directly with reportlab platypus -- pure Python,
+# robust tables + embedded chart PNGs. Declared explicitly because report.py imports it
+# directly now (previously only transitive via xhtml2pdf). xhtml2pdf/weasyprint are no
+# longer used by the report path; kept until a separate cleanup pass drops them.
+reportlab>=4.0.0
 xhtml2pdf>=0.2.16
 weasyprint>=62.0
 jinja2>=3.1.0

@@ -254,7 +254,7 @@ def get_case_summary(case_ref: str = "") -> str:
             _cite_text_document(
                 emitter,
                 label=f"FIR {ctx['crime_no']}",
-                source="CaseMaster.BriefFacts",
+                source="Case file (FIR)",
                 text=ctx["brief_facts"] or "",
             )
 
@@ -446,6 +446,10 @@ def _step(emitter: RunEmitter | None, agent: str, title: str, **kw: Any) -> Iter
             for k, v in caller.f_locals.items()
             if not k.startswith("_") and k not in {"emitter", "session", "handle", "self"}
             and isinstance(v, (str, int, float, bool, list, tuple, dict, type(None)))
+            # Drop unset/empty-default args (e.g. an omitted text_query="") -- they render
+            # as a blank "text_query:" row in the reasoning trail and mislead the officer
+            # into thinking an empty query was run. 0/False/empty-collections are real values.
+            and v not in ("", None)
         }
     friendly_title = FRIENDLY_TOOL_TITLES.get(tool_name or "", title)
     with emitter.step(
@@ -470,13 +474,29 @@ def _cite_text_document(
     label: str,
     source: str,
     text: str,
+    doc_url: str | None = None,
 ) -> None:
+    """Emit a source document + its citation.
+
+    With doc_url (a short-lived signed Stratus URL), the citation links straight out to the
+    real FIR/IR — the frontend opens it in a new tab from the bucket (window.open, so no CORS
+    and no backend proxy; the signed URL response carries no Access-Control-Allow-Origin, so a
+    fetch()-into-drawer would be blocked — a new tab is navigation, not a cross-origin fetch).
+    The citation card still shows the inline snippet. Without doc_url the full text is inlined
+    as a DocumentArtifact the drawer renders (the current case's own BriefFacts has no Stratus
+    object to link to).
+    """
     if not emitter or not text:
+        return
+    if doc_url:
+        emitter.citation(AssistantCitation(
+            id=_aid("cite"), label=label, source=source,
+            href=doc_url, snippet=text[:280],
+        ))
         return
     artifact_id = _aid("doc")
     emitter.artifact(DocumentArtifact(
-        id=artifact_id, title=label, format="text", text=text,
-        caption=source,
+        id=artifact_id, title=label, format="text", text=text, caption=source,
     ))
     emitter.citation(AssistantCitation(
         id=_aid("cite"), label=label, source=source,
@@ -786,30 +806,63 @@ def find_links_between_cases(case_refs: list[str]) -> str:
             entry = shared.setdefault(r["uid"], {"name": r["name"], "labels": r["labels"], "cases": set()})
             entry["cases"].update(r["cases"])
 
+        # Only cases that actually share an identifier belong in the graph — orphan case nodes
+        # (from an unfiltered similar-case list) drown the real link in disconnected dots.
+        linked_case_ids: set[int] = set()
+        for entry in shared.values():
+            linked_case_ids.update(entry["cases"])
+
+        # Officers need to see WHAT each case is (crime type + district), not a bare CrimeNo,
+        # and WHAT connects them (the shared account/device, labelled), or the graph says nothing.
+        info_by_id: dict[int, dict[str, Any]] = {}
+        for r in _rows(session, """
+            SELECT c.CaseMasterID AS id, c.CrimeNo AS crime_no, csh.CrimeHeadName AS crime_type,
+                   g.IncidentDistrict AS district
+            FROM CaseMaster c
+            LEFT JOIN CrimeSubHead csh ON csh.CrimeSubHeadID = c.CrimeMinorHeadID
+            LEFT JOIN EXT_CaseGeo g ON g.CaseMasterID = c.CaseMasterID
+            WHERE c.CaseMasterID = ANY(:ids)
+        """, ids=list(linked_case_ids)) if linked_case_ids else []:
+            info_by_id[r["id"]] = r
+
+        _KIND_LABEL = {"Account": "A/c", "UPIHandle": "UPI", "Device": "IMEI",
+                       "PhoneNumber": "Phone", "IP": "IP", "Wallet": "Wallet"}
+
         nodes: list[GraphArtifactNode] = []
         links: list[GraphArtifactLink] = []
-        for case_id in case_ids:
+        for case_id in sorted(linked_case_ids):
+            info = info_by_id.get(case_id, {})
+            short_mo = str(info.get("crime_type") or "Case").split(" / ")[0]
+            district = info.get("district") or ""
             nodes.append(GraphArtifactNode(
-                id=f"case:{case_id}", label=crime_by_id.get(case_id, str(case_id)), type="Crime",
-                properties={"case_id": case_id},
+                id=f"case:{case_id}",
+                label=f"{short_mo}{(' · ' + district) if district else ''}",
+                type="Crime",
+                properties={k: v for k, v in {
+                    "CrimeNo": crime_by_id.get(case_id), "type": info.get("crime_type"),
+                    "district": district,
+                }.items() if v},
             ))
         for uid, entry in shared.items():
             # The dynamic live labels mean an object can be :Account:BankStatement; take
             # the first label the historical loader assigns so colours stay stable.
-            kind = next((l for l in entry["labels"] if l in
-                         ("Account", "UPIHandle", "Device", "PhoneNumber", "IP", "Wallet")), "Object")
+            kind = next((l for l in entry["labels"] if l in _KIND_LABEL), "Object")
+            short = _KIND_LABEL.get(kind, kind)
             nodes.append(GraphArtifactNode(
-                id=f"obj:{uid}", label=entry["name"] or kind, type=kind,
-                properties={"shared_by": len(entry["cases"])},
+                id=f"obj:{uid}", label=f"{short} {entry['name']}" if entry["name"] else short, type=kind,
+                properties={k: v for k, v in {
+                    "identifier": entry["name"], "kind": kind, "shared_by_cases": len(entry["cases"]),
+                }.items() if v},
             ))
             for case_id in entry["cases"]:
                 links.append(GraphArtifactLink(
-                    source=f"case:{case_id}", target=f"obj:{uid}", relationship="MENTIONS",
+                    source=f"case:{case_id}", target=f"obj:{uid}", relationship="shares",
                 ))
 
         handle.emit_artifact(GraphArtifact(
-            id=_aid("graph"), title="Shared identifiers across cases", nodes=nodes, links=links,
-            caption=f"{len(shared)} object(s) referenced by more than one of {len(case_ids)} cases.",
+            id=_aid("graph"), title="Cases linked by shared identifiers", nodes=nodes, links=links,
+            caption=f"{len(linked_case_ids)} of {len(case_ids)} cases are connected — they share "
+                    f"{len(shared)} identifier(s) (account / device / UPI / phone / IP).",
         ))
 
         lines = []
@@ -1136,12 +1189,18 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
         if not query_text:
             return "Provide either case_ref or text_query."
 
-        k = max(1, min(int(top_k or 5), 20))
-        handle.query = f"vector similarity over FIR narratives, top {k} (Titan 1536-d, cosine)"
+        k = max(1, min(int(top_k or 8), 12))   # cap on how many matches to RETURN
+        # Over-fetch a wide pool, then apply a score-based cutoff below (never a SQL gate).
+        POOL = 30
+        # Log EXACTLY what gets embedded -- the FIR narrative derived from case_ref is not the
+        # (usually empty) text_query param, so this is the only place the real vector query is
+        # visible for debugging. Truncated so the log stays readable.
+        logger.info("find_similar_cases: embedding %d chars (source=%s, from=%s): %r",
+                    len(query_text), source_ref, "case_ref" if exclude_case_id else "text_query",
+                    " ".join(query_text.split())[:200])
         vector = stores.embed(query_text)
-        # Over-fetch: the source case's own chunks rank top and get dropped below.
         result = stores.pinecone_index().query(
-            vector=vector, top_k=k + 6, include_metadata=True,
+            vector=vector, top_k=POOL, include_metadata=True,
         )
 
         seen_cases: dict[int, dict[str, Any]] = {}
@@ -1154,7 +1213,7 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
             if case_id == exclude_case_id or case_id in seen_cases:
                 continue
             seen_cases[case_id] = {"score": float(match.get("score") or 0), "meta": meta}
-            if len(seen_cases) >= k:
+            if len(seen_cases) >= POOL:
                 break
 
         if not seen_cases:
@@ -1172,7 +1231,43 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
         """, ids=list(seen_cases))
         by_id = {r["case_id"]: r for r in rows}
 
-        ranked = sorted(seen_cases.items(), key=lambda kv: -kv[1]["score"])
+        # PURE vector similarity with a score-based cutoff -- NOT a SQL crime-head gate.
+        # Cosine over FIR narratives scores unrelated fraud cases ~0.76-0.80 on shared
+        # vocabulary, while a genuine same-script cluster sits tighter and higher (e.g.
+        # scn1 0.87-0.88 then a gap to 0.81; scn4 a tight 0.86-0.88). So: drop everything
+        # below FLOOR, then keep only the top cluster -- matches within GAP of the best
+        # score -- which cuts the long noisy tail after the natural gap without pinning a
+        # single magic number. Crime head is a *label* only, never a filter (P1).
+        _FLOOR = 0.80
+        _GAP = 0.06
+        _ranked_all = sorted(seen_cases.items(), key=lambda kv: -kv[1]["score"])
+        top_score = _ranked_all[0][1]["score"]
+        cutoff = max(_FLOOR, round(top_score - _GAP, 4))
+        ranked = [(cid, v) for cid, v in _ranked_all if v["score"] >= cutoff][:k]
+
+        query_type: str | None = None
+        if exclude_case_id:
+            qrows = _rows(session, """
+                SELECT csh.CrimeHeadName AS t FROM CaseMaster c
+                LEFT JOIN CrimeSubHead csh ON csh.CrimeSubHeadID = c.CrimeMinorHeadID
+                WHERE c.CaseMasterID = :id
+            """, id=exclude_case_id)
+            query_type = qrows[0]["t"] if qrows else None
+
+        # Transparency (P1): state exactly what was embedded and the cutoff applied, so the
+        # officer never sees a bare empty text_query with no explanation.
+        snippet_preview = " ".join(query_text.split())[:120]
+        handle.query = (
+            f"embed FIR narrative of {source_ref} ({len(query_text)} chars) -> Pinecone cosine "
+            f"(Titan 1536-d); keep matches score >= {cutoff:.2f} (top match {top_score:.2f}). "
+            f"Embedded text starts: \u201c{snippet_preview}\u2026\u201d"
+        )
+
+        if not ranked:
+            handle.output = f"no matches >= {cutoff:.2f}"
+            return (f"No cases are semantically similar enough to {source_ref}: the best cosine "
+                    f"score was {top_score:.2f}, below the {cutoff:.2f} cutoff.")
+
         handle.emit_artifact(TableArtifact(
             id=_aid("tbl"), title=f"Cases similar to {source_ref}",
             columns=["Score", "CrimeNo", "Type", "District", "Registered"],
@@ -1182,7 +1277,8 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
                 (by_id.get(cid) or {}).get("district", ""),
                 str((by_id.get(cid) or {}).get("registered", "")),
             ] for cid, v in ranked],
-            caption="Cosine similarity over FIR narrative embeddings.",
+            caption=f"Ranked by FIR-narrative similarity (Titan cosine); cutoff {cutoff:.2f}. "
+                    f"Linkage is a separate step \u2014 use \u2018Find links\u2019 to check shared identifiers.",
         ))
         emitter and emitter.retrieval(RetrievalPayload(
             step_id=handle.id,
@@ -1206,11 +1302,18 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
         for cid, v in ranked[:3]:
             row = by_id.get(cid)
             if row and row.get("brief_facts"):
+                # Link the citation straight to the FIR in Stratus via a short-lived signed
+                # URL (browser fetches direct from the bucket, no backend proxy). The key
+                # matches the vector record's `source` metadata; the snippet stays inline.
+                # Lazy import: keep the Zoho SDK out of tools.py's import path.
+                from ..services.catalyst_queue import presigned_get_url
+                doc_url = presigned_get_url(f"historical/docs/{row['crime_no']}/fir.txt")
                 _cite_text_document(
                     emitter,
                     label=f"FIR {row['crime_no']}",
                     source=f"similarity {v['score']:.2f}",
                     text=row["brief_facts"],
+                    doc_url=doc_url,
                 )
 
         # The "Find Links" move: hand the agent the case refs and offer the officer the
@@ -1223,7 +1326,8 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
         ))
 
         districts = {(by_id.get(cid) or {}).get("district") for cid, _ in ranked}
-        out = [f"SIMILAR CASES to {source_ref} ({len(ranked)} matches):"]
+        out = [f"SIMILAR CASES to {source_ref} \u2014 by FIR-narrative similarity "
+               f"({len(ranked)} cases, cosine cutoff {cutoff:.2f}):"]
         for cid, v in ranked:
             row = by_id.get(cid, {})
             out.append(f"  {v['score']:.2f}  {row.get('crime_no', cid)}  {row.get('crime_type') or '?'}  "
@@ -1231,8 +1335,10 @@ def find_similar_cases(case_ref: str = "", text_query: str = "", top_k: int = 5)
         if len([d for d in districts if d]) > 1:
             out.append(f"  Spread across {len([d for d in districts if d])} districts: "
                        f"{', '.join(str(d) for d in districts if d)} - a cross-jurisdiction pattern.")
+        out.append("  These are meaning-matches only. To see whether they are actually one network "
+                   "(shared account/device/UPI), run the separate link step:")
         out.append(f"  Case refs for link analysis: {', '.join(all_refs)}")
-        handle.output = f"{len(ranked)} matches, top {ranked[0][1]['score']:.2f}"
+        handle.output = f"{len(ranked)} matches >= {cutoff:.2f}, top {ranked[0][1]['score']:.2f}"
         return "\n".join(out)
 
 
@@ -1533,9 +1639,13 @@ _SPECS: list[tuple[Callable[..., str], str]] = [
      "(person)-[:OWNS]->(object), (Account)-[:TRANSACTED_WITH {amount, txn_timestamp, mode}]->(Account|Wallet), "
      "(CaseMaster)-[:HAS_EVIDENCE]->(InvestigationReport). No GDS/APOC. Single read query only."),
     (find_similar_cases,
-     "Find cases with the same modus operandi by MEANING, not keywords -- the cross-district "
-     "'same script' match. Pass case_ref to match an existing case, or text_query to describe an MO. "
-     "Returns case refs you should then pass to find_links_between_cases."),
+     "Find cases that read alike by MEANING -- pure vector search: it embeds the case's FIR "
+     "narrative (or your text_query) and cosine-ranks Pinecone, keeping only matches above a "
+     "score-based cutoff. Pass case_ref to match an existing case, or text_query to describe an MO. "
+     "It does NOT compute shared accounts/devices/UPIs -- that structural linkage is a SEPARATE "
+     "graph step; this tool offers a one-click 'Find links among these cases' follow-up for it. "
+     "Do NOT run find_links_between_cases or shared-identifier SQL yourself as part of a "
+     "similar-cases answer."),
     (legal_checklist,
      "For one case: what each charged section requires you to prove, whether the evidence on file "
      "covers it (green/amber/red), and real precedents that turned on the flagged elements. "

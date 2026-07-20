@@ -99,9 +99,12 @@ def context_inventory(run_id: str) -> str:
                 f"{a.get('url') or ''}"
             )
     if cites:
-        lines.append("Citations gathered so far:")
+        # No raw cite-id here: the model was echoing "[cite-abc123] ... (CaseMaster.BriefFacts)"
+        # verbatim into the answer. It doesn't need the internal id — the citation panel
+        # renders the sources; the model just needs to know what's already cited.
+        lines.append("Sources already cited (do not repeat these ids or column names in prose):")
         for c in cites[:12]:
-            lines.append(f"- [{c.get('id')}] {c.get('label')} ({c.get('source')})")
+            lines.append(f"- {c.get('label')}")
     return "\n".join(lines)
 
 

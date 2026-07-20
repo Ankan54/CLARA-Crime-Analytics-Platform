@@ -115,6 +115,7 @@ Decide the mode FIRST:
 - "identity": greetings, "who are you?", "what can you do?", "help" -> write `direct_answer` introducing yourself and your capabilities in {lang_name}. {no_internals}
 - "refuse": the question is about {out_of_scope} or anything unrelated to crime investigation -> write a polite `direct_answer` in {lang_name} declining and stating what you CAN help with.
 - "answer": the question is about {in_scope} -> fill `assignments` to route to specialists.
+- A request to VISUALISE, chart, graph, plot, map, build a dashboard/interactive dashboard, or generate a report of in-scope crime data is ALWAYS "answer" mode. CLARA presents its analysis as interactive dashboards, charts and PDF reports — a specialist builds them. NEVER "refuse" a dashboard/chart/visualisation/report request and NEVER reply that you "are not a dashboard/visualisation tool"; you produce these.
 
 ## Specialists (only used in "answer" mode)
 - case: {case}
@@ -126,6 +127,9 @@ Decide the mode FIRST:
 Rules:
 - Pick the SMALLEST set that fully answers the question.
 - A simple, single-topic question -> exactly ONE specialist.
+- "similar cases / same MO / same script / has this happened elsewhere / cases like this" -> `mo` ONLY. This answer stops at narrative similarity (which cases, what MO they share). Do NOT also assign `network`: checking whether those cases share an account/device/UPI is a SEPARATE follow-up the officer triggers next with "find links". Assigning `network` here spoils that next step.
+- "find links / are these connected / do they share an account-device-UPI / same person / ring / gang / aliases" -> `network` (finding shared identifiers IS the link step). Only add `mo` if the officer also explicitly asked for MO/similarity in the SAME question.
+- "dashboard / interactive dashboard / chart / graph / plot / visualise these stats / crime situation by district" -> `mo` (crime statistics & trends). It gathers the stats and builds the dashboard/chart itself. Use `case` instead when the visual is about one specific case; add `financial`/`network` too only if the dashboard must combine a money-trail or link view.
 - A composite question ("summarise the case AND trace the money", "is this a ring AND where") -> the few specialists it needs; they run in parallel.
 - For each specialist, write a self-contained `subtask` that includes the case reference and any identifiers, so the specialist needs nothing but that string.
 - This is a CONVERSATION. If the latest question is a follow-up ("what about the third one?", "trace that account", "now show it as a chart", "explain in Kannada"), resolve the reference from the messages above and write the subtask in FULL, naming the actual case / account / entity being referred to. Never pass a dangling pronoun to a specialist.
@@ -141,7 +145,8 @@ def _heuristic_plan(question: str, case_context: dict[str, Any] | None) -> list[
     picks: list[str] = []
     if any(w in q for w in ("money", "fund", "trace", "freez", "transfer", "upi", "account", "launder", "crypto", "mule")):
         picks.append("financial")
-    if any(w in q for w in ("similar", "same script", "modus", " mo ", "pattern", "trend", "surge", "hotspot", "spike")):
+    if any(w in q for w in ("similar", "same script", "modus", " mo ", "pattern", "trend", "surge", "hotspot", "spike",
+                            "dashboard", "chart", "graph", "plot", "visuali", "hotspots", "by district", "statistics", "stats")):
         picks.append("mo")
     if any(w in q for w in ("link", "ring", "gang", "alias", "same person", "repeat", "network", "shared", "community", "cluster", "history")):
         picks.append("network")
@@ -387,12 +392,19 @@ def build_assistant_graph(
             if emitter:
                 emitter.answer_delta(answer)
         elif len(results) == 1:
+            # The finding is already in hand -- stream it straight out (no extra LLM hop).
             answer = results[0]["text"].strip()
             for piece in _word_chunks(answer):
                 if emitter:
                     emitter.answer_delta(piece)
                 await asyncio.sleep(0)
         else:
+            # P5: composing several findings into one answer needs another LLM call, which
+            # is the gap the officer sees as a blank "Thinking…". Surface an explicit
+            # composing state so there's visible movement until the first token lands.
+            if emitter:
+                emitter.step_once("supervisor", "thinking", "Composing the answer",
+                                  detail="Combining the specialist findings into one reply\u2026")
             # _compose handles streaming internally via composer.astream
             answer = await _compose(results, question)
 
@@ -433,11 +445,15 @@ def build_assistant_graph(
                     continue
                 full_text += token
                 buf += token
-                if len(buf) >= 30:
-                    if emitter and len(full_text) > 40:
+                # Flush in small chunks so the answer visibly builds up. Emit from the very
+                # first chunk -- an earlier `len(full_text) > 40` gate silently dropped the
+                # answer's opening ~30 chars from the live stream (they only reappeared on
+                # history reload), which read as the answer "popping in" mid-sentence.
+                if len(buf) >= 24:
+                    if emitter:
                         emitter.answer_delta(buf)
                     buf = ""
-            if buf and emitter and len(full_text) > 40:
+            if buf and emitter:
                 emitter.answer_delta(buf)
             text = full_text.strip()
         except Exception:

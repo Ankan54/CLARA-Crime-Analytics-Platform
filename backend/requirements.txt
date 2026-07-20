@@ -35,6 +35,12 @@ beautifulsoup4>=4.12.0
 matplotlib>=3.8.0
 pandas>=2.2.0
 plotly>=5.24.0
-# Polished HTML->PDF. WeasyPrint is primary (needs Pango/Cairo on Linux/Docker);
-# xhtml2pdf above stays as the Windows/native fallback when system libs are absent.
+# PDF export (skills/report.py) is built directly with reportlab platypus -- pure Python,
+# identical on Windows and Docker, robust word-wrapped tables + embedded chart PNGs. This
+# replaced the xhtml2pdf/WeasyPrint HTML path (xhtml2pdf crashed in reportlab table
+# geometry; WeasyPrint needs GTK/Pango, absent on native Windows). reportlab is declared
+# explicitly here because report.py now imports it directly (it was only transitive before).
+reportlab>=4.0.0
+# xhtml2pdf/weasyprint above are no longer used by the report path; kept only until a
+# separate dependency-cleanup pass removes them (and the Dockerfile's Pango/Cairo libs).
 weasyprint>=62.0

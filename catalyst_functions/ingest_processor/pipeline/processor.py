@@ -1621,7 +1621,7 @@ class IngestProcessor:
                                 n.origin = coalesce(n.origin, 'demo'), n.run_id = $run_id,
                                 n.case_id = coalesce(n.case_id, $case_id),
                                 n.updated_at = datetime($ts),
-                                n.display_name = coalesce($display_name, n.display_name)
+                                n.display_name = coalesce(n.display_name, $display_name)
                             """,
                             uid=uid, run_id=self.params.run_id, case_id=self.params.case_id, ts=_utc_now(),
                             display_name=display_name,

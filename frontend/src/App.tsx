@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Link,
   Navigate,
@@ -127,6 +127,101 @@ function App() {
   );
 }
 
+const LANDING_FEATURES = [
+  {
+    id: "ingest",
+    title: "Reads the documents used in the investigation",
+    detail:
+      "FIRs, investigation reports, and evidence notes are ingested as written — people, identifiers, and events are extracted and queued for officer review before anything is committed.",
+  },
+  {
+    id: "graph",
+    title: "Loads every fact into three specialised stores",
+    detail:
+      "The same extracted facts flow into a SQL store for structured records, a graph for entity links, and a vector store for meaning-based search — so shared phones, accounts, devices, and places connect cases that seem unrelated when read alone.",
+  },
+  {
+    id: "ask",
+    title: "Reasons across all three at once",
+    detail:
+      "An agentic system queries SQL, the entity graph, and vector search together, so CLARA answers in your language — case briefings, cross-case links, and legal checks — with a visible trail behind every claim.",
+  },
+] as const;
+
+function LandingFeatureSpotlight() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) {
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % LANDING_FEATURES.length);
+    }, 5500);
+    return () => window.clearInterval(timer);
+  }, [paused]);
+
+  const active = LANDING_FEATURES[activeIndex];
+
+  return (
+    <div
+      className="landing-features"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setPaused(false);
+        }
+      }}
+    >
+      <div className="landing-feature-tabs" role="tablist" aria-label="Platform capabilities">
+        {LANDING_FEATURES.map((feature, index) => (
+          <button
+            key={feature.id}
+            className={`landing-feature-tab${index === activeIndex ? " active" : ""}`}
+            type="button"
+            role="tab"
+            id={`landing-feature-tab-${feature.id}`}
+            aria-selected={index === activeIndex}
+            aria-controls="landing-feature-panel"
+            tabIndex={index === activeIndex ? 0 : -1}
+            onClick={() => setActiveIndex(index)}
+            onKeyDown={(event) => {
+              if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+                return;
+              }
+              event.preventDefault();
+              const delta = event.key === "ArrowRight" ? 1 : -1;
+              const next =
+                (index + delta + LANDING_FEATURES.length) % LANDING_FEATURES.length;
+              setActiveIndex(next);
+              document.getElementById(`landing-feature-tab-${LANDING_FEATURES[next].id}`)?.focus();
+            }}
+          >
+            <span className="landing-feature-index">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="landing-feature-title">{feature.title}</span>
+          </button>
+        ))}
+      </div>
+      <div
+        className="landing-feature-panel"
+        role="tabpanel"
+        id="landing-feature-panel"
+        aria-labelledby={`landing-feature-tab-${active.id}`}
+      >
+        <p key={active.id}>{active.detail}</p>
+      </div>
+    </div>
+  );
+}
+
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -142,8 +237,9 @@ function LandingPage() {
             <img className="hero-lockup-image" src={aegisBrandImage} alt={APP_TITLE} />
           </div>
           <p className="landing-copy">
-            A single workspace for case document ingestion, entity-network links, and officer
-            review, built on a multi-agent retrieval engine.
+            Turn everyday case documents into one connected investigation network.
+            <br />
+            Ask CLARA plain-language questions across cases and surface links that might stay buried.
           </p>
           <div className="hero-actions">
             <button
@@ -162,20 +258,7 @@ function LandingPage() {
               Explore scenarios
             </button>
           </div>
-          <div className="hero-stats">
-            <div className="hero-stat">
-              <strong>Search everything at once</strong>
-              <span>Cases, suspects, evidence &amp; legal docs — one query</span>
-            </div>
-            <div className="hero-stat">
-              <strong>Connects the dots automatically</strong>
-              <span>Suspects, events &amp; entities linked across records</span>
-            </div>
-            <div className="hero-stat">
-              <strong>Officers stay in control</strong>
-              <span>Every AI finding reviewed before action is taken</span>
-            </div>
-          </div>
+          <LandingFeatureSpotlight />
         </div>
 
         <LandingScenarioSlideshow />
@@ -186,13 +269,38 @@ function LandingPage() {
   );
 }
 
-const TECH_STACK: Array<{ name: string; note: string; logo: string }> = [
-  { name: "Zoho Catalyst", note: "Serverless · Stratus · QuickML", logo: "/logos/catalyst-logo.svg" },
-  { name: "Pinecone", note: "Vector search", logo: "/logos/pinecone_new.svg" },
-  { name: "Neo4j", note: "Entity graph", logo: "/logos/neo4j.svg" },
-  { name: "LangGraph", note: "Agent orchestration", logo: "/logos/langgraph-logo.svg" },
-  { name: "FastAPI", note: "Backend API", logo: "/logos/fastapi.svg" },
-  { name: "React", note: "Console UI", logo: "/logos/react.svg" },
+const TECH_STACK: Array<{ name: string; note: string; logo: string; href?: string }> = [
+  {
+    name: "Zoho Catalyst",
+    note: "Serverless · Stratus · QuickML",
+    logo: "/logos/catalyst-logo.svg",
+    href: "https://catalyst.zoho.com/",
+  },
+  {
+    name: "Pinecone",
+    note: "Vector search",
+    logo: "/logos/pinecone_new.svg",
+    href: "https://www.pinecone.io/",
+  },
+  {
+    name: "Neo4j",
+    note: "Entity graph",
+    logo: "/logos/neo4j.svg",
+    href: "https://neo4j.com/",
+  },
+  {
+    name: "LangGraph",
+    note: "Agent orchestration",
+    logo: "/logos/langgraph-logo.svg",
+    href: "https://www.langchain.com/langgraph",
+  },
+  {
+    name: "FastAPI",
+    note: "Backend API",
+    logo: "/logos/fastapi.svg",
+    href: "https://fastapi.tiangolo.com/",
+  },
+  { name: "React", note: "Console UI", logo: "/logos/react.svg", href: "https://react.dev/" },
 ];
 
 function PoweredBy() {
@@ -200,12 +308,30 @@ function PoweredBy() {
     <div className="powered-by">
       <span className="powered-by-label">Built on</span>
       <div className="powered-by-row">
-        {TECH_STACK.map((tech) => (
-          <div key={tech.name} className="tech-chip" title={tech.note}>
-            <img src={tech.logo} alt="" aria-hidden loading="lazy" />
-            <strong>{tech.name}</strong>
-          </div>
-        ))}
+        {TECH_STACK.map((tech) => {
+          const content = (
+            <>
+              <img src={tech.logo} alt="" aria-hidden loading="lazy" />
+              <strong>{tech.name}</strong>
+            </>
+          );
+          return tech.href ? (
+            <a
+              key={tech.name}
+              className="tech-chip"
+              href={tech.href}
+              title={tech.note}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {content}
+            </a>
+          ) : (
+            <div key={tech.name} className="tech-chip" title={tech.note}>
+              {content}
+            </div>
+          );
+        })}
       </div>
       <p className="creator-tag">
         Created by <strong>Team Radiant Rangers</strong> — Ankan Bera
@@ -276,6 +402,9 @@ function ConsoleLayout() {
       return false;
     }
   });
+  // Peek-expand while the pointer is over a collapsed rail (does not change the stored preference).
+  const [sidebarHovered, setSidebarHovered] = useState(false);
+  const hoverLeaveTimer = useRef<number | null>(null);
   // Below this width the sidebar becomes a horizontal top bar (see index.css) where a
   // narrow icon-only rail doesn't apply -- ignore the stored preference there rather than
   // stripping nav labels out of a layout that still needs them.
@@ -294,12 +423,42 @@ function ConsoleLayout() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const collapsed = sidebarCollapsed && !isNarrowViewport;
+  useEffect(
+    () => () => {
+      if (hoverLeaveTimer.current != null) window.clearTimeout(hoverLeaveTimer.current);
+    },
+    [],
+  );
+
+  const pinnedCollapsed = sidebarCollapsed && !isNarrowViewport;
+  const collapsed = pinnedCollapsed && !sidebarHovered;
+
+  function handleSidebarEnter(): void {
+    if (!pinnedCollapsed) return;
+    if (hoverLeaveTimer.current != null) {
+      window.clearTimeout(hoverLeaveTimer.current);
+      hoverLeaveTimer.current = null;
+    }
+    setSidebarHovered(true);
+  }
+
+  function handleSidebarLeave(): void {
+    if (hoverLeaveTimer.current != null) window.clearTimeout(hoverLeaveTimer.current);
+    // Short delay so the rail doesn't flicker when crossing into the main panel.
+    hoverLeaveTimer.current = window.setTimeout(() => {
+      setSidebarHovered(false);
+      hoverLeaveTimer.current = null;
+    }, 140);
+  }
 
   return (
     <ToastProvider>
-      <div className={`console-shell${collapsed ? " sidebar-collapsed" : ""}`}>
-      <aside className={`sidebar contour${collapsed ? " collapsed" : ""}`}>
+      <div className={`console-shell${collapsed ? " sidebar-collapsed" : ""}${pinnedCollapsed ? " sidebar-pin-collapsed" : ""}`}>
+      <aside
+        className={`sidebar contour${collapsed ? " collapsed" : ""}`}
+        onMouseEnter={handleSidebarEnter}
+        onMouseLeave={handleSidebarLeave}
+      >
         <Link to="/" className="brand-block" title={APP_TITLE}>
           {collapsed ? (
             <img className="brand-mark" src={aegisLogo} alt="CLARA" />
@@ -348,10 +507,13 @@ function ConsoleLayout() {
           <button
             type="button"
             className="sidebar-collapse-toggle"
-            onClick={() => setSidebarCollapsed((current) => !current)}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={() => {
+              setSidebarHovered(false);
+              setSidebarCollapsed((current) => !current);
+            }}
+            title={sidebarCollapsed ? "Keep sidebar expanded" : "Collapse sidebar"}
           >
-            <AssistantIcon name={collapsed ? "chevron-right" : "chevron-left"} />
+            <AssistantIcon name={sidebarCollapsed ? "chevron-right" : "chevron-left"} />
           </button>
         )}
       </aside>

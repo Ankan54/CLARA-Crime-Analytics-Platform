@@ -60,11 +60,31 @@ class StepHandle:
         self.tool_name: str | None = None
         self.tool_input: dict[str, Any] | None = None
         self.artifact_refs: list[str] = []
+        # Set by RunEmitter.step() so progress() can re-emit the same running step.
+        self._agent: AgentKind = "supervisor"
+        self._kind: StepKind = "tool_call"
+        self._title: str = ""
+        self._specialist: str | None = None
 
     def emit_artifact(self, artifact: AssistantArtifact) -> str:
         self._emitter.artifact(artifact)
         self.artifact_refs.append(artifact.id)
         return artifact.id
+
+    def progress(self, detail: str) -> None:
+        """Re-emit this step as still-running with new detail.
+
+        The upsert-by-id in the UI transitions it in place, and every frame resets the WS
+        idle-read timer -- so a long operation (PDF render/upload) keeps the socket alive and
+        shows movement instead of a silent gap that trips WS_IDLE_TIMEOUT_SECONDS.
+        """
+        self.detail = detail
+        self._emitter._emit_step(
+            self.id, self._agent, self._kind, self._title, "running",
+            detail=detail, specialist=self._specialist,
+            tool_name=self.tool_name, tool_input=self.tool_input,
+            query=self.query, artifact_refs=self.artifact_refs or None,
+        )
 
 
 class RunEmitter:
@@ -181,6 +201,10 @@ class RunEmitter:
         handle.detail = detail
         handle.tool_name = tool_name
         handle.tool_input = tool_input
+        handle._agent = agent
+        handle._kind = kind
+        handle._title = title
+        handle._specialist = specialist
         self._emit_step(
             step_id, agent, kind, title, "running",
             detail=detail, specialist=specialist,

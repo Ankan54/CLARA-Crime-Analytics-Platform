@@ -1,7 +1,7 @@
 ---
 name: find-links-after-similarity
-agents: network,mo,supervisor
-description: "Find structural links among cases after a similar-cases or same-modus-operandi result. Use when the officer clicks or asks find links among these cases, whether similar cases are connected, whether separate investigations share an account, device, UPI, phone or IP, or when vector results must be checked in the graph."
+agents: network,supervisor
+description: "Find structural links among cases after a similar-cases or same-modus-operandi result. Use ONLY when the officer explicitly asks to find links / whether cases are connected / whether they share an account, device, UPI, phone or IP. This is the SEPARATE follow-up step AFTER a similar-cases answer -- do NOT run it as part of answering 'find similar cases / same MO' (that answer stops at the narrative similarity)."
 ---
 
 # Find Links After Similarity

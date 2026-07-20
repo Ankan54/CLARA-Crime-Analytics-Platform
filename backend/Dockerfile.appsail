@@ -23,6 +23,10 @@ COPY backend/app ./app
 COPY backend/migrations ./migrations
 COPY .env /.env
 
+# Local .env often has INGEST_LOCAL_INVOKE=true for offline demos. load_dotenv
+# does not override existing process env, so pin false here for AppSail.
+ENV INGEST_LOCAL_INVOKE=false
+
 # Bundle the Indic-capable face so WeasyPrint can resolve it via fontconfig.
 COPY backend/app/assistant/skills/fonts/NotoSansKSP-Regular.ttf /usr/share/fonts/truetype/ksp/NotoSansKSP-Regular.ttf
 RUN fc-cache -f

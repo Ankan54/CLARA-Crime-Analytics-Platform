@@ -235,5 +235,11 @@ def to_wire(event: AssistantEvent) -> dict[str, Any]:
     exclude_none keeps optional fields absent rather than null: the UI treats
     `detail: null` and a missing `detail` the same, but absent frames stay smaller over
     the socket and read better in the trace view.
+
+    mode="json" is load-bearing: artifact tables carry raw Postgres values (datetime,
+    Decimal) in Any-typed rows, which python-mode leaves as objects — then the router's
+    `websocket.send_json(event)` -> json.dumps throws `datetime is not JSON serializable`,
+    kills the socket mid-run, and the UI shows "connection closed unexpectedly". json mode
+    coerces datetime->ISO string and Decimal->str so the frame is always serialisable.
     """
-    return event.model_dump(by_alias=True, exclude_none=True)
+    return event.model_dump(by_alias=True, exclude_none=True, mode="json")

@@ -1,254 +1,211 @@
-# KSP Crime Intelligence Platform — Synthetic Data Generator
+# KSP Crime Intelligence Platform
 
-Karnataka State Police Datathon 2026 · Crime Intelligence Platform demo dataset.
-
----
-
-## Architecture: Two Routes, Three Stores
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│  data_generation/generate.py (12 stages)                            │
-│                                                                     │
-│  Stage 1-3  preflight → reference → entities                        │
-│  Stage 4    historical_docs  ──► sample_data/historical/docs/<CrimeNo>/  │
-│  Stage 5    narratives       (Bedrock LLM, disk-cached)             │
-│  Stage 6    sql_csv          ──► sample_data/historical/sql/             │
-│  Stage 7    db_load          ──► sample_data/historical/db/ksp.sqlite    │
-│  Stage 8    graph_from_db    ──► sample_data/historical/graph/           │
-│  Stage 9    vector_embed_docs──► sample_data/historical/vector/          │
-│  Stage 10   live_docs        ──► sample_data/live_demo/live_scn{1-4}/    │
-│  Stage 11   evidence                                                │
-│  Stage 12   validate                                                │
-└─────────────────────────────────────────────────────────────────────┘
-
-Historical route (pre-loaded)          Demo route (held-back)
-──────────────────────────────         ─────────────────────────────
-documents → SQL CSVs → ksp.sqlite      held-back FIR + IR docs
-                ↓                      fir.expected.json (ground truth)
-         graph_builder.py              ir.expected.json
-                ↓
-         vector embedder               NEVER loaded into ksp.sqlite
-                ↓
-       sample_data/historical/ ✓            sample_data/live_demo/ (upload target)
-```
-
-**The SQL DB is the single source of truth.** `graph_builder.py` reads `ksp.sqlite` to
-build Neo4j CSVs — never from in-memory generator objects. Both routes produce the same
-artifact shape; they differ only in who performs the extraction.
+Karnataka State Police Datathon 2026 demo: upload FIR / investigation evidence, extract and link entities across Postgres, Neo4j, and Pinecone, and investigate with the CLARA assistant — all on Zoho Catalyst (AppSail + Job Functions) with Zoho QuickML for ingestion and chat.
 
 ---
 
-## Quick Start
+## Repo layout
 
-```bash
-# Install dependencies
+| Path | Role |
+|------|------|
+| `backend/` | FastAPI API, WebSockets, assistant |
+| `frontend/` | React + Vite demo UI |
+| `catalyst_functions/ingest_processor/` | Catalyst job: Phase A extract → Phase B load |
+| `data_generation/` | Offline synthetic dataset builder |
+| `data_ingestion/` | Historical load helpers (Stratus / stores) |
+| `sample_data/` | Generated historical + live-demo documents |
+| `scripts/` | Wipe / reload historical data, demo reset |
+
+Package notes: [backend/README.md](backend/README.md) · [frontend/README.md](frontend/README.md) · [ingest_processor/README.md](catalyst_functions/ingest_processor/README.md)
+
+---
+
+## Prerequisites
+
+- Python 3.11+
+- Node.js 20+
+- Docker Desktop (for AppSail image builds)
+- [Zoho Catalyst CLI](https://www.zoho.com/catalyst/help/cli.html) (`npm i -g zcatalyst-cli` or use the root `package.json`)
+- Accounts / projects: Zoho Catalyst (India DC), Postgres, Neo4j Aura, Pinecone
+
+---
+
+## 1. Clone and install
+
+```powershell
+cd C:\path\to\ksp_datathon_26
+
+# Python (data generation + backend + local scripts)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+pip install -r backend/requirements.txt
 
-# Set up credentials (.env)
-cp .env.example .env   # fill in AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
+# Frontend
+cd frontend
+npm install
+cd ..
 
-# Run full pipeline (all 12 stages)
+# Catalyst CLI (optional if already global)
+npm install
+```
+
+---
+
+## 2. Environment variables
+
+Copy the examples and fill in real values. **Do not commit real `.env` / config files.**
+
+```powershell
+# Backend + local scripts (repo root)
+copy .env.example .env
+
+# Frontend
+copy frontend\.env.example frontend\.env
+
+# Catalyst project file (used by CLI deploy)
+copy catalyst.example.json catalyst.json
+
+# Ingest job function env (baked into function deploy config)
+copy catalyst_functions\ingest_processor\catalyst-config.example.json catalyst_functions\ingest_processor\catalyst-config.json
+```
+
+Both **data ingestion** and **chat** use Zoho QuickML:
+
+```env
+DATA_INGESTION_LLM=zoho
+CHAT_LLM_PROVIDER=zoho
+```
+
+Set the India DC overrides and Zoho OAuth / QuickML vars as documented in `.env.example`. Also set `DB_*`, `NEO4J_*`, `PINECONE_*`, and matching values in `catalyst-config.json` for the job function.
+
+Local ingest without submitting Catalyst jobs:
+
+```env
+INGEST_LOCAL_INVOKE=true
+```
+
+For AppSail / remote jobs, set `INGEST_LOCAL_INVOKE=false` and point `SPLINK_ENDPOINT_URL` at your deployed backend base URL.
+
+---
+
+## 3. Generate sample data (optional)
+
+`sample_data/` is already in the repo. Regenerate only if you change the generator:
+
+```powershell
 python -m data_generation.generate
-
-# Resume from a specific stage (checkpointed)
-python -m data_generation.generate --stages db_load,graph_from_db,vector_embed_docs
-
-# Validate only
 python -m data_generation.validate --output-dir sample_data
+```
 
-# Run with strict mode (warnings become errors)
-python -m data_generation.validate --output-dir sample_data --strict
+Outputs land under `sample_data/historical/` (pre-load baseline) and `sample_data/live_demo/` (upload targets for demo scenarios).
+
+---
+
+## 4. Load historical data into stores
+
+Wipe all stores and reload the historical baseline from `sample_data` + sqlite:
+
+```powershell
+# Dry-run (prints the plan)
+python scripts/reset_and_reload_historical.py
+
+# Execute
+python scripts/reset_and_reload_historical.py --yes
+```
+
+This runs: wipe → Postgres migrate → historical docs to Stratus → Neo4j → Pinecone.
+
+Demo-only wipe (keeps historical seed):
+
+```powershell
+python scripts/reset_demo_data.py --dry-run
+python scripts/reset_demo_data.py --yes
 ```
 
 ---
 
-## Output Structure
+## 5. Run locally
 
-```
-sample_data/
-├── historical/
-│   ├── docs/
-│   │   └── <CrimeNo>/
-│   │       ├── fir.txt                   # Full FIR with KSP header block
-│   │       └── investigation_report.txt  # IR with digital forensics
-│   ├── sql/
-│   │   ├── ksp/
-│   │   │   ├── CaseMaster.csv            # KSP-ER core tables
-│   │   │   ├── ComplainantDetails.csv
-│   │   │   ├── Victim.csv
-│   │   │   ├── Accused.csv
-│   │   │   ├── ArrestSurrender.csv
-│   │   │   ├── ActSectionAssociation.csv
-│   │   │   ├── ChargesheetDetails.csv
-│   │   │   └── master/                   # All 18 master/lookup CSVs
-│   │   └── extension/
-│   │       ├── accounts.csv              # Dimension tables
-│   │       ├── devices.csv               # (one row per unique identifier)
-│   │       ├── upis.csv
-│   │       ├── phones.csv
-│   │       ├── ips.csv
-│   │       ├── wallets.csv
-│   │       ├── transactions.csv          # Link/fact tables
-│   │       ├── uses.csv                  # (with context columns)
-│   │       ├── mentions.csv
-│   │       ├── accused_in.csv
-│   │       └── complainant_in.csv
-│   ├── db/
-│   │   ├── schema.sql                    # DDL for all tables
-│   │   └── ksp.sqlite                    # Canonical SQLite DB
-│   ├── graph/
-│   │   ├── nodes_crime.csv
-│   │   ├── nodes_person.csv
-│   │   ├── nodes_account.csv
-│   │   ├── nodes_device.csv
-│   │   ├── nodes_upi.csv
-│   │   ├── nodes_phone.csv
-│   │   ├── nodes_ip.csv
-│   │   ├── nodes_wallet.csv
-│   │   ├── rels_uses.csv                 # All edges carry source_caseid/observed_date/confidence
-│   │   ├── rels_mentions.csv
-│   │   ├── rels_accused_in.csv
-│   │   ├── rels_complainant_in.csv
-│   │   ├── rels_transferred_to.csv
-│   │   ├── rels_charged_under.csv
-│   │   ├── rels_occurred_in.csv
-│   │   └── import.cypher                 # Neo4j bulk import script
-│   ├── vector/
-│   │   └── narratives.jsonl              # Full docs embedded; node_id=CaseMasterID
-│   └── evidence/
-│       └── scenario_{1-4}/evidence/
-└── live_demo/
-    ├── live_scn1/                        # Digital Arrest Ring reveal
-    │   ├── fir.txt
-    │   ├── fir.kn.txt                    # Kannada translation
-    │   ├── fir.kn_backtranslation.txt
-    │   ├── fir.expected.json             # Ground-truth extraction target
-    │   ├── investigation_report.txt
-    │   └── ir.expected.json
-    ├── live_scn2/                        # Entity Resolution reveal
-    ├── live_scn3/                        # Follow the Money bridge reveal
-    └── live_scn4/                        # Surge continuation
+**Backend** (port 9000):
+
+```powershell
+uvicorn app.main:app --app-dir backend --reload --host 0.0.0.0 --port 9000
 ```
 
----
+**Frontend** (Vite; proxies `/api` and `/ws` when `VITE_API_BASE_URL` is unset):
 
-## Key Modules
-
-| File                   | Role                                                                 |
-|------------------------|----------------------------------------------------------------------|
-| `data_generation/generate.py`          | Pipeline orchestrator (12 stages, checkpointed)                      |
-| `ksp_master.py`        | Static KSP master data + CrimeNo/CaseNo formatting                  |
-| `id_registry.py`       | Deterministic logical-key → INT PK mapping; live CrimeNo reservation |
-| `models.py`            | Dataclasses for all entities (KSP-core + extension)                  |
-| `scenario_generator.py`| Scenario-specific entity generation (planted links)                  |
-| `background_generator.py`| Background decoy case generation (34 cases)                        |
-| `data_generation/narrative_generator.py` | AWS Bedrock/LangChain narrative integration (LLM generation + cache) |
-| `document_generator.py`| Full fir.txt + investigation_report.txt for historical cases         |
-| `export.py`            | Projects Corpus → SQL CSVs (KSP-core + extension)                   |
-| `sql_schema.py`        | Generates `schema.sql` DDL for all tables                            |
-| `db_loader.py`         | Loads CSVs into `ksp.sqlite` (enforces FK constraints)               |
-| `graph_builder.py`     | Builds Neo4j CSVs from `ksp.sqlite`; MERGE semantics on natural keys |
-| `dimension_utils.py`   | Deduplicates identifier pool (one row per natural key)               |
-| `live_demo_generator.py`| Generates held-back live demo docs + `*.expected.json`             |
-| `legal_layer.py`       | Act/Section → BNS/ITACT/PMLA/BSA mappings                           |
-| `identifier_pool.py`   | Fixed, named identifier constants for planted links                  |
-| `data_generation/validate.py`          | Comprehensive validation (Suites A-I)                                |
-| `data_generation/config.py`            | Seed, volume targets, model names, output paths                      |
-
----
-
-## Demo Scenarios
-
-### Scenario 1 — Digital Arrest Ring
-- 3 historical FIRs across Mysuru, Mangaluru, Hubballi-Dharwad
-- All route funds to `AGG_ACC_01` (aggregation account, no owner)
-- Live IR reveals: controller identity + `CTRL_IMEI_01` / `CTRL_UPI_01`
-- Platform demo: financial graph traversal discovers ring; legal checklist flags BSA 63 gap
-
-### Scenario 2 — Many Names, One Man (Entity Resolution)
-- 4 alias Accused rows with different names across 3 historical + 1 live case
-- Shared: `DEV_IMEI_02`, `UPI_02`, `PHONE_02`
-- Platform demo: entity resolution via shared identifiers merges aliases at runtime
-
-### Scenario 3 — Follow the Money (Bridge Account)
-- 2 historical FIRs across Belagavi + Hubballi-Dharwad
-- `BRIDGE_ACC_03` pre-loaded as flagged mule; no cross-case link yet
-- Live case routes funds through it → platform graphs Bengaluru→Belagavi→Dharwad flow
-
-### Scenario 4 — The Surge (Spike Detection)
-- 5 baseline FIRs (Jan–May 2026) with independent identifiers
-- 14 burst FIRs (last 21 days) sharing `DEV_POOL_04` / `IP_POOL_04` / `MULE_SET_04`
-- Platform demo: temporal spike detection; community detection reveals ring structure
-
-### Decoys
-- 34 background cases covering all 10 crime types
-- Similar-MO decoys calibrated to appear near Tier B similarity threshold
-- No shared identifiers with scenario planted links
-
----
-
-## Validation Suites
-
-| Suite | What it checks                                                            |
-|-------|---------------------------------------------------------------------------|
-| A     | ER DDL superset; ksp.sqlite FK integrity; DB row-count parity; ER columns |
-| B     | CrimeNo format; CaseNo derivation; district resolution; CSType distribution |
-| C     | Doc↔SQL consistency; live expected.json validity; pool identifier FK resolution |
-| D     | Vector completeness (one record per case + IR); metadata fields present   |
-| E     | Graph-from-DB parity (Crime nodes == CaseMaster rows; object node counts) |
-| F     | Dimension uniqueness; Scn2 shared IMEI node; cross-case graph links; byte-identity |
-| G     | SQL context columns on link tables; all graph edges carry source_caseid/confidence |
-| H     | Two-route separation (live CrimeNos absent from ksp.sqlite)               |
-| I     | Volume targets ±10%; IFSC format; identifier cross-store consistency; evidence artifacts; Kannada translation; narrative tiers |
-
----
-
-## Configuration
-
-Key settings in `data_generation/config.py`:
-- `SEED`: RNG seed for reproducibility (default: 42)
-- `OUTPUT_DIR`: root output directory (default: `sample_data/`)
-- `BEDROCK_REGION`: AWS region for Bedrock API
-- `BEDROCK_MODEL_ID`: Claude model for narrative generation
-- `VALIDATION_EMBEDDING_MODEL`: sentence-transformers model for tier similarity checks
-
-LLM responses are disk-cached in `.cache/llm/`. Re-runs skip Bedrock API calls.
-
----
-
-## Requirements
-
-```
-boto3
-python-dotenv
-faker
-sentence-transformers
+```powershell
+cd frontend
+npm run dev
 ```
 
-See `requirements.txt` for pinned versions.
+Open the Vite URL shown in the terminal. Smoke: `http://localhost:9000/healthz`.
 
 ---
 
-## Reproducibility
+## 6. Deploy to Zoho Catalyst
 
-- All random state seeded from `config.SEED` at pipeline start
-- LLM narratives disk-cached keyed by deterministic prompt hash
-- `id_registry.py` assigns INT PKs in a fixed, deterministic order
-- Re-running from scratch produces byte-identical CSVs (except LLM cache misses)
-- Checkpoint system (`python -m data_generation.generate --stages ...`) resumes from durable stage artifacts
+Login to the **India** data centre, then deploy AppSail apps and the ingest function.
+
+### 6.1 Docker Hub images
+
+Build and push backend + frontend images to **Docker Hub** (replace `YOUR_DOCKERHUB_USER`):
+
+```powershell
+cd C:\path\to\ksp_datathon_26
+
+# Backend
+docker build -f backend/Dockerfile.appsail -t YOUR_DOCKERHUB_USER/ksp-catalyst-backend:latest .
+docker push YOUR_DOCKERHUB_USER/ksp-catalyst-backend:latest
+
+# Frontend — set BACKEND_URL / VITE_WS_BASE_URL to your live backend origin before/during build
+docker build -f frontend/Dockerfile.appsail -t YOUR_DOCKERHUB_USER/ksp-catalyst-frontend:latest .
+docker push YOUR_DOCKERHUB_USER/ksp-catalyst-frontend:latest
+```
+
+Ensure `catalyst.json` and `catalyst_functions/ingest_processor/catalyst-config.json` have production env values (Zoho LLM, DB, Neo4j, Pinecone, Splink URL). Images that `COPY .env` must not ship secrets you are unwilling to publish — prefer AppSail / portal env where possible.
+
+### 6.2 AppSail (backend + frontend)
+
+```powershell
+catalyst login
+
+catalyst deploy appsail --name ksp-catalyst-backend --source docker://YOUR_DOCKERHUB_USER/ksp-catalyst-backend:latest --port 9000
+
+catalyst deploy appsail --name ksp-catalyst-frontend --source docker://YOUR_DOCKERHUB_USER/ksp-catalyst-frontend:latest --port 9000
+```
+
+### 6.3 Ingest job function
+
+```powershell
+# Ensure catalyst.json functions.targets includes "ingest_processor"
+# and catalyst-config.json env_variables are filled in
+catalyst deploy --only functions:ingest_processor
+```
+
+CLI deploys can sit with little terminal output while Catalyst works — wait and confirm in the Catalyst console rather than killing the command early.
 
 ---
 
-## KSP Schema Compliance
+## Demo scenarios (after historical load)
 
-- All KSP-ER core tables (CaseMaster, Accused, etc.) are **byte-faithful** to the ER diagram
-- Extension tables use `EXT_` prefix and **never alter** KSP-ER columns
-- `PRAGMA foreign_keys = ON` enforced during DB load; any FK violation aborts the build
-- `CrimeNo` format: `C(1)+DistrictID(4)+UnitID(4)+Year(4)+Serial(5)` — Category 1 for all FIRs
-- `Act.ActCode` and `Section.SectionCode` are VARCHAR PKs (per ER); no surrogate INT
-- `ActSectionAssociation` uses a composite key (no surrogate ID)
+Allowlisted keys: `digital-arrest`, `many-names`, `follow-money`, `surge`.
+
+Typical API flow:
+
+1. `POST /api/v1/demo-scenarios/{scenario_key}/prepare`
+2. `POST /api/v1/upload` (FIR, then IR / evidence)
+3. `POST /api/v1/process/{batch_id}` → Phase A → `REVIEW_PENDING`
+4. Resolve review queue if needed
+5. `POST /api/v1/process/{run_id}/proceed` → Phase B → `COMPLETED`
+
+Live documents for the UI live under `frontend/src/assets/live_demo/` (synced from `sample_data/live_demo/`).
 
 ---
 
-*Karnataka State Police Datathon 2026 · Synthetic data pipeline*
+## Notes
+
+- Refresh token scopes must include Catalyst project, Stratus, QuickML, and job scheduling APIs.
+- Postgres via a transaction pooler needs `prepare_threshold=0` (already wired in app connection strings).
+- Secret-bearing files (`catalyst.json`, `catalyst-config.json`, `.env`) are gitignored; only the `*.example*` templates are tracked.

@@ -3,16 +3,17 @@ WORKDIR /app
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 COPY frontend ./
-# VITE_API_BASE_URL intentionally unset at build time -- api.ts falls back to
-# same-origin /api/v1, which nginx.conf.template reverse-proxies to the real
-# backend at runtime (see comment there for why this is needed, not optional).
+# REST stays same-origin (/api/v1 â†’ nginx â†’ EC2). WebSockets must dial EC2 over wss
+# directly â€” AppSail's gateway strips Upgrade on proxied /ws/ hops.
+ARG VITE_WS_BASE_URL=https://100.55.90.158.sslip.io
+ENV VITE_WS_BASE_URL=$VITE_WS_BASE_URL
 RUN npm run build
 
 FROM nginx:1.27-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY frontend/nginx.conf.template /etc/nginx/server.conf.template
 
-ENV BACKEND_URL=https://ksp-catalyst-backend-50043496759.development.catalystappsail.in
+ENV BACKEND_URL=http://100.55.90.158:9000
 EXPOSE 8080
 
 # Deliberately not using nginx's built-in /etc/nginx/templates/ auto-envsubst --

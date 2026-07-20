@@ -28,6 +28,8 @@ import { useToast } from "../ToastProvider";
 const SESSIONS_KEY = "aegis.assistant.sessions.v2";
 const LEGACY_SESSIONS_KEY = "aegis.assistant.sessions.v1";
 const COLLAPSED_KEY = "aegis.assistant.history-collapsed";
+/** Cap chat history in localStorage — older sessions are dropped automatically. */
+const MAX_STORED_SESSIONS = 8;
 
 function makeId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
@@ -155,6 +157,121 @@ function loadCollapsed(): boolean {
     return JSON.parse(window.localStorage.getItem(COLLAPSED_KEY) ?? "false") === true;
   } catch {
     return false;
+  }
+}
+
+/** Drop the heaviest fields before writing to localStorage (5MB cap). Live UI keeps full data. */
+function sessionsForStorage(sessions: AssistantSession[]): AssistantSession[] {
+  return sessions.map((session) => ({
+    ...session,
+    // Trace event logs balloon fast (every answer_delta / step). Keep them in memory only.
+    traces: [],
+    messages: session.messages.map((message) => ({
+      ...message,
+      steps: message.steps?.map((step) => ({
+        ...step,
+        query: step.query && step.query.length > 800 ? `${step.query.slice(0, 800)}…` : step.query,
+        code: undefined,
+        toolInput: undefined,
+        output:
+          typeof step.output === "string" && step.output.length > 600
+            ? `${step.output.slice(0, 600)}…`
+            : step.output,
+        retrieval: undefined,
+      })),
+      artifacts: message.artifacts?.map((artifact) => {
+        if (artifact.kind === "graph") {
+          return {
+            ...artifact,
+            nodes: artifact.nodes.map(({ id, label, type }) => ({ id, label, type })),
+            links: artifact.links.map(({ source, target, relationship }) => ({
+              source,
+              target,
+              relationship,
+            })),
+          };
+        }
+        if (artifact.kind === "table") {
+          return { ...artifact, rows: artifact.rows.slice(0, 40) };
+        }
+        if (artifact.kind === "document" && artifact.text && artifact.text.length > 6000) {
+          return { ...artifact, text: `${artifact.text.slice(0, 6000)}…` };
+        }
+        return artifact;
+      }),
+    })),
+  }));
+}
+
+function isQuotaExceeded(err: unknown): boolean {
+  return (
+    err instanceof DOMException &&
+    (err.name === "QuotaExceededError" || err.name === "NS_ERROR_DOM_QUOTA_REACHED" || err.code === 22)
+  );
+}
+
+/** Keep the newest sessions; always preserve `keepId` if provided (the open chat). */
+function capSessions(sessions: AssistantSession[], keepId?: string | null): AssistantSession[] {
+  if (sessions.length <= MAX_STORED_SESSIONS) return sessions;
+  const newestFirst = [...sessions].sort((a, b) =>
+    (b.updatedAt || "").localeCompare(a.updatedAt || ""),
+  );
+  const kept = newestFirst.slice(0, MAX_STORED_SESSIONS);
+  if (keepId && !kept.some((session) => session.id === keepId)) {
+    const active = sessions.find((session) => session.id === keepId);
+    if (active) {
+      return [active, ...kept.slice(0, MAX_STORED_SESSIONS - 1)];
+    }
+  }
+  return kept;
+}
+
+/** Persist sessions without crashing the page when localStorage is full. */
+function persistSessions(sessions: AssistantSession[]): void {
+  try {
+    window.localStorage.removeItem(LEGACY_SESSIONS_KEY);
+  } catch {
+    /* ignore */
+  }
+
+  const write = (data: AssistantSession[]) => {
+    window.localStorage.setItem(SESSIONS_KEY, JSON.stringify(data));
+  };
+
+  let payload = sessionsForStorage(sessions);
+  try {
+    write(payload);
+    return;
+  } catch (err) {
+    if (!isQuotaExceeded(err)) {
+      console.warn("Failed to persist assistant sessions", err);
+      return;
+    }
+  }
+
+  // Drop oldest sessions until the write fits.
+  const newestFirst = [...payload].sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
+  for (let keep = Math.min(newestFirst.length, MAX_STORED_SESSIONS) - 1; keep >= 1; keep -= 1) {
+    try {
+      write(newestFirst.slice(0, keep));
+      return;
+    } catch (err) {
+      if (!isQuotaExceeded(err)) {
+        console.warn("Failed to persist assistant sessions", err);
+        return;
+      }
+    }
+  }
+
+  try {
+    window.localStorage.removeItem(SESSIONS_KEY);
+    if (newestFirst[0]) write([newestFirst[0]]);
+  } catch {
+    try {
+      window.localStorage.removeItem(SESSIONS_KEY);
+    } catch {
+      /* ignore */
+    }
   }
 }
 
@@ -496,11 +613,23 @@ export function AssistantPage() {
   }, [traceCarrier, activeSessionId]);
 
   useEffect(() => {
-    window.localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
-  }, [sessions]);
+    const capped = capSessions(sessions, activeSessionId);
+    if (capped.length < sessions.length) {
+      setSessions(capped);
+      if (activeSessionId && !capped.some((session) => session.id === activeSessionId)) {
+        setActiveSessionId(capped[0]?.id ?? "");
+      }
+      return;
+    }
+    persistSessions(capped);
+  }, [sessions, activeSessionId]);
 
   useEffect(() => {
-    window.localStorage.setItem(COLLAPSED_KEY, JSON.stringify(historyCollapsed));
+    try {
+      window.localStorage.setItem(COLLAPSED_KEY, JSON.stringify(historyCollapsed));
+    } catch {
+      /* ignore quota on a one-byte flag */
+    }
   }, [historyCollapsed]);
 
   useEffect(() => {
@@ -1015,7 +1144,7 @@ export function AssistantPage() {
               <SuggestedPrompts
                 prompts={localizedPrompts}
                 title={copy.suggestedQuestions}
-                onSelect={(prompt) => void sendMessage(prompt.prompt, prompt.id)}
+                onSelect={(prompt) => setInput(prompt.prompt)}
                 disabled={busy}
               />
               <ChatComposer

@@ -2,6 +2,10 @@
 .*
 !.gitignore
 !.catalystrc
+!.env.example
+!**/.env.example
+!frontend/.gitignore
+!frontend/.oxlintrc.json
 
 # Python
 __pycache__/
@@ -26,6 +30,7 @@ wheels/
 *.egg
 MANIFEST
 *.pdf
+
 # Virtual environments
 venv/
 .venv/
@@ -47,6 +52,11 @@ htmlcov/
 coverage.xml
 *.cover
 .hypothesis/
+tests/
+backend/tests/
+backend/scripts/
+**/test_*.py
+**/self_check.py
 
 # Type checkers & linters
 .mypy_cache/
@@ -63,8 +73,42 @@ coverage.xml
 secrets.json
 credentials.json
 catalyst.json
+!catalyst.example.json
 backend/app-config.json
+catalyst_functions/**/catalyst-config.json
+!catalyst_functions/**/catalyst-config.example.json
+
+# Ad-hoc / agent docs (keep package READMEs + skill playbooks)
+/*.md
+!/README.md
 AGENTS.md
+CLAUDE.md
+CODING_AGENT_HANDOFF.md
+design/
+catalyst-client/
+catalyst_functions/bedrock_clitest/
+
+# Root scratch artifacts (tests, zips, logs, diagrams)
+/test.py
+/test_*.py
+/examples_*.py
+/*.zip
+/*.log
+/failures.json
+/specialist_subgraph.png
+/supervisor_graph.png
+/visualisation.png
+
+# scripts/ — keep only wipe + historical reload + demo reset
+/scripts/**
+!/scripts/wipe_all_data.py
+!/scripts/reset_and_reload_historical.py
+!/scripts/reset_demo_data.py
+
+# Ingest function local helpers (not needed to run)
+catalyst_functions/ingest_processor/deploy_function.ps1
+catalyst_functions/ingest_processor/self_check.py
+catalyst_functions/ingest_processor/test_extract_formats.py
 
 # OS files
 .DS_Store
@@ -88,26 +132,13 @@ Desktop.ini
 *.log
 logs/
 
-# Data & model artifacts (uncomment or adjust as needed)
-# *.csv
-# *.parquet
-# *.pkl
-# *.pickle
-# *.h5
-# *.hdf5
-# *.joblib
-# *.model
-# data/raw/
-# data/processed/
-# models/
-
 # Temporary files
 tmp/
 temp/
 *.tmp
 *.bak
 
-# Node (if using any JS tooling)
+# Node
 node_modules/
 npm-debug.log*
 yarn-debug.log*

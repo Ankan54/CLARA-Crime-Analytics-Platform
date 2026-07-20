@@ -30,6 +30,7 @@ from typing import Any
 
 from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import StructuredTool
+from langgraph.errors import GraphRecursionError
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
@@ -119,7 +120,12 @@ SPECS: tuple[SpecialistSpec, ...] = (
         prompt=COMMON_RULES + (
             "\nFocus: pick the RIGHT tool for the question, call it, then explain the linking evidence:\n"
             "- 'do we know this accused / other names / aliases / same person / repeat offender / his history / escalation' -> person_history(name). If you only have a case (not a name), FIRST get the name with one query: MATCH (c:CaseMaster {case_id:<id>})<-[:INVOLVES]-(a:Accused) RETURN a.display_name; then call person_history(that name). person_history collapses aliases via shared device/UPI/phone -- do NOT hand-write Cypher to resolve aliases yourself.\n"
-            "- 'find links / are these cases connected / do they share an account-device-UPI' -> find_links_between_cases(case_refs).\n"
+            "- 'find links / are these cases connected / do they share an account-device-UPI' -> find_links_between_cases(case_refs). "
+            "This is the graph-DB linkage step: it returns a Neo4j-backed graph (case nodes + the shared account/device/UPI as a labelled hub). "
+            "Call it ONCE with all the case refs, then STOP and compose from its result: LEAD with that graph and a one-line "
+            "'these N cases all share <identifier>'. Do NOT re-derive the links as an SQL table, and do NOT then call expand_entity or "
+            "run_cypher_read on each shared identifier -- that one call already has the answer; looping over the identifiers just burns the "
+            "step budget and produces nothing new.\n"
             "- 'organised ring / gang / community / cluster / is this surge organised' -> detect_community.\n"
             "- 'operator org chart / role map / who does what' -> load the operator-org-chart skill.\n"
             "- what one identifier connects to -> expand_entity(value).\n"
@@ -140,12 +146,17 @@ SPECS: tuple[SpecialistSpec, ...] = (
         prompt=COMMON_RULES + (
             "\nFocus: pick the tool, call it, then STOP and report:\n"
             "- 'same MO / same script / similar cases / has this appeared elsewhere' -> find_similar_cases(case_ref=\"\" for the case in context). "
-            "It returns the ranked matches with scores + districts in ONE call. Report the scores, districts and whether it is cross-jurisdictional; "
-            "offer the Find-Links follow-up. Do NOT re-query the matches with run_sql_select afterwards.\n"
+            "This is PURE vector similarity (it embeds the FIR narrative and cosine-ranks Pinecone). It returns the ranked matches with scores + districts in ONE call. "
+            "Compose the finding as a STORY of similarity only: (1) one line naming the shared modus operandi / common script these cases follow, "
+            "(2) the matched cases with their scores and districts, (3) whether it is cross-jurisdictional. Then STOP. "
+            "CRITICAL: this answer must NOT contain link analysis. Do NOT run find_links_between_cases, run_cypher_read, detect_community, expand_entity or any "
+            "shared-identifier / EXT_Mentions run_sql_select here, and do NOT load the find-links skill. Whether these cases actually SHARE an account/device/UPI "
+            "is a DELIBERATELY SEPARATE next step the officer runs via the one-click 'Find links among these cases' follow-up the tool already emits -- "
+            "answering it now would spoil that follow-up. End by inviting the officer to run that link check.\n"
             "- 'trend / surge / how many / which district / spike / hotspot / rising' -> query_case_stats "
             "(group_by district|crime_type|month, with a crime_type and/or date filter). One call gives the counts.\n"
             "Reach for run_sql_select ONLY for a specific count/filter query_case_stats cannot express, then STOP. "
-            "State a 0.71 similarity as 'possible', 0.9+ as a strong match."
+            "State a 0.81 similarity as 'possible', 0.9+ as a strong match."
         ),
         friendly_action="Finding similar cases",
     ),
@@ -334,6 +345,7 @@ async def run_specialist(
     )
     messages = [*_bounded_history(history), HumanMessage(content=subtask)]
     final = ""
+    last_tool_text = ""  # fallback if the model never composes a final answer (budget/recursion cap)
     thinking_buf = ""
     thinking_step_id: str | None = None
     last_emit_t: float = 0.0
@@ -344,11 +356,12 @@ async def run_specialist(
     code_step_ids: dict[int, str] = {}
     last_code_emit_t: float = 0.0
 
-    async for event in subgraph.astream(
+    try:
+      async for event in subgraph.astream(
         {"messages": messages},
         {"recursion_limit": recursion_limit},
         stream_mode=["messages", "updates"],
-    ):
+      ):
         # event is a tuple (stream_type, payload) when multiple stream modes
         if isinstance(event, tuple) and len(event) == 2:
             stream_type, payload = event
@@ -412,6 +425,14 @@ async def run_specialist(
         elif stream_type == "updates":
             for _node, node_payload in (payload or {}).items():
                 for message in (node_payload or {}).get("messages", []) or []:
+                    if isinstance(message, ToolMessage):
+                        # Keep the last substantive tool result so a specialist that hits
+                        # its budget/recursion cap without composing a final answer still
+                        # surfaces real findings instead of a generic "no answer".
+                        tool_text = _text_of(message.content).strip()
+                        if len(tool_text) > 80 and "STOP querying" not in tool_text:
+                            last_tool_text = tool_text
+                        continue
                     if not isinstance(message, AIMessage):
                         continue
                     text = _strip_thinking_tags(_text_of(message.content))
@@ -437,6 +458,13 @@ async def run_specialist(
                             )
                     elif text:
                         final = text
+    except GraphRecursionError:
+        # The ReAct loop exhausted its step budget mid-flight. Its tool calls already ran
+        # and emitted their artifacts (e.g. find_links_between_cases' shared-identifier
+        # graph), and last_tool_text holds the real finding -- so DON'T let the exception
+        # escape and get replaced by a generic "couldn't converge" upstream. Fall through
+        # to the return below and surface what the tools actually found.
+        logger.warning("specialist %s hit its step budget; salvaging last tool finding", spec.key)
 
     if thinking_step_id and emitter:
         emitter._emit_step(
@@ -446,7 +474,7 @@ async def run_specialist(
             detail=_strip_thinking_tags(thinking_buf[-800:]),
         )
 
-    return final or f"{spec.display} found no answer for that subtask."
+    return final or last_tool_text or f"{spec.display} found no answer for that subtask."
 
 
 def _extract_code_arg(partial_json: str) -> str:

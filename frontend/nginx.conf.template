@@ -5,26 +5,27 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # Reverse-proxy /api + /ws to the backend AppSail service so the browser only
-    # ever talks same-origin to this host (avoids whitelisting this origin under
-    # Catalyst Console -> Authentication -> Authorized Domains for CORS). This is
-    # the production equivalent of the local Vite dev-server proxy (vite.config.ts).
+    # Reverse-proxy /api + /ws to the backend so the browser only talks same-origin
+    # to this host (avoids CORS / Authorized Domains on Catalyst).
     #
-    # CRITICAL: `Host` must be the *backend* hostname (${BACKEND_HOST}), never
-    # $host. Catalyst's AppSail gateway routes purely by the Host header; sending
-    # our own host ($host = this frontend) makes the gateway route the proxied
-    # request straight back to THIS frontend, which re-matches /api/ and proxies
-    # again -- an infinite loop. Each hop appends to X-Forwarded-For until the
-    # request headers overflow nginx's proxy buffer, which surfaces (misleadingly)
-    # as "upstream sent too big header" -> 502. proxy_ssl_server_name sends SNI so
-    # the gateway's TLS layer also selects the backend vhost.
+    # BACKEND_URL can be:
+    #   - AppSail HTTPS: https://ksp-catalyst-backend-....catalystappsail.in
+    #   - EC2 HTTP:      http://<public-ip-or-dns>:9000
+    #
+    # CRITICAL for AppSail upstreams: `Host` must be the *backend* hostname
+    # (${BACKEND_HOST}), never $host — otherwise the Catalyst gateway loops the
+    # proxy back to this frontend (502 / too-big header). For EC2 HTTP upstreams
+    # the same Host rule is correct (public DNS/IP:port).
+    # proxy_ssl_server_name only matters when BACKEND_URL is https://.
     location /api/ {
         proxy_pass ${BACKEND_URL}/api/;
+        proxy_http_version 1.1;
         proxy_set_header Host ${BACKEND_HOST};
         proxy_ssl_server_name on;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 3600s;
         proxy_buffer_size 16k;
         proxy_buffers 4 16k;
         proxy_busy_buffers_size 32k;
@@ -37,6 +38,9 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_set_header Host ${BACKEND_HOST};
         proxy_ssl_server_name on;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_read_timeout 3600s;
         proxy_buffer_size 16k;
         proxy_buffers 4 16k;

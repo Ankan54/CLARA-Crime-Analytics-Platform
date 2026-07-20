@@ -108,7 +108,7 @@ def _init_app():
         logger.debug("catalyst app reuse via get_app")
         return app
     except Exception:
-        logger.debug("catalyst get_app unavailable; falling back to initialize_app", exc_info=True)
+        logger.debug("catalyst get_app unavailable (expected off-Catalyst); using initialize_app")
 
     cred = credentials.RefreshTokenCredential(
         {
@@ -173,6 +173,25 @@ def get_object_text(key: str) -> str:
     data = obj if isinstance(obj, bytes) else obj.read()
     logger.debug("stratus get_object_text done key=%s size=%d", key, len(data))
     return data.decode("utf-8")
+
+
+def presigned_get_url(key: str, expiry_seconds: int = 604800) -> str | None:
+    """Mint a short-lived signed URL the browser can GET directly from Stratus (no auth).
+
+    Used for assistant citations so the officer opens the real FIR/IR straight from the
+    bucket — no backend proxy in the byte path. The URL embeds a temporary signature and
+    expires (default 7 days), so it must be minted at citation time, never cached in
+    Pinecone metadata (which only stores the stable key). Returns None on failure so a
+    citation degrades to no-link rather than erroring the whole run.
+    """
+    try:
+        app = _init_app()
+        bucket = app.stratus().bucket(settings.zoho_stratus_bucket)
+        res = bucket.generate_presigned_url(key=key, url_action="GET", expiry_in_sec=str(expiry_seconds))
+        return res.get("signature") if isinstance(res, dict) else res
+    except Exception:
+        logger.exception("stratus presigned_get_url failed key=%s", key)
+        return None
 
 
 def get_checkpoint_manifest(case_id: int, run_id: str) -> dict[str, Any]:

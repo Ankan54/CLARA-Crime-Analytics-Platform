@@ -362,21 +362,36 @@ def _cleanup_neo4j(case_ids: list[int], run_ids: list[str]) -> int:
         driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
         deleted = 0
         with driver.session() as session:
+            # origin='demo' guard is load-bearing: _load_graph stamps the demo run_id
+            # (and, for new nodes, case_id) onto shared *historical* identifier nodes it
+            # merely MERGEs onto — but keeps origin='historical' via coalesce. Deleting
+            # by case_id/run_id ALONE therefore DETACH-deletes those planted historical
+            # nodes and severs their OWNS edges to the historical aliases, so the
+            # live→historical fusion breaks on the *next* demo run (confirmed live: scn2's
+            # 4-alias collapse regressed to 1 on the 2nd reset+ingest cycle). Scoping the
+            # delete to origin='demo' preserves shared historical nodes, matching
+            # reset_demo_data.py's `MATCH (n {origin:'demo'})` approach.
             if case_ids:
                 # _load_graph stamps n.case_id as an integer (RunParams.case_id: int) —
                 # matching against strings here would silently match nothing.
                 result = session.run(
-                    "MATCH (n) WHERE n.case_id IN $case_ids DETACH DELETE n RETURN count(n) AS cnt",
+                    "MATCH (n) WHERE n.case_id IN $case_ids AND n.origin = 'demo' "
+                    "DETACH DELETE n RETURN count(n) AS cnt",
                     case_ids=[int(c) for c in case_ids],
                 )
                 deleted += result.single()["cnt"]
             for rid in run_ids:
                 # _load_graph stamps the property as n.run_id, not n.source_run_id.
                 result = session.run(
-                    "MATCH (n) WHERE n.run_id = $rid DETACH DELETE n RETURN count(n) AS cnt",
+                    "MATCH (n) WHERE n.run_id = $rid AND n.origin = 'demo' "
+                    "DETACH DELETE n RETURN count(n) AS cnt",
                     rid=rid,
                 )
                 deleted += result.single()["cnt"]
+            # Demo edges between two *historical* nodes are never reached by node deletion
+            # (both endpoints survive). They carry the demo run_id, so remove them here.
+            for rid in run_ids:
+                session.run("MATCH ()-[r]->() WHERE r.run_id = $rid DELETE r", rid=rid)
         driver.close()
         return deleted
     except Exception:
