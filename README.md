@@ -2,6 +2,8 @@
 
 Karnataka State Police Datathon 2026 demo: upload FIR / investigation evidence, extract and link entities across Postgres, Neo4j, and Pinecone, and investigate with the CLARA assistant — all on Zoho Catalyst (AppSail + Job Functions) with Zoho QuickML for ingestion and chat.
 
+![App landing page](app_landing.png)
+
 ---
 
 ## Repo layout
