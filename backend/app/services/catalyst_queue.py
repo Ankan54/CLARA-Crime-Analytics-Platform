@@ -61,6 +61,64 @@ def _patch_zcatalyst_url_join() -> None:
     logger.debug("zcatalyst url patch applied")
 
 
+def _patch_zcatalyst_token_expiry() -> None:
+    """Fix zcatalyst_sdk's RefreshTokenCredential.token() access-token expiry math.
+
+    The bundled SDK caches the access token with
+    ``expires_in = now_seconds + expires_in * 1000`` (credentials.py). ``time()`` is
+    in seconds, so Zoho's real 3600-second lifetime is stored as ~41 days in the
+    future. The access token actually dies after 1 hour, so a long-lived process
+    (uvicorn on EC2) keeps handing the SDK a dead token and every Stratus/job call
+    fails with ``INVALID_TOKEN`` 401 until the process is restarted. A fresh process
+    works only because its cached token is <1h old — exactly the symptom we saw.
+
+    Patching token() at the root fixes every SDK auth path at once (Stratus
+    put/get/list + bucket signature, and job submit) instead of retrying per call.
+    """
+    from zcatalyst_sdk.credentials import RefreshTokenCredential
+
+    if getattr(RefreshTokenCredential.token, "_ksp_patched", False):
+        logger.debug("zcatalyst token expiry patch already applied")
+        return
+
+    from zcatalyst_sdk import _constants as api_constants
+    from zcatalyst_sdk._constants import RequestMethod
+    from zcatalyst_sdk.exceptions import CatalystCredentialError
+
+    def _token(self) -> str:
+        cached = self._cached_token
+        if not cached or float(cached.get("_ksp_expires_at", 0.0)) <= time.time():
+            from zcatalyst_sdk._http_client import HttpClient
+
+            requester = HttpClient(base_url=api_constants.ACCOUNTS_URL)
+            resp = requester.request(
+                method=RequestMethod.POST,
+                path="/oauth/v2/token",
+                data={
+                    "grant_type": "refresh_token",
+                    "refresh_token": self._refresh_token,
+                    "client_id": self._client_id,
+                    "client_secret": self._client_secret,
+                },
+            )
+            data = resp.response_json
+            if not (data.get("access_token") and data.get("expires_in")):
+                raise CatalystCredentialError(
+                    "AUTHENTICATION_FAILURE",
+                    "Unexpected response while fetching access token",
+                    str(data),
+                )
+            # expires_in is seconds; refresh 60s early. Stored under our own key so
+            # the SDK's buggy `expires_in` rewrite can never be read as the deadline.
+            data["_ksp_expires_at"] = time.time() + float(data["expires_in"]) - 60
+            self._cached_token = data
+        return self._cached_token.get("access_token")
+
+    _token._ksp_patched = True  # type: ignore[attr-defined]
+    RefreshTokenCredential.token = _token  # type: ignore[method-assign]
+    logger.debug("zcatalyst token expiry patch applied")
+
+
 def _get_access_token() -> str:
     now = time.time()
     token = _token_cache["token"]
@@ -101,6 +159,7 @@ def _init_app():
     from zcatalyst_sdk import credentials, types
 
     _patch_zcatalyst_url_join()
+    _patch_zcatalyst_token_expiry()
     try:
         # Works when this process itself runs inside Catalyst (e.g. deployed to
         # AppSail) — the project identity is injected implicitly, no OAuth needed.

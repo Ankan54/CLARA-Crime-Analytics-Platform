@@ -62,7 +62,7 @@ backend/scripts/
 .mypy_cache/
 .ruff_cache/
 .pytype/
-
+artifacts/
 # Environment variables & secrets
 .env
 .env.*
